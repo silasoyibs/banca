@@ -1,0 +1,77 @@
+.hero {
+  margin-left: auto;
+  margin-top: 10rem;
+  max-width: 120rem;
+  display: flex;
+  gap: 2rem;
+  height: 50rem;
+  &__left {
+    padding-top: 5rem;
+    width: 50%;
+  }
+  &__right {
+    width: 50%;
+  }
+  &__img {
+    position: relative;
+    background-color: #bcdfeb;
+    border-radius: 40px;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    transition: all 2s ease;
+  }
+  &__img--1 {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    z-index: 2;
+    height: 75%;
+  }
+  &__img--2 {
+    position: absolute;
+    top: 15%;
+    right: 70%;
+    z-index: 2;
+    height: 42%;
+    animation: moveImgLeft 2s ease;
+  }
+  &__img--3 {
+    position: absolute;
+    bottom: 0%;
+    right: 50%;
+    z-index: 2;
+    height: 37%;
+    animation: moveImg3Left 2s ease;
+  }
+  &__img--4 {
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    z-index: 2;
+    height: 10%;
+  }
+  &__description {
+    padding-top: 4rem;
+    line-height: 1.5;
+    color: $color-text;
+  }
+}
+.email {
+  padding-top: 2rem;
+  width: 100%;
+  &__input {
+    width: 55%;
+    height: 5.2rem;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    &::placeholder {
+      font-size: 1.6rem;
+    }
+  }
+}
+input[type="text"] {
+  padding: 0 1rem;
+  font-size: 2rem;
+}

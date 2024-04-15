@@ -1,0 +1,49 @@
+// Cta Button Animation
+@keyframes fillButton {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0%;
+  }
+}
+@keyframes unfillButton {
+  0% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Hero animation
+// img-2 animation
+@keyframes moveImgLeft {
+  0% {
+    opacity: 0;
+    right: 50%;
+  }
+  30% {
+    opacity: 0;
+    right: 50%;
+  }
+  100% {
+    opacity: 1;
+    right: 70%;
+  }
+}
+// img-3 animation
+@keyframes moveImg3Left {
+  0% {
+    opacity: 0;
+    right: 20%;
+  }
+  30% {
+    opacity: 0;
+    right: 20%;
+  }
+  100% {
+    opacity: 1;
+    right: 50%;
+  }
+}

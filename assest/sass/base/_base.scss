@@ -1,0 +1,26 @@
+*,
+*::after,
+*::before {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: inherit;
+}
+
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: $color-text;
+}
+
+html {
+  /* Setting HTML font to 62.5% allows user to zoon in and out while giving us the 10px base from 16px default */
+  /* Later allows for easier use of rem - note: rem not compatible with ES9 */
+  // This defines what 1rem is
+  font-size: 62.5%; //1rem = 10px 10px/16px = 62.5%
+}
+
+body {
+  box-sizing: border-box;
+}

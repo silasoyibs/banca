@@ -1,0 +1,35 @@
+.section-header {
+  background-color: $color-blue--light;
+  min-height: 80rem;
+  padding-top: 2rem;
+}
+
+.nav {
+  width: 100%;
+  &__links {
+    width: 60%;
+    justify-content: right;
+    gap: 5rem;
+  }
+  &__items {
+    position: relative;
+  }
+  &__link.activeLink::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    background-color: $color-blue;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border-radius: 50%;
+  }
+  &__link {
+    &:link {
+      color: $color-text;
+    }
+    &:hover {
+      color: $color-blue;
+    }
+  }
+}
