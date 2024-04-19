@@ -1,6 +1,5 @@
 .section-header {
   background-color: $color-blue--light;
-  min-height: 80rem;
   padding-top: 2rem;
 }
 
@@ -25,6 +24,9 @@
     border-radius: 50%;
   }
   &__link {
+    &.activeLink {
+      color: $color-blue;
+    }
     &:link {
       color: $color-text;
     }

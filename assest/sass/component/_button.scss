@@ -25,7 +25,7 @@
   &:hover::before {
     animation: fillButton 0.5s forwards;
   }
-  &:not(:hover)::before {
+  &.show-unfillanimation:not(:hover)::before {
     animation: unfillButton 0.5s;
   }
 }

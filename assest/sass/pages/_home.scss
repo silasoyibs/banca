@@ -1,77 +1,340 @@
-.hero {
-  margin-left: auto;
-  margin-top: 10rem;
-  max-width: 120rem;
-  display: flex;
-  gap: 2rem;
-  height: 50rem;
-  &__left {
-    padding-top: 5rem;
-    width: 50%;
+.hero-section {
+  padding-top: 8rem;
+  background-color: $color-blue--light;
+  .hero {
+    padding: 0 0 8rem 3rem;
+    display: flex;
+    gap: 2rem;
+    &__left {
+      padding-top: 5rem;
+      width: 50%;
+    }
+    &__right {
+      width: 50%;
+    }
+    &__img {
+      position: relative;
+      background-color: $color-blue--light;
+      border-radius: 40px;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      transition: all 2s ease;
+    }
+    &__img--1 {
+      position: absolute;
+      top: 10%;
+      right: 10%;
+      z-index: 2;
+      height: 75%;
+    }
+    &__img--2 {
+      position: absolute;
+      top: 15%;
+      right: 70%;
+      z-index: 2;
+      height: 42%;
+      animation: moveImgLeft 2s ease;
+    }
+    &__img--3 {
+      position: absolute;
+      bottom: 0%;
+      right: 50%;
+      z-index: 2;
+      height: 37%;
+      animation: moveImg3Left 2s ease;
+    }
+    &__img--4 {
+      position: absolute;
+      top: 2%;
+      right: 1%;
+      z-index: 2;
+      height: 10%;
+    }
+    &__description {
+      padding-top: 4rem;
+      line-height: 1.5;
+      color: $color-text;
+    }
+    &__market-condition {
+      padding-top: 3rem;
+      display: flex;
+      gap: 3rem;
+      & span {
+        color: $color-text;
+      }
+    }
   }
-  &__right {
-    width: 50%;
-  }
-  &__img {
-    position: relative;
-    background-color: #bcdfeb;
-    border-radius: 40px;
+  .email {
+    padding-top: 2rem;
     width: 100%;
-    height: 100%;
-    z-index: 1;
-    transition: all 2s ease;
+    &__input {
+      width: 55%;
+      height: 5.2rem;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      &::placeholder {
+        font-size: 1.6rem;
+      }
+    }
   }
-  &__img--1 {
-    position: absolute;
-    top: 10%;
-    right: 10%;
-    z-index: 2;
-    height: 75%;
-  }
-  &__img--2 {
-    position: absolute;
-    top: 15%;
-    right: 70%;
-    z-index: 2;
-    height: 42%;
-    animation: moveImgLeft 2s ease;
-  }
-  &__img--3 {
-    position: absolute;
-    bottom: 0%;
-    right: 50%;
-    z-index: 2;
-    height: 37%;
-    animation: moveImg3Left 2s ease;
-  }
-  &__img--4 {
-    position: absolute;
-    top: 2%;
-    right: 1%;
-    z-index: 2;
-    height: 10%;
-  }
-  &__description {
-    padding-top: 4rem;
-    line-height: 1.5;
-    color: $color-text;
+  input[type="text"] {
+    padding: 0 1rem;
+    font-size: 2rem;
   }
 }
-.email {
-  padding-top: 2rem;
-  width: 100%;
-  &__input {
-    width: 55%;
-    height: 5.2rem;
-    border-radius: 5px;
-    border: none;
-    outline: none;
-    &::placeholder {
+
+// section banca
+.section-banca-stats {
+  background-color: $color-blue--black;
+  padding: 5rem 0rem;
+  .banca-stats {
+    &--container {
+      display: flex;
+      gap: 1rem;
+    }
+    &__card {
+      gap: 1rem;
+      background-color: $color-blue--black;
+    }
+    &__icon-bg {
+      flex: 0 0 auto;
+      height: 7rem;
+      width: 7rem;
+      border-radius: 50%;
+      background-color: $color-white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &__icon {
+      color: $color-blue;
+      font-size: 3rem;
+    }
+    &__text {
       font-size: 1.6rem;
+      font-weight: 500;
+      color: $color-white;
     }
   }
 }
-input[type="text"] {
-  padding: 0 1rem;
-  font-size: 2rem;
+
+// section features
+.section-feature {
+  background-color: $color-light--grey;
+  padding: 10rem 0rem;
+  .feature {
+    text-align: center;
+    &__cards {
+      padding-top: 5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 25rem 25rem;
+      gap: 3rem;
+    }
+  }
+  .cards-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid $color-shade--gray;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+    padding: 2rem;
+    &__svg {
+      padding-bottom: 3rem;
+      & img {
+        height: 7rem;
+      }
+    }
+    &__tittle {
+      font-size: 2rem;
+      padding-bottom: 2rem;
+      font-weight: 600;
+    }
+    &:last-child {
+      background-color: $color-blue;
+      color: $color-white;
+      .cards-item__tittle {
+        font-size: 5rem;
+        font-weight: 800;
+      }
+      .card-item__text--link {
+        font-size: 2rem;
+        margin-right: 2px;
+        transition: all 1s ease;
+        color: $color-white;
+        &:hover .card-item__arrow {
+          animation: moveR 1s forwards;
+        }
+        &:not(:hover) .card-item__arrow {
+          animation: moveL 1s;
+        }
+      }
+    }
+  }
+
+  .cards-item:not(:last-child):hover {
+    box-shadow: 0px 5.9348835945px 29.6744174957px 0px
+      rgba(6, 7, 46, 0.1019607843);
+  }
+}
+
+// section loan
+.section-loan {
+  background-color: $color-white;
+  padding: 5rem 0rem;
+  .loan {
+    padding-top: 10rem;
+    gap: 2rem;
+    &__process {
+      align-self: center;
+    }
+    &__text {
+      padding-top: 4rem;
+      line-height: 1.5;
+    }
+    &__list-item {
+      padding-top: 4rem;
+      color: $color-text--list;
+      font-family: "Roboto", sans-serif;
+      font-weight: 600;
+
+      & li:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
+    &__link {
+      margin-top: 5rem;
+      color: $color-blue;
+      font-family: "Roboto", sans-serif;
+      font-weight: 600;
+      font-size: 1.7rem;
+      position: relative;
+      transition: all 0.5s ease-in-out;
+      &::before {
+        content: "";
+        height: 2px;
+        width: 0rem;
+        background-color: $color-blue;
+        position: absolute;
+        bottom: -2px;
+      }
+      &:hover::before {
+        animation: moveLeft 0.5s ease-in-out forwards;
+        // animation-fill-mode: forwards;
+      }
+      &:not(:hover)::before {
+        animation: moveRight 0.5s ease-in-out;
+      }
+    }
+
+    &__stats {
+      align-self: center;
+      padding-top: 3rem;
+      &--container {
+        gap: 3rem;
+        align-items: center;
+      }
+      grid-template-rows: min-content;
+      grid-template-columns: repeat(2, min-content);
+      column-gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      &--num {
+        color: $color-heading--primary;
+        font-size: 5rem;
+        font-weight: 600;
+      }
+      &--text {
+        line-height: 1.5;
+        color: $color-text;
+      }
+    }
+    &__img {
+      display: grid;
+      grid-template-rows: min-content 29rem min-content;
+      & img {
+        display: inline-block;
+      }
+      &--1 {
+        margin-bottom: -2rem;
+      }
+      &--2 {
+        margin-top: -1rem;
+      }
+
+      .loan__message {
+        position: relative;
+        overflow: hidden;
+        &::before {
+          content: "";
+          height: 47rem;
+          width: 47rem;
+          background: radial-gradient(
+            50% 50% at 50% 50%,
+            #dc1f353b 39.06%,
+            rgba(238, 106, 45, 0) 100%
+          );
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        &-img--1 {
+          top: 0%;
+          left: 30%;
+          position: absolute;
+        }
+        &-img--2 {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        &-img--3 {
+          position: absolute;
+          left: 50%;
+          bottom: 0%;
+          height: 9.4rem;
+        }
+      }
+    }
+
+    &__card-holder {
+      position: relative;
+      height: 50rem;
+      &::before {
+        content: "";
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background: radial-gradient(
+          100% 100% at 20% 30%,
+          rgba(175, 255, 238, 0.62) 40%,
+          rgba(247, 173, 83, 0.526) 60%
+        );
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50%;
+        filter: blur(60px);
+      }
+      &-img--1 {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
+      &-img--2 {
+        position: absolute;
+        z-index: 2;
+        top: 75%;
+        transform: translateY(-50%);
+        height: 20rem;
+      }
+    }
+  }
 }

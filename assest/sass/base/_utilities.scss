@@ -19,6 +19,9 @@
 .u-text-center {
   text-align: center;
 }
+.u-gap-small {
+  gap: 3px;
+}
 .ml-auto {
   margin-left: auto;
 }
@@ -29,8 +32,25 @@
   margin-left: 2rem;
 }
 .header-primary {
-  color: $color-heading;
+  color: $color-heading--primary;
+  font-size: 5rem;
+  font-weight: 600;
 }
 .header-primary--hero {
   font-size: 6rem;
+}
+.header-secondary {
+  color: $color-text;
+  font-family: "poppins";
+  font-family: 1rem;
+  color: $color-heading--secondary;
+}
+.check-box {
+  color: $color-blue;
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+.paragraph {
+  color: $color-text;
+  line-height: 1.5;
 }
