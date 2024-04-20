@@ -107,38 +107,6 @@ body {
   box-sizing: border-box;
 }
 
-.u-flex {
-  display: flex;
-}
-
-.u-flex-d-col {
-  flex-direction: column;
-}
-
-.u-flex-d-row {
-  flex-direction: row;
-}
-
-.u-flex-v-center {
-  align-items: center;
-}
-
-.u-flex-h-center {
-  justify-content: center;
-}
-
-.u-flex-space-between {
-  justify-content: space-between;
-}
-
-.u-text-center {
-  text-align: center;
-}
-
-.u-gap-small {
-  gap: 3px;
-}
-
 .ml-auto {
   margin-left: auto;
 }
@@ -155,6 +123,10 @@ body {
   color: #0c0d0e;
   font-size: 5rem;
   font-weight: 600;
+}
+
+.header-primary--light {
+  color: white;
 }
 
 .header-primary--hero {
@@ -177,6 +149,10 @@ body {
 .paragraph {
   color: #4c5267;
   line-height: 1.5;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .btn-cta {
@@ -220,6 +196,38 @@ body {
 .container--hero {
   margin: 0 auto;
   max-width: 130rem;
+}
+
+.u-flex {
+  display: flex;
+}
+
+.u-flex-d-col {
+  flex-direction: column;
+}
+
+.u-flex-d-row {
+  flex-direction: row;
+}
+
+.u-flex-v-center {
+  align-items: center;
+}
+
+.u-flex-h-center {
+  justify-content: center;
+}
+
+.u-flex-space-between {
+  justify-content: space-between;
+}
+
+.u-text-center {
+  text-align: center;
+}
+
+.u-gap-small {
+  gap: 3px;
 }
 
 .section-header {
@@ -284,15 +292,9 @@ body {
 }
 .hero-section .hero {
   padding: 0 0 8rem 3rem;
-  display: flex;
-  gap: 2rem;
 }
 .hero-section .hero__left {
   padding-top: 5rem;
-  width: 50%;
-}
-.hero-section .hero__right {
-  width: 50%;
 }
 .hero-section .hero__img {
   position: relative;
@@ -369,16 +371,11 @@ body {
   background-color: #0e1520;
   padding: 5rem 0rem;
 }
-.section-banca-stats .banca-stats--container {
-  display: flex;
-  gap: 1rem;
-}
 .section-banca-stats .banca-stats__card {
   gap: 1rem;
   background-color: #0e1520;
 }
 .section-banca-stats .banca-stats__icon-bg {
-  flex: 0 0 auto;
   height: 7rem;
   width: 7rem;
   border-radius: 50%;
@@ -406,8 +403,6 @@ body {
 }
 .section-feature .feature__cards {
   padding-top: 5rem;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: 25rem 25rem;
   gap: 3rem;
 }
@@ -597,4 +592,62 @@ body {
   top: 75%;
   transform: translateY(-50%);
   height: 20rem;
+}
+
+.section-loan-calculator {
+  padding: 5rem 0;
+  height: min-content;
+  text-align: center;
+  background: url("/calculator-bg.png"), #0e1520;
+}
+.section-loan-calculator h2 {
+  padding-bottom: 5rem;
+}
+.section-loan-calculator .loan-calculator {
+  width: 35%;
+  height: min-content;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 5px;
+  padding: 3rem;
+}
+.section-loan-calculator .loan-calculator h3 {
+  font-size: 3rem;
+  text-align: left;
+  font-weight: 700;
+  padding-bottom: 2rem;
+}
+.section-loan-calculator .loan-calculator__form {
+  text-align: start;
+}
+.section-loan-calculator .loan-calculator__form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.section-loan-calculator .loan-calculator__form input,
+.section-loan-calculator .loan-calculator__form select {
+  width: 100%;
+  height: 5rem;
+  margin-bottom: 3rem;
+  outline: #0050b2;
+  background-color: #f2f2f2;
+  color: #9199a1;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  border-radius: 4px;
+  line-height: 56px;
+  font-size: 1.6rem;
+  border-color: transparent;
+}
+.section-loan-calculator .loan-calculator__form input:focus,
+.section-loan-calculator .loan-calculator__form select:focus {
+  border: 1px solid #0050b2;
+  border-radius: 5px;
+}
+.section-loan-calculator .loan-calculator__form input[type=text] {
+  padding: 0 1rem;
+}
+.section-loan-calculator .loan-calculator__form Button {
+  width: 100%;
 }/*# sourceMappingURL=main.css.map */

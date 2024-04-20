@@ -1,27 +1,3 @@
-.u-flex {
-  display: flex;
-}
-.u-flex-d-col {
-  flex-direction: column;
-}
-.u-flex-d-row {
-  flex-direction: row;
-}
-.u-flex-v-center {
-  align-items: center;
-}
-.u-flex-h-center {
-  justify-content: center;
-}
-.u-flex-space-between {
-  justify-content: space-between;
-}
-.u-text-center {
-  text-align: center;
-}
-.u-gap-small {
-  gap: 3px;
-}
 .ml-auto {
   margin-left: auto;
 }
@@ -35,6 +11,9 @@
   color: $color-heading--primary;
   font-size: 5rem;
   font-weight: 600;
+}
+.header-primary--light {
+  color: $color-white;
 }
 .header-primary--hero {
   font-size: 6rem;
@@ -53,4 +32,7 @@
 .paragraph {
   color: $color-text;
   line-height: 1.5;
+}
+.text-center {
+  text-align: center;
 }

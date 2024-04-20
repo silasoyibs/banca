@@ -34,7 +34,7 @@
     <main>
       <!-- section hero-section -->
     <section class="hero-section">
-      <div class="hero container--hero">
+      <div class="hero grid grid--2-cols container--hero">
         <div class="hero__left">
           <h1 class="header-primary header-primary--hero">
             Simplify all your banking and loan methods.
@@ -76,7 +76,7 @@
   <!-- section banca-stats -->
     <section class="section-banca-stats">
     <div class="banca-stats">
-        <div class="container banca-stats--container">
+        <div class="container banca-stats--container grid grid--3-cols">
           <!-- card--1 -->
           <div class="banca-stats__card u-flex u-flex-v-center">
             <div class="banca-stats__icon-bg">
@@ -115,7 +115,7 @@
       <div class="feature container">
           <span class="header-secondary">OUR FEATURES</span>
           <h2 class="header-primary">We have better and more feature</h2>
-        <div class="feature__cards">
+        <div class="feature__cards grid grid--4-cols">
           <!-- card--1 -->
           <div class="cards-item">
             <span class="cards-item__svg"><img src="/speedometer-outline.svg" alt="speed" class="svg"></span>
@@ -194,7 +194,7 @@
             <img src="/bank-balance.png" class="loan__card-holder-img--2"/>
           </div>
           <div class="loan__stats">
-            <h2 class="header-primary">We have reputable customer relatinships</h2>
+            <h2 class="header-primary">We have reputable customer relationships</h2>
             <p class="paragraph">
               There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly .
             </p>
@@ -211,6 +211,36 @@
               </div>
             </div>
           </div>
+      </div>
+    </section>
+    <!-- section Loan Calculator -->
+    <section class="section-loan-calculator">
+      <span class="header-secondary">LOAN CALCULATOR</span>
+      <h2 class="header-primary header-primary--light">Calculate and confirm your loans</h2>
+      <div class="loan-calculator">
+          <h3>Loan Calculator</h3>
+        <form action="" class="loan-calculator__form">
+          <div>
+            <label>Type of Loan</label>
+            <select value="">
+              <option value="Debt Loan">Debt Loan</option>
+              <option value="Installment Loan">Installment Loan</option>
+            </select>
+          </div>
+          <div>
+            <label>Amount of money</label>
+            <input type="text" placeholder="Enter Amount"/>
+          </div>
+          <div>
+            <label for="">For how long (days)</label>
+            <input type="text" placeholder="For how long (days)"/>
+          </div>
+          <div>
+            <label for="">Repayments</label>
+            <input type="text" placeholder="Enter Amount"/>
+          </div>
+          <button class="btn-cta"><span>Apply For Loans</span></button>
+        </form>
       </div>
     </section>
   <main/>
