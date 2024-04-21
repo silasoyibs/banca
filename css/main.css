@@ -270,8 +270,11 @@ body {
 .section-footer .footer__socials .socials-items {
   width: 100%;
 }
-.section-footer .footer__socials .socials-items .socials-links {
-  margin-left: 50rem;
+.section-footer .footer__socials .socials-items .footer-line {
+  height: 2px;
+  width: 50%;
+  background-color: #fff;
+  margin: 0 1rem 0 1rem;
 }
 .section-footer .footer__socials .socials-items .socials-links .socials-icons {
   color: white;
