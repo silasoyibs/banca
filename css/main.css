@@ -155,6 +155,11 @@ body {
   text-align: center;
 }
 
+.stats-container {
+  gap: 3rem;
+  align-items: center;
+}
+
 .btn-cta {
   padding: 1.5rem 3.5rem;
   background-color: #0050b2;
@@ -230,6 +235,87 @@ body {
   gap: 3px;
 }
 
+.section-footer {
+  padding: 10rem 0;
+  background-color: #000000;
+  color: white;
+}
+.section-footer .footer {
+  column-gap: 3rem;
+}
+.section-footer .footer__mission {
+  padding-right: 4rem;
+}
+.section-footer .footer__mission .mission-tittle,
+.section-footer .footer__mission .mission-text {
+  padding-bottom: 3rem;
+}
+.section-footer .footer__nav-heading {
+  font-weight: 800;
+  padding-bottom: 3rem;
+}
+.section-footer .footer_links-item li:not(:last-child) {
+  padding-bottom: 3rem;
+}
+.section-footer .footer__link {
+  color: #dcdada;
+  font-weight: 100;
+}
+.section-footer .footer__link:hover {
+  color: #0050b2;
+}
+.section-footer .footer__socials {
+  grid-column: 2/-1;
+}
+.section-footer .footer__socials .socials-items {
+  width: 100%;
+}
+.section-footer .footer__socials .socials-items .socials-links {
+  margin-left: 50rem;
+}
+.section-footer .footer__socials .socials-items .socials-links .socials-icons {
+  color: white;
+  font-size: 2.5rem;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  padding: 1rem;
+  margin-right: 1rem;
+}
+.section-footer .footer__socials .socials-items .socials-links .socials-icons:hover {
+  color: #0050b2;
+  border: 1px solid #0050b2;
+}
+.section-footer .footer__copy-right {
+  padding-top: 2rem;
+  gap: 2rem;
+}
+.section-footer .footer__copy-right a {
+  color: #ebebeb;
+}
+.section-footer .footer__copy-right a:hover {
+  color: #0050b2;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid--2-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid--3-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid--4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid--center-v {
+  align-items: center;
+}
+
 .section-header {
   background-color: #c9e7f1;
   padding-top: 2rem;
@@ -264,26 +350,6 @@ body {
 }
 .nav__link:hover {
   color: #0050b2;
-}
-
-.grid {
-  display: grid;
-}
-
-.grid--2-cols {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.grid--3-cols {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.grid--4-cols {
-  grid-template-columns: repeat(4, 1fr);
-}
-
-.grid--center-v {
-  align-items: center;
 }
 
 .hero-section {
@@ -509,10 +575,6 @@ body {
   align-items: center;
   justify-content: center;
 }
-.section-loan .loan__stats--container {
-  gap: 3rem;
-  align-items: center;
-}
 .section-loan .loan__stats--num {
   color: #0c0d0e;
   font-size: 5rem;
@@ -648,6 +710,72 @@ body {
 .section-loan-calculator .loan-calculator__form input[type=text] {
   padding: 0 1rem;
 }
+.section-loan-calculator .loan-calculator__form div:nth-child(2) > div,
+.section-loan-calculator .loan-calculator__form div:nth-child(4) > div {
+  position: relative;
+}
+.section-loan-calculator .loan-calculator__form div:nth-child(2) div > span,
+.section-loan-calculator .loan-calculator__form div:nth-child(4) div > span {
+  position: absolute;
+  top: 35%;
+  right: 2%;
+  transform: translate(-50%, -50%);
+}
 .section-loan-calculator .loan-calculator__form Button {
   width: 100%;
+}
+
+.section-contact-us {
+  background-color: #f6f6f6;
+  padding: 10rem 0 5rem 0;
+}
+.section-contact-us .contact-us {
+  column-gap: 5rem;
+}
+.section-contact-us .contact-us__form {
+  background-color: #fff;
+  border: 1px solid #ebebeb;
+  border-radius: 8px;
+  padding: 5rem;
+  width: 100%;
+}
+.section-contact-us .contact-us__form > h3 {
+  font-size: 3rem;
+  padding-bottom: 5rem;
+}
+.section-contact-us .contact-us__form > input {
+  display: block;
+  width: 100%;
+  height: 5rem;
+  margin-bottom: 2rem;
+  background-color: #f2f2f2;
+  color: #9199a1;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  border-radius: 5px;
+  line-height: 56px;
+  font-size: 1.6rem;
+  border-color: transparent;
+  outline: none;
+}
+.section-contact-us .contact-us__form > input:focus {
+  border: 1px solid #0050b2;
+  border-radius: 5px;
+}
+.section-contact-us .contact-us__form > input[type=text] {
+  padding: 0 1rem;
+}
+.section-contact-us .contact-us__stats {
+  padding-top: 3rem;
+}
+.section-contact-us .contact-us__stats .stats-tittle {
+  padding-bottom: 1rem;
+}
+.section-contact-us .contact-us__stats .stats-text {
+  padding-bottom: 3rem;
+}
+.section-contact-us .contact-us__stats .stats-num .stats-num--contact-us {
+  color: #0c0d0e;
+  font-size: 5rem;
+  font-weight: 600;
 }/*# sourceMappingURL=main.css.map */
