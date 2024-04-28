@@ -8,7 +8,6 @@
     }
     &__img {
       position: relative;
-      background-color: $color-blue--light;
       border-radius: 40px;
       width: 100%;
       height: 100%;
@@ -129,13 +128,10 @@
     background-color: #fff;
     border: 1px solid $color-shade--gray;
     border-radius: 8px;
-    height: 100%;
-    width: 100%;
-    padding: 2rem;
     &__svg {
       padding-bottom: 3rem;
       & img {
-        height: 7rem;
+        height: 5vw;
       }
     }
     &__tittle {
@@ -166,8 +162,7 @@
   }
 
   .cards-item:not(:last-child):hover {
-    box-shadow: 0px 5.9348835945px 29.6744174957px 0px
-      rgba(6, 7, 46, 0.1019607843);
+    box-shadow: 0px 5.9348835945px 29.6744174957px rgba(6, 7, 46, 0.1019607843);
   }
 }
 
@@ -240,14 +235,17 @@
     &__img {
       display: grid;
       grid-template-rows: min-content 29rem min-content;
-      & img {
-        display: inline-block;
+      & > figure {
+        width: 100%;
       }
       &--1 {
         margin-bottom: -2rem;
       }
       &--2 {
         margin-top: -1rem;
+      }
+      &--customer {
+        max-width: 100%;
       }
 
       .loan__message {
@@ -267,6 +265,7 @@
           left: 50%;
           transform: translate(-50%, -50%);
         }
+
         &-img--1 {
           top: 0%;
           left: 30%;
@@ -324,7 +323,6 @@
 // Sector Loan-calculator
 .section-loan-calculator {
   padding: 5rem 0;
-  height: min-content;
   text-align: center;
   background: url("/calculator-bg.png"), #0e1520;
   & h2 {
@@ -333,7 +331,6 @@
 
   .loan-calculator {
     width: 35%;
-    height: min-content;
     margin: 0 auto;
     background-color: $color-white;
     border-radius: 5px;
@@ -354,7 +351,6 @@
       & input,
       select {
         width: 100%;
-        height: 5rem;
         margin-bottom: 3rem;
         outline: $color-blue;
         background-color: #f2f2f2;
@@ -362,7 +358,7 @@
         font-family: "Roboto", sans-serif;
         font-weight: 400;
         border-radius: 4px;
-        line-height: 56px;
+        height: 5rem;
         font-size: 1.6rem;
         border-color: transparent;
       }
@@ -412,7 +408,6 @@
       & > input {
         display: block;
         width: 100%;
-        height: 5rem;
         margin-bottom: 2rem;
         background-color: #f2f2f2;
         color: #9199a1;

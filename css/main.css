@@ -270,11 +270,8 @@ body {
 .section-footer .footer__socials .socials-items {
   width: 100%;
 }
-.section-footer .footer__socials .socials-items .footer-line {
-  height: 2px;
-  width: 50%;
-  background-color: #fff;
-  margin: 0 1rem 0 1rem;
+.section-footer .footer__socials .socials-items .socials-links {
+  gap: 1rem;
 }
 .section-footer .footer__socials .socials-items .socials-links .socials-icons {
   color: white;
@@ -282,11 +279,16 @@ body {
   border: 1px solid #fff;
   border-radius: 50%;
   padding: 1rem;
-  margin-right: 1rem;
 }
 .section-footer .footer__socials .socials-items .socials-links .socials-icons:hover {
   color: #0050b2;
   border: 1px solid #0050b2;
+}
+.section-footer .footer__socials .socials-items .footer-line {
+  height: 2px;
+  width: 50%;
+  background-color: #fff;
+  margin: 0 1rem 0 1rem;
 }
 .section-footer .footer__copy-right {
   padding-top: 2rem;
@@ -367,7 +369,6 @@ body {
 }
 .hero-section .hero__img {
   position: relative;
-  background-color: #c9e7f1;
   border-radius: 40px;
   width: 100%;
   height: 100%;
@@ -483,15 +484,12 @@ body {
   background-color: #fff;
   border: 1px solid #ebebeb;
   border-radius: 8px;
-  height: 100%;
-  width: 100%;
-  padding: 2rem;
 }
 .section-feature .cards-item__svg {
   padding-bottom: 3rem;
 }
 .section-feature .cards-item__svg img {
-  height: 7rem;
+  height: 5vw;
 }
 .section-feature .cards-item__tittle {
   font-size: 2rem;
@@ -519,7 +517,7 @@ body {
   animation: moveL 1s;
 }
 .section-feature .cards-item:not(:last-child):hover {
-  box-shadow: 0px 5.9348835945px 29.6744174957px 0px rgba(6, 7, 46, 0.1019607843);
+  box-shadow: 0px 5.9348835945px 29.6744174957px rgba(6, 7, 46, 0.1019607843);
 }
 
 .section-loan {
@@ -591,14 +589,17 @@ body {
   display: grid;
   grid-template-rows: min-content 29rem min-content;
 }
-.section-loan .loan__img img {
-  display: inline-block;
+.section-loan .loan__img > figure {
+  width: 100%;
 }
 .section-loan .loan__img--1 {
   margin-bottom: -2rem;
 }
 .section-loan .loan__img--2 {
   margin-top: -1rem;
+}
+.section-loan .loan__img--customer {
+  max-width: 100%;
 }
 .section-loan .loan__img .loan__message {
   position: relative;
@@ -661,7 +662,6 @@ body {
 
 .section-loan-calculator {
   padding: 5rem 0;
-  height: min-content;
   text-align: center;
   background: url("/calculator-bg.png"), #0e1520;
 }
@@ -670,7 +670,6 @@ body {
 }
 .section-loan-calculator .loan-calculator {
   width: 35%;
-  height: min-content;
   margin: 0 auto;
   background-color: white;
   border-radius: 5px;
@@ -693,7 +692,6 @@ body {
 .section-loan-calculator .loan-calculator__form input,
 .section-loan-calculator .loan-calculator__form select {
   width: 100%;
-  height: 5rem;
   margin-bottom: 3rem;
   outline: #0050b2;
   background-color: #f2f2f2;
@@ -701,7 +699,7 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   border-radius: 4px;
-  line-height: 56px;
+  height: 5rem;
   font-size: 1.6rem;
   border-color: transparent;
 }
@@ -749,7 +747,6 @@ body {
 .section-contact-us .contact-us__form > input {
   display: block;
   width: 100%;
-  height: 5rem;
   margin-bottom: 2rem;
   background-color: #f2f2f2;
   color: #9199a1;

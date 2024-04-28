@@ -29,25 +29,25 @@
       grid-column: 2/-1;
       .socials-items {
         width: 100%;
-        .footer-line {
-          height: 2px;
-          width: 50%;
-          background-color: #fff;
-          margin: 0 1rem 0 1rem;
-        }
         .socials-links {
+          gap: 1rem;
           & .socials-icons {
             color: $color-white;
             font-size: 2.5rem;
             border: 1px solid #fff;
             border-radius: 50%;
             padding: 1rem;
-            margin-right: 1rem;
           }
           & .socials-icons:hover {
             color: $color-blue;
             border: 1px solid $color-blue;
           }
+        }
+        .footer-line {
+          height: 2px;
+          width: 50%;
+          background-color: #fff;
+          margin: 0 1rem 0 1rem;
         }
       }
     }
