@@ -202,7 +202,7 @@ main {
   top: 20px;
   left: 50%;
   transform: translateX(300%);
-  transition: transform 3s cubic-bezier(0.17, 0.67, 0.91, 1.26);
+  transition: transform 2s cubic-bezier(0.17, 0.67, 0.91, 1.26);
 }
 
 .toastBox.active {
@@ -215,8 +215,7 @@ main {
   align-items: center;
   background-color: #fff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  height: 10rem;
-  width: 25rem;
+  padding: 2.5rem 10rem 2.5rem 0rem;
   border-radius: 12px;
   border-left: solid 6px #0050b2;
   overflow: hidden;
