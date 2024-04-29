@@ -105,6 +105,11 @@ html {
 
 body {
   box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+main {
+  position: relative;
 }
 
 .ml-auto {
@@ -190,6 +195,79 @@ body {
 }
 .btn-cta.show-unfillanimation:not(:hover)::before {
   animation: unfillButton 0.5s;
+}
+
+.toastBox {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(300%);
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.91, 1.26);
+}
+
+.toastBox.active {
+  transform: translateX(-50%);
+}
+
+.toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  height: 10rem;
+  width: 25rem;
+  border-radius: 12px;
+  border-left: solid 6px #0050b2;
+  overflow: hidden;
+}
+.toast .toast-close-icon {
+  position: absolute;
+  top: 5%;
+  right: 3%;
+  color: #0050b2;
+  font-size: 3rem;
+  font-weight: 400;
+}
+.toast .toast-message--tittle {
+  font-size: 2rem;
+  font-weight: 600;
+}
+.toast .toast-message--text {
+  display: block;
+  color: #2c2929;
+}
+.toast .toast-icon {
+  font-size: 3.5rem;
+  padding: 0 1rem 0 1rem;
+}
+.toast .toast-icon.toast-icon--success {
+  color: #0050b2;
+}
+.toast .toast-icon.toast-icon--error {
+  color: #ff0000;
+}
+.toast::before {
+  position: absolute;
+  bottom: 0;
+  content: "";
+  height: 4px;
+  width: 100%;
+  background-color: #0050b2;
+  opacity: 0.4;
+}
+.toast::after {
+  position: absolute;
+  bottom: 0;
+  content: "";
+  height: 4px;
+  width: 100%;
+  background-color: #0050b2;
+  opacity: 1;
+  transition: width 5s ease;
+}
+.toast.active::after {
+  width: 0%;
 }
 
 .container {

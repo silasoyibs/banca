@@ -1,6 +1,7 @@
 export const navLinks = document.querySelectorAll(".nav__link");
 export const activePage = window.location.pathname.split("/")[1];
 export const btnCta = document.querySelectorAll(".btn-cta");
+const main = document.querySelector("main");
 
 // Nav Active Link
 export const navLinkActive = function (navLinks, activePage) {
@@ -22,3 +23,9 @@ export const showBtnAnimation = function (btnCta) {
     });
   });
 };
+
+// Toast
+class Toast {
+  success() {}
+}
+const toast = new Toast();
