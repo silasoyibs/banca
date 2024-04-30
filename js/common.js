@@ -23,19 +23,15 @@ export const showBtnAnimation = function (btnCta) {
   });
 };
 
-// Toast
+// Toast notification
 class Toast {
   _parentElement = document.querySelector(".toastBox");
-  _toastElement = document.querySelector(".toast");
   render(markup) {
     this._parentElement.innerHTML = "";
-    this._parentElement.insertAdjacentHTML("afterbegin", markup);
     this._parentElement.classList.add("active");
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
-  error(message) {
-    const markupError = this.generateErrorMarkup(message);
-    this.render(markupError);
-  }
+
   generateErrorMarkup(message) {
     return `
        <div class="toast">
@@ -53,7 +49,7 @@ class Toast {
   }
   generateSuccessMarkup(message) {
     return `
-      <div class="toast">
+      <div class="toast ">
             <ion-icon class="toast-close-icon" name="close-outline"></ion-icon>
             <ion-icon
               class="toast-icon toast-icon--success"
@@ -66,9 +62,48 @@ class Toast {
         </div>
     `;
   }
-  success(message) {
+  renderSuccessMessage(message) {
     const markupSucess = this.generateSuccessMarkup(message);
     this.render(markupSucess);
   }
+
+  renderErrorMessage(message) {
+    const markupError = this.generateErrorMarkup(message);
+    this.render(markupError);
+  }
+
+  close() {
+    const toastClose = document.querySelector(".toast-close-icon");
+    toastClose.addEventListener("click", () => {
+      this._parentElement.classList.remove("active");
+    });
+  }
+  active() {
+    const toast = document.querySelector(".toast");
+    setTimeout(() => {
+      toast.classList.add("active");
+    }, 10);
+  }
+  hide() {
+    setTimeout(() => {
+      this._parentElement.classList.remove("active");
+    }, 6000);
+  }
+  success(message) {
+    this.renderSuccessMessage(message);
+    this.active();
+    this.close();
+  }
+  error(message) {
+    this.renderErrorMessage(message);
+    this.active();
+    this.close();
+  }
 }
 export const toast = new Toast();
+
+// email validation function
+export function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}

@@ -1,9 +1,14 @@
-import { navLinkActive, navLinks, activePage } from "./common";
-import { showBtnAnimation } from "./common";
-import { btnCta } from "./common";
+import {
+  navLinkActive,
+  navLinks,
+  activePage,
+  showBtnAnimation,
+  btnCta,
+  toast,
+  validateEmail,
+} from "./common";
 import { addDoc } from "firebase/firestore";
-import { colRef } from "./firebase";
-import { toast } from "./common";
+import { emailSubcriber } from "./firebase";
 // variables declaration
 const emailForm = document.querySelector(".email");
 // HomePage
@@ -17,20 +22,35 @@ class Home {
     this.getEmailSubcriber();
   }
   getEmailSubcriber() {
+    const btnSubcriberText = document.querySelector(".email-subcriber-text");
     emailForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      toast.error("enter a correct email");
-      // try {
-      //   if (!emailForm.subcriberemail.value) return;
-      //   await addDoc(colRef, {
-      //     email: emailForm.subcriberemail.value
-      //       .toLowerCase()
-      //       .replace(/\s/g, ""),
-      //   });
-      //   emailForm.reset();
-      // } catch {
-      //   console.log("something went wrong");
-      // }
+      try {
+        e.preventDefault();
+        const email = emailForm.subcriberemail.value.toLowerCase().trim();
+        if (!email) {
+          throw new Error("please enter your email");
+        }
+        if (!validateEmail(email)) {
+          throw new Error("please enter a valid email");
+        }
+        btnSubcriberText.textContent = "Submitting...";
+        if (!navigator.onLine) {
+          throw new Error("please check your internet connection");
+        }
+        await addDoc(emailSubcriber, {
+          email: email,
+        });
+        toast.success("Thank you for subscribing!");
+        toast.hide();
+        setTimeout(() => {
+          btnSubcriberText.textContent = "Get Started";
+        }, 6000);
+        emailForm.reset();
+      } catch (error) {
+        btnSubcriberText.textContent = "Get Started";
+        toast.error(error.message);
+        toast.hide();
+      }
     });
   }
 }

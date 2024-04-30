@@ -16,8 +16,6 @@
   background-color: #fff;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   padding: 2.5rem 10rem 2.5rem 0rem;
-  // height: 10rem;
-  // width: 25rem;
   border-radius: 12px;
   border-left: solid 6px $color-blue;
   overflow: hidden;
@@ -65,7 +63,7 @@
     width: 100%;
     background-color: $color-blue;
     opacity: 1;
-    transition: width 5s ease;
+    transition: width 5s ease 2s;
   }
   &.active::after {
     width: 0%;

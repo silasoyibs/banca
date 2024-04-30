@@ -20,7 +20,7 @@ initializeApp(firebaseConfig);
 // get database
 const db = getFirestore();
 // get collection from database
-export const colRef = collection(db, "account");
+export const emailSubcriber = collection(db, "email-subcriber");
 
 // ="email
 // btn-cta
