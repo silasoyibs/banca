@@ -821,8 +821,7 @@ main {
   font-size: 3rem;
   padding-bottom: 5rem;
 }
-.section-contact-us .contact-us__form > input {
-  display: block;
+.section-contact-us .contact-us__form div input {
   width: 100%;
   margin-bottom: 2rem;
   background-color: #f2f2f2;
@@ -830,12 +829,17 @@ main {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   border-radius: 5px;
-  line-height: 56px;
+  line-height: 40px;
   font-size: 1.6rem;
   border-color: transparent;
   outline: none;
 }
-.section-contact-us .contact-us__form > input:focus {
+.section-contact-us .contact-us__form div input[name=message] {
+  width: 100%;
+  display: block;
+  padding-bottom: 7rem;
+}
+.section-contact-us .contact-us__form div input .section-contact-us .contact-us__form > input:focus {
   border: 1px solid #0050b2;
   border-radius: 5px;
 }

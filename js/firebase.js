@@ -21,6 +21,7 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 // get collection from database
 export const emailSubcriber = collection(db, "email-subcriber");
+export const contactUs = collection(db, "contact-us-form");
 
 // ="email
 // btn-cta

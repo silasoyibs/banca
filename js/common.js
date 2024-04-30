@@ -1,16 +1,15 @@
 export const navLinks = document.querySelectorAll(".nav__link");
-export const activePage = window.location.pathname.split("/")[1];
 export const btnCta = document.querySelectorAll(".btn-cta");
 
 // Nav Active Link
-export const navLinkActive = function (navLinks, activePage) {
+export const navLinkActive = function (navLinks) {
   navLinks.forEach((link) => {
-    const linkName = link.href.split("/");
-    const linkLength = linkName.length;
-    const splitedLink = linkName[linkLength - 1];
-    if (splitedLink === activePage) {
-      link.classList.add("activeLink");
-    }
+    link.addEventListener("click", (e) => {
+      navLinks.forEach((link) => {
+        link.classList.remove("activeLink");
+      });
+      e.target.classList.add("activeLink");
+    });
   });
 };
 

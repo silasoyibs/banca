@@ -15,18 +15,21 @@
         </div>
         <ul class="nav__links u-flex ml-auto">
           <li class="nav__items">
-            <a href="index.html" class="nav__link">HOME</a>
+            <a href="#home" class="nav__link">HOME</a>
           </li>
           <li class="nav__items">
-            <a href="loan.html" class="nav__link">LOAN</a>
+            <a href="#loan" class="nav__link">LOAN</a>
           </li>
           <li class="nav__items">
-            <a href="about-us.html" class="nav__link">ABOUT US</a>
+            <a href="#what-we-offer" class="nav__link">WHAT WE OFFER</a>
           </li>
           <li class="nav__items">
-            <a href="contact-us.html" class="nav__link">CONTACT US</a>
+            <a href="#contact-us" class="nav__link">CONTACT US</a>
           </li>
         </ul>
+        <button class="btn-cta ml-auto">
+          <span>Login</span>
+        </button>
         <button class="btn-cta ml-auto">
           <span>Register Now</span>
         </button>
@@ -115,7 +118,7 @@
         </div>
       </section>
       <!-- section feature  -->
-      <section class="section-feature">
+      <section class="section-feature" id="what-we-offer">
         <div class="feature container">
           <span class="header-secondary">OUR FEATURES</span>
           <h2 class="header-primary">We have better and more feature</h2>
@@ -274,7 +277,7 @@
         </div>
       </section>
       <!-- section Loan Calculator -->
-      <section class="section-loan-calculator">
+      <section class="section-loan-calculator" id="loan">
         <span class="header-secondary">LOAN CALCULATOR</span>
         <h2 class="header-primary header-primary--light">
           Calculate and confirm your loans
@@ -313,7 +316,7 @@
         </div>
       </section>
       <!-- section Contact us -->
-      <section class="section-contact-us">
+      <section class="section-contact-us" id="contact-us">
         <div class="contact-us grid grid--2-cols container">
           <div class="loan__stats contact-us__stats">
             <h2 class="header-primary stats-tittle">
@@ -334,12 +337,27 @@
               </div>
             </div>
           </div>
-          <form action="" class="contact-us__form">
+          <form class="contact-us__form">
             <h3>Get in touch</h3>
-            <input type="text" placeholder="Enter full name" />
-            <input type="text" placeholder="Enter Email Address" />
+            <div>
+              <input
+                type="text"
+                placeholder="Enter full name"
+                name="fullname"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                placeholder="Enter Email Address"
+                name="email"
+              />
+            </div>
+            <div>
+              <input type="text" placeholder="your message" name="message" />
+            </div>
             <button class="btn-cta btn-cta--subcribe">
-              <span>Subcribe</span>
+              <span class="btn-contactus-text">Submit</span>
             </button>
           </form>
         </div>

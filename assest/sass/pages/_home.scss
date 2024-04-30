@@ -405,8 +405,7 @@
         font-size: 3rem;
         padding-bottom: 5rem;
       }
-      & > input {
-        display: block;
+      & div input {
         width: 100%;
         margin-bottom: 2rem;
         background-color: #f2f2f2;
@@ -414,13 +413,17 @@
         font-family: "Roboto", sans-serif;
         font-weight: 400;
         border-radius: 5px;
-        line-height: 56px;
+        line-height: 40px;
         font-size: 1.6rem;
         border-color: transparent;
         outline: none;
       }
-
-      & > input:focus {
+      & div input[name="message"] {
+        width: 100%;
+        display: block;
+        padding-bottom: 7rem;
+      }
+      & div input & > input:focus {
         border: 1px solid $color-blue;
         border-radius: 5px;
       }
