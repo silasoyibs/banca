@@ -22,6 +22,7 @@ const db = getFirestore();
 // get collection from database
 export const emailSubcriber = collection(db, "email-subcriber");
 export const contactUs = collection(db, "contact-us-form");
+export const loanApplication = collection(db, "loan-application");
 
 // ="email
 // btn-cta

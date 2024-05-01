@@ -108,10 +108,6 @@ body {
   overflow-x: hidden;
 }
 
-main {
-  position: relative;
-}
-
 .ml-auto {
   margin-left: auto;
 }
@@ -198,11 +194,12 @@ main {
 }
 
 .toastBox {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(300%);
   transition: transform 2s cubic-bezier(0.17, 0.67, 0.91, 1.26);
+  z-index: 100;
 }
 
 .toastBox.active {
@@ -785,8 +782,14 @@ main {
   border: 1px solid #0050b2;
   border-radius: 5px;
 }
-.section-loan-calculator .loan-calculator__form input[type=text] {
+.section-loan-calculator .loan-calculator__form input[type=text],
+.section-loan-calculator .loan-calculator__form input[type=number] {
   padding: 0 1rem;
+}
+.section-loan-calculator .loan-calculator__form input[type=number]::-webkit-inner-spin-button,
+.section-loan-calculator .loan-calculator__form input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .section-loan-calculator .loan-calculator__form div:nth-child(2) > div,
 .section-loan-calculator .loan-calculator__form div:nth-child(4) > div {

@@ -49,7 +49,7 @@
               Our team of experts uses a methodology to <br />
               identify the credit cards most.
             </div>
-            <form class="email">
+            <form class="email" method="POST">
               <input
                 type="text"
                 class="email__input"
@@ -284,34 +284,47 @@
         </h2>
         <div class="loan-calculator">
           <h3>Loan Calculator</h3>
-          <form action="" class="loan-calculator__form">
+          <form class="loan-calculator__form" method="POST">
             <div>
               <label>Type of Loan</label>
-              <select value="">
-                <option value="Debt Loan">Debt Loan</option>
-                <option value="Installment Loan">Installment Loan</option>
+              <select name="typeOfLoan">
+                <option value="Debt-Loan">Debt Loan</option>
+                <option value="installment-loan">Installment Loan</option>
               </select>
             </div>
             <div>
               <label>Amount of money</label>
               <div>
-                <input type="text" placeholder="Enter Amount" />
-                <span><ion-icon name="logo-usd"></ion-icon></span>
+                <input
+                  type="number"
+                  placeholder="Enter Amount"
+                  name="amountOfMoney"
+                />
+                <span>₦</span>
               </div>
             </div>
             <div>
-              <label for="">For how long (days)</label>
-              <input type="text" placeholder="For how long (days)" />
+              <label>Enter your banca account number</label>
+              <input
+                class="loan-account-number"
+                type="number"
+                placeholder="Enter Account number"
+                name="bancaAccountNumber"
+              />
             </div>
             <div>
-              <label for="">Repayments</label>
+              <label>Repayments</label>
               <div>
-                <input type="text" placeholder="Enter Amount" /><span
-                  ><ion-icon name="logo-usd"></ion-icon
-                ></span>
+                <input
+                  type="number"
+                  placeholder="Enter Amount"
+                  name="repayments"
+                /><span>₦</span>
               </div>
             </div>
-            <button class="btn-cta"><span>Apply For Loans</span></button>
+            <button class="btn-cta">
+              <span class="btn-loan-text">Apply For Loans</span>
+            </button>
           </form>
         </div>
       </section>
@@ -337,7 +350,7 @@
               </div>
             </div>
           </div>
-          <form class="contact-us__form">
+          <form class="contact-us__form" method="POST">
             <h3>Get in touch</h3>
             <div>
               <input

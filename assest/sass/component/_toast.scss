@@ -1,9 +1,10 @@
 .toastBox {
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(calc(-50% + 350%));
   transition: transform 2s cubic-bezier(0.17, 0.67, 0.91, 1.26);
+  z-index: 100;
 }
 .toastBox.active {
   transform: translateX(-50%);
