@@ -22,6 +22,17 @@ export const showBtnAnimation = function (btnCta) {
   });
 };
 
+// Tablet Navigation
+export function tabletNav(){
+  const tabletNav = document.querySelector('.tablet-nav--container');
+  // const toggleMenu = document.querySelector('.open-tablet-menu');
+  const tabHamburgerMenu = document.querySelector(".navbar-toggler");
+
+  tabHamburgerMenu.addEventListener('click',()=>{
+    tabletNav.classList.toggle('open-tablet-menu');
+  })
+}
+
 // Toast notification
 class Toast {
   _parentElement = document.querySelector(".toastBox");

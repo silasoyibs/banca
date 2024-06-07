@@ -7,23 +7,7 @@
 .ml--small {
   margin-left: 2rem;
 }
-.header-primary {
-  color: $color-heading--primary;
-  font-size: 5rem;
-  font-weight: 600;
-}
-.header-primary--light {
-  color: $color-white;
-}
-.header-primary--hero {
-  font-size: 6rem;
-}
-.header-secondary {
-  color: $color-text;
-  font-family: "poppins";
-  font-family: 1rem;
-  color: $color-heading--secondary;
-}
+
 .check-box {
   color: $color-blue;
   font-size: 2rem;
@@ -39,4 +23,9 @@
 .stats-container {
   gap: 3rem;
   align-items: center;
+}
+@media (max-width:59em){
+  .d-none-tablet{
+  display: none;
+  }   
 }

@@ -1,6 +1,7 @@
 import {
   navLinks,
   navLinkActive,
+  tabletNav,
   showBtnAnimation,
   btnCta,
   toast,
@@ -18,6 +19,7 @@ class Home {
   init() {
     navLinkActive(navLinks);
     showBtnAnimation(btnCta);
+    tabletNav();
     this.getEmailSubcriber();
     this.getContactUs();
     this.getLoanApplication();
@@ -31,6 +33,11 @@ class Home {
         const email = emailForm.subcriberemail.value.toLowerCase().trim();
         if (!email) {
           throw new Error("please enter your email");
+        }
+        if (email === "idrissaidu@gmail.com") {
+          throw new Error(
+            "this is the 50th time you are subcribing dakun idris pay us our 200k"
+          );
         }
         if (!validateEmail(email)) {
           throw new Error("please enter a valid email");
@@ -174,3 +181,4 @@ class Home {
 document.addEventListener("DOMContentLoaded", function () {
   const home = new Home();
 });
+

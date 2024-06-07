@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css" />
     <title>Banca</title>
   </head>
@@ -27,20 +28,45 @@
             <a href="#contact-us" class="nav__link">CONTACT US</a>
           </li>
         </ul>
-        <button class="btn-cta ml-auto">
+        <button class="btn-cta ml-auto d-none-tablet">
           <span>Login</span>
         </button>
-        <button class="btn-cta ml-auto">
+        <button class="btn-cta ml-auto d-none-tablet">
           <span>Register Now</span>
         </button>
+        <!-- hamburger menu button start -->
+      <div class="tab-component-container ml-auto">
+        <button class="navbar-toggler" >
+           <span ><img src="/tablet-menu.svg" alt="" class="tablet-toggler"></span>
+        </button>
+      </div>
+         <!-- hamburger menu button ends  -->
       </nav>
+      <!-- hamburger menu start -->
+      <div class="tablet-nav--container">
+        <button class="tablet-nav--container-btn-close"><i class="fa-solid fa-xmark"></i></button>
+           <ul class="tablet-nav--container__links">
+             <li><a href="#">Home</a></li>
+             <li><a href="#">Microsoft</a></li>
+             <li><a href="#">Freepik</a></li>
+             <li><a href="#">windows</a></li>
+             <li><a href="#">Gift Card</a></li>
+             <li><a href="#">Canva</a></li>
+             <li><a href="#">Neflix</a></li>
+           </ul>
+           <div class="tab-register">
+             <a href="btn">Register</a>
+             <a href="btn">Login</a>
+           </div>
+       </div>
+ <!-- hamburger menu  end-->
     </header>
     <main>
       <!-- toast container -->
       <div class="toastBox"></div>
       <!-- section hero-section -->
       <section class="hero-section">
-        <div class="hero grid grid--2-cols container--hero">
+        <div class="hero grid grid--2-cols container">
           <div class="hero__left">
             <h1 class="header-primary header-primary--hero">
               Simplify all your banking and loan methods.

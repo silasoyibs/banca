@@ -3,3 +3,20 @@ body {
   font-weight: 400;
   font-family: sans-serif;
 }
+.header-primary {
+  color: $color-heading--primary;
+  font-size: 5rem;
+  font-weight: 600;
+}
+.header-primary--light {
+  color: $color-white;
+}
+.header-primary--hero {
+  font-size: 6rem;
+}
+.header-secondary {
+  color: $color-text;
+  font-family: "poppins";
+  font-family: 1rem;
+  color: $color-heading--secondary;
+}

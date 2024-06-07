@@ -17,6 +17,7 @@
     "vite-plugin-eslint": "^1.8.1"
   },
   "dependencies": {
+    "amazon-paapi": "^1.0.7",
     "firebase": "^9.23.0"
   }
 }

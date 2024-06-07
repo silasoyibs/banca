@@ -9,6 +9,13 @@
     width: 60%;
     justify-content: right;
     gap: 5rem;
+    @media(max-width:73em){
+      width: 52%;
+      gap: 2rem;
+    }
+    @media(max-width:59em){
+      display: none;
+    }
   }
   &__items {
     position: relative;
@@ -34,4 +41,99 @@
       color: $color-blue;
     }
   }
+  
+}
+// Tablet and Mobile menu
+.navbar-toggler {
+  border: transparent;
+  outline: none;
+  background-color:transparent;
+  display:none;
+}
+// tablet and mobile menu container
+.tablet-nav--container {
+  position: absolute;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8784313725);
+  height: 100vh;
+  width: 50%;
+  transform: translateX(100%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease-in-out;
+}
+@media screen and (max-width: 59em) {
+  .navbar-toggler {
+    display: block;
+  }
+  .tablet-nav--container.open-tablet-menu {
+    transform: translateX(0);
+      opacity: 1;
+    visibility: visible;
+  }
+}
+
+
+@media screen and (max-width: 48em) {
+  .tablet-nav--container {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@media screen and (max-width: 48em) {
+  .tablet-nav--container {
+    width: 70%;
+  }
+}
+.tablet-nav--container {
+  gap: 1rem;
+}
+
+.tablet-nav--container__links a {
+  color: red;
+  font-size: 3rem;
+}
+
+.tablet-nav--container li {
+  margin-bottom: 20px;
+}
+
+.tablet-nav--container li:last-child {
+  margin-bottom: 20px;
+}
+
+.tablet-nav--container-btn-close {
+  padding: 2rem;
+  background-color: transparent;
+  position: absolute;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  top: 1rem;
+  left: 1rem;
+}
+
+.tablet-nav--container-btn-close .fa-xmark {
+  font-size: 6rem;
+  color: red;
+}
+
+.tab-register {
+  align-self: center;
+  justify-self: center;
+  display: flex;
+  gap: 2rem;
+  padding-top: 3rem;
+}
+.tab-register a {
+  color: var(--white);
+  padding: 1rem 2rem;
+  background-color: red;
+  font-size: 2rem;
+  border-radius: 16px;
 }
