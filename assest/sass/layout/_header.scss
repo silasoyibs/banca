@@ -49,6 +49,9 @@
   outline: none;
   background-color:transparent;
   display:none;
+  & img{
+    height:3rem;
+  }
 }
 // tablet and mobile menu container
 .tablet-nav--container {
@@ -91,12 +94,15 @@
   }
 }
 .tablet-nav--container {
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .tablet-nav--container__links a {
-  color: red;
-  font-size: 3rem;
+  color:$color-white;
+  font-size: 2rem;
+  &:hover{
+    color:$color-blue;
+  }
 }
 
 .tablet-nav--container li {
@@ -108,19 +114,20 @@
 }
 
 .tablet-nav--container-btn-close {
-  padding: 2rem;
-  background-color: transparent;
+  background-color:transparent;
   position: absolute;
   cursor: pointer;
   border: none;
   outline: none;
   top: 1rem;
   left: 1rem;
+  padding: none;
+  box-sizing: border-box; 
 }
 
-.tablet-nav--container-btn-close .fa-xmark {
-  font-size: 6rem;
-  color: red;
+.tablet-nav--container-btn-close ion-icon[name="close-circle-outline"] {
+  font-size: 5rem;
+  color:$color-white;
 }
 
 .tab-register {
@@ -131,9 +138,9 @@
   padding-top: 3rem;
 }
 .tab-register a {
-  color: var(--white);
+  color: $color-white;
   padding: 1rem 2rem;
-  background-color: red;
+  background-color:$color-blue;
   font-size: 2rem;
   border-radius: 16px;
 }

@@ -25,11 +25,14 @@ export const showBtnAnimation = function (btnCta) {
 // Tablet Navigation
 export function tabletNav(){
   const tabletNav = document.querySelector('.tablet-nav--container');
-  // const toggleMenu = document.querySelector('.open-tablet-menu');
+  const closeMenuBtn = document.querySelector('.tablet-nav--container-btn-close');
   const tabHamburgerMenu = document.querySelector(".navbar-toggler");
 
   tabHamburgerMenu.addEventListener('click',()=>{
     tabletNav.classList.toggle('open-tablet-menu');
+  })
+  closeMenuBtn.addEventListener('click',()=>{
+    tabletNav.classList.remove('open-tablet-menu')
   })
 }
 

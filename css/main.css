@@ -85,6 +85,11 @@ body {
   font-size: 5rem;
   font-weight: 600;
 }
+@media (max-width: 75em) {
+  .header-primary {
+    font-size: 3.5rem;
+  }
+}
 
 .header-primary--light {
   color: white;
@@ -92,6 +97,11 @@ body {
 
 .header-primary--hero {
   font-size: 6rem;
+}
+@media (max-width: 75em) {
+  .header-primary--hero {
+    font-size: 4.5rem;
+  }
 }
 
 .header-secondary {
@@ -122,10 +132,16 @@ html {
   /* Setting HTML font to 62.5% allows user to zoon in and out while giving us the 10px base from 16px default */
   /* Later allows for easier use of rem - note: rem not compatible with ES9 */
   font-size: 62.5%;
+  overflow-x: hidden;
 }
 @media (max-width: 75em) {
   html {
     font-size: 56.25%;
+  }
+}
+@media (max-width: 59em) {
+  html {
+    font-size: 50%;
   }
 }
 
@@ -453,6 +469,9 @@ body {
   background-color: transparent;
   display: none;
 }
+.navbar-toggler img {
+  height: 3rem;
+}
 
 .tablet-nav--container {
   position: absolute;
@@ -493,12 +512,15 @@ body {
   }
 }
 .tablet-nav--container {
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .tablet-nav--container__links a {
-  color: red;
-  font-size: 3rem;
+  color: white;
+  font-size: 2rem;
+}
+.tablet-nav--container__links a:hover {
+  color: #0050b2;
 }
 
 .tablet-nav--container li {
@@ -510,7 +532,6 @@ body {
 }
 
 .tablet-nav--container-btn-close {
-  padding: 2rem;
   background-color: transparent;
   position: absolute;
   cursor: pointer;
@@ -518,11 +539,13 @@ body {
   outline: none;
   top: 1rem;
   left: 1rem;
+  padding: none;
+  box-sizing: border-box;
 }
 
-.tablet-nav--container-btn-close .fa-xmark {
-  font-size: 6rem;
-  color: red;
+.tablet-nav--container-btn-close ion-icon[name=close-circle-outline] {
+  font-size: 5rem;
+  color: white;
 }
 
 .tab-register {
@@ -534,9 +557,9 @@ body {
 }
 
 .tab-register a {
-  color: var(--white);
+  color: white;
   padding: 1rem 2rem;
-  background-color: red;
+  background-color: #0050b2;
   font-size: 2rem;
   border-radius: 16px;
 }
@@ -673,13 +696,26 @@ body {
   background-color: #0e1520;
   padding: 5rem 0rem;
 }
+.section-banca-stats .banca-stats--container {
+  gap: 2rem;
+}
+@media (max-width: 44em) {
+  .section-banca-stats .banca-stats--container {
+    grid-template-columns: 1fr;
+  }
+}
 .section-banca-stats .banca-stats__card {
   gap: 1rem;
   background-color: #0e1520;
 }
+@media (max-width: 44em) {
+  .section-banca-stats .banca-stats__card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
 .section-banca-stats .banca-stats__icon-bg {
-  height: 7rem;
-  width: 7rem;
+  padding: 2.5rem;
   border-radius: 50%;
   background-color: white;
   display: flex;
@@ -705,8 +741,13 @@ body {
 }
 .section-feature .feature__cards {
   padding-top: 5rem;
-  grid-template-rows: 25rem 25rem;
+  grid-template-rows: 1fr 1fr;
   gap: 3rem;
+}
+@media (max-width: 59em) {
+  .section-feature .feature__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 .section-feature .cards-item {
   display: flex;
@@ -716,6 +757,7 @@ body {
   background-color: #fff;
   border: 1px solid #ebebeb;
   border-radius: 8px;
+  padding: 4rem;
 }
 .section-feature .cards-item__svg {
   padding-bottom: 3rem;
@@ -755,6 +797,11 @@ body {
 .section-loan {
   background-color: white;
   padding: 5rem 0rem;
+}
+@media (max-width: 44em) {
+  .section-loan > div {
+    grid-template-columns: 1fr;
+  }
 }
 .section-loan .loan {
   padding-top: 10rem;
@@ -826,12 +873,14 @@ body {
 }
 .section-loan .loan__img--1 {
   margin-bottom: -2rem;
+  width: 100%;
 }
 .section-loan .loan__img--2 {
   margin-top: -1rem;
+  width: 100%;
 }
 .section-loan .loan__img--customer {
-  max-width: 100%;
+  width: 100%;
 }
 .section-loan .loan__img .loan__message {
   position: relative;
@@ -893,36 +942,44 @@ body {
 }
 
 .section-loan-calculator {
-  padding: 5rem 0;
+  padding: 5rem 2.5rem;
   text-align: center;
   background: url("/calculator-bg.png"), #0e1520;
 }
 .section-loan-calculator h2 {
   padding-bottom: 5rem;
 }
-.section-loan-calculator .loan-calculator {
-  width: 35%;
+.section-loan-calculator .loan-calculator--container {
+  max-width: 45rem;
   margin: 0 auto;
+}
+.section-loan-calculator .loan-calculator--container .loan-calculator {
+  width: 100%;
   background-color: white;
   border-radius: 5px;
   padding: 3rem;
 }
-.section-loan-calculator .loan-calculator h3 {
+@media (max-width: 44em) {
+  .section-loan-calculator .loan-calculator--container .loan-calculator {
+    width: 100%;
+  }
+}
+.section-loan-calculator .loan-calculator--container .loan-calculator h3 {
   font-size: 3rem;
   text-align: left;
   font-weight: 700;
   padding-bottom: 2rem;
 }
-.section-loan-calculator .loan-calculator__form {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form {
   text-align: start;
 }
-.section-loan-calculator .loan-calculator__form label {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form label {
   display: block;
   font-weight: 600;
   margin-bottom: 1rem;
 }
-.section-loan-calculator .loan-calculator__form input,
-.section-loan-calculator .loan-calculator__form select {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form input,
+.section-loan-calculator .loan-calculator--container .loan-calculator__form select {
   width: 100%;
   margin-bottom: 3rem;
   outline: #0050b2;
@@ -935,32 +992,32 @@ body {
   font-size: 1.6rem;
   border-color: transparent;
 }
-.section-loan-calculator .loan-calculator__form input:focus,
-.section-loan-calculator .loan-calculator__form select:focus {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form input:focus,
+.section-loan-calculator .loan-calculator--container .loan-calculator__form select:focus {
   border: 1px solid #0050b2;
   border-radius: 5px;
 }
-.section-loan-calculator .loan-calculator__form input[type=text],
-.section-loan-calculator .loan-calculator__form input[type=number] {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form input[type=text],
+.section-loan-calculator .loan-calculator--container .loan-calculator__form input[type=number] {
   padding: 0 1rem;
 }
-.section-loan-calculator .loan-calculator__form input[type=number]::-webkit-inner-spin-button,
-.section-loan-calculator .loan-calculator__form input[type=number]::-webkit-outer-spin-button {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form input[type=number]::-webkit-inner-spin-button,
+.section-loan-calculator .loan-calculator--container .loan-calculator__form input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-.section-loan-calculator .loan-calculator__form div:nth-child(2) > div,
-.section-loan-calculator .loan-calculator__form div:nth-child(4) > div {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form div:nth-child(2) > div,
+.section-loan-calculator .loan-calculator--container .loan-calculator__form div:nth-child(4) > div {
   position: relative;
 }
-.section-loan-calculator .loan-calculator__form div:nth-child(2) div > span,
-.section-loan-calculator .loan-calculator__form div:nth-child(4) div > span {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form div:nth-child(2) div > span,
+.section-loan-calculator .loan-calculator--container .loan-calculator__form div:nth-child(4) div > span {
   position: absolute;
   top: 35%;
   right: 2%;
   transform: translate(-50%, -50%);
 }
-.section-loan-calculator .loan-calculator__form Button {
+.section-loan-calculator .loan-calculator--container .loan-calculator__form Button {
   width: 100%;
 }
 
@@ -970,6 +1027,11 @@ body {
 }
 .section-contact-us .contact-us {
   column-gap: 5rem;
+}
+@media (max-width: 44em) {
+  .section-contact-us .contact-us {
+    grid-template-columns: 1fr;
+  }
 }
 .section-contact-us .contact-us__form {
   background-color: #fff;

@@ -114,14 +114,24 @@
 .section-banca-stats {
   background-color: $color-blue--black;
   padding: 5rem 0rem;
+
   .banca-stats {
+    &--container{
+      gap:2rem;
+      @media (max-width:44em){
+        grid-template-columns: 1fr;
+      }
+    }
     &__card {
       gap: 1rem;
       background-color: $color-blue--black;
+      @media (max-width:44em){
+        flex-direction: column;
+        text-align: center;
+      }
     }
     &__icon-bg {
-      height: 7rem;
-      width: 7rem;
+      padding: 2.5rem;
       border-radius: 50%;
       background-color: $color-white;
       display: flex;
@@ -148,8 +158,11 @@
     text-align: center;
     &__cards {
       padding-top: 5rem;
-      grid-template-rows: 25rem 25rem;
+      grid-template-rows: 1fr 1fr;
       gap: 3rem;
+      @media(max-width:59em){
+        grid-template-columns: repeat(2,1fr);
+      }
     }
   }
   .cards-item {
@@ -160,6 +173,8 @@
     background-color: #fff;
     border: 1px solid $color-shade--gray;
     border-radius: 8px;
+    padding: 4rem;
+
     &__svg {
       padding-bottom: 3rem;
       & img {
@@ -202,6 +217,12 @@
 .section-loan {
   background-color: $color-white;
   padding: 5rem 0rem;
+  & > div{
+    @media (max-width:44em){
+      grid-template-columns: 1fr;
+    }
+  }
+ 
   .loan {
     padding-top: 10rem;
     gap: 2rem;
@@ -272,12 +293,14 @@
       }
       &--1 {
         margin-bottom: -2rem;
+        width: 100%;
       }
       &--2 {
         margin-top: -1rem;
+        width: 100%;
       }
       &--customer {
-        max-width: 100%;
+        width: 100%;
       }
 
       .loan__message {
@@ -354,77 +377,84 @@
 
 // Sector Loan-calculator
 .section-loan-calculator {
-  padding: 5rem 0;
+  padding: 5rem 2.5rem;
   text-align: center;
   background: url("/calculator-bg.png"), #0e1520;
   & h2 {
     padding-bottom: 5rem;
   }
 
-  .loan-calculator {
-    width: 35%;
-    margin: 0 auto;
-    background-color: $color-white;
-    border-radius: 5px;
-    padding: 3rem;
-    & h3 {
-      font-size: 3rem;
-      text-align: left;
-      font-weight: 700;
-      padding-bottom: 2rem;
-    }
-    &__form {
-      text-align: start;
-      & label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 1rem;
-      }
-      & input,
-      select {
+.loan-calculator--container{
+  max-width:45rem;
+  margin: 0 auto;
+    .loan-calculator {
+      width: 100%;
+      background-color: $color-white;
+      border-radius: 5px;
+      padding: 3rem;
+      @media (max-width:44em){
         width: 100%;
-        margin-bottom: 3rem;
-        outline: $color-blue;
-        background-color: #f2f2f2;
-        color: #9199a1;
-        font-family: "Roboto", sans-serif;
-        font-weight: 400;
-        border-radius: 4px;
-        height: 5rem;
-        font-size: 1.6rem;
-        border-color: transparent;
       }
-      & input:focus,
-      select:focus {
-        border: 1px solid $color-blue;
-        border-radius: 5px;
+      & h3 {
+        font-size: 3rem;
+        text-align: left;
+        font-weight: 700;
+        padding-bottom: 2rem;
       }
-      input[type="text"],
-      input[type="number"] {
-        padding: 0 1rem;
-      }
-      input[type="number"]::-webkit-inner-spin-button,
-      input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-      div:nth-child(2) > div,
-      div:nth-child(4) > div {
-        position: relative;
-      }
-      div:nth-child(2) div > span,
-      div:nth-child(4) div > span {
-        position: absolute;
-        top: 35%;
-        right: 2%;
-        transform: translate(-50%, -50%);
-      }
+      &__form {
+        text-align: start;
+        & label {
+          display: block;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+        & input,
+        select {
+          width: 100%;
+          margin-bottom: 3rem;
+          outline: $color-blue;
+          background-color: #f2f2f2;
+          color: #9199a1;
+          font-family: "Roboto", sans-serif;
+          font-weight: 400;
+          border-radius: 4px;
+          height: 5rem;
+          font-size: 1.6rem;
+          border-color: transparent;
+        }
+        & input:focus,
+        select:focus {
+          border: 1px solid $color-blue;
+          border-radius: 5px;
+        }
+        input[type="text"],
+        input[type="number"] {
+          padding: 0 1rem;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        div:nth-child(2) > div,
+        div:nth-child(4) > div {
+          position: relative;
+        }
+        div:nth-child(2) div > span,
+        div:nth-child(4) div > span {
+          position: absolute;
+          top: 35%;
+          right: 2%;
+          transform: translate(-50%, -50%);
+        }
 
-      & Button {
-        width: 100%;
+        & Button {
+          width: 100%;
+        }
       }
     }
-  }
+}
+  
 }
 
 // section contact-us
@@ -433,6 +463,9 @@
   padding: 10rem 0 5rem 0;
   .contact-us {
     column-gap: 5rem;
+    @media(max-width:44em){
+      grid-template-columns: 1fr;
+    }
     &__form {
       background-color: #fff;
       border: 1px solid $color-shade--gray;

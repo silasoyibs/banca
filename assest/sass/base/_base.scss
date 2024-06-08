@@ -19,10 +19,15 @@ html {
   /* Later allows for easier use of rem - note: rem not compatible with ES9 */
   // This defines what 1rem is
   font-size: 62.5%; //1rem = 10px 10px/16px = 62.5%
+  overflow-x: hidden;
 
   // 1200px larger desktop
   @media (max-width:75em){
     font-size: 56.25%;
+  }
+  // 940px tablet and smaller desktop
+  @media (max-width:59em){
+    font-size: 50%;
   }
 }
 
