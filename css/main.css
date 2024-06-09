@@ -336,7 +336,14 @@ body {
   color: white;
 }
 .section-footer .footer {
-  column-gap: 3rem;
+  gap: 3rem;
+}
+@media (max-width: 34em) {
+  .section-footer .footer {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    gap: 2rem;
+  }
 }
 .section-footer .footer__mission {
   padding-right: 4rem;
@@ -344,6 +351,11 @@ body {
 .section-footer .footer__mission .mission-tittle,
 .section-footer .footer__mission .mission-text {
   padding-bottom: 3rem;
+}
+@media (max-width: 34em) {
+  .section-footer .footer__mission {
+    padding-right: 0rem;
+  }
 }
 .section-footer .footer__nav-heading {
   font-weight: 800;
@@ -361,6 +373,11 @@ body {
 }
 .section-footer .footer__socials {
   grid-column: 2/-1;
+}
+@media (max-width: 34em) {
+  .section-footer .footer__socials {
+    grid-column: 1/-1;
+  }
 }
 .section-footer .footer__socials .socials-items {
   width: 100%;
@@ -580,7 +597,6 @@ body {
 @media (max-width: 59em) {
   .hero-section .hero {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
     gap: 3rem;
     padding-bottom: 2rem;
   }
@@ -593,67 +609,8 @@ body {
     text-align: center;
   }
 }
-.hero-section .hero__img {
-  position: relative;
-  border-radius: 40px;
+.hero-section .hero__right figure img {
   width: 100%;
-  height: 100%;
-  z-index: 1;
-  transition: all 2s ease;
-}
-@media (max-width: 75em) {
-  .hero-section .hero__img {
-    width: 90%;
-    height: 90%;
-    margin: 0 auto;
-  }
-}
-@media (max-width: 59em) {
-  .hero-section .hero__img {
-    width: 85%;
-    height: 85%;
-    margin: 0 auto;
-  }
-}
-.hero-section .hero__img--1 {
-  position: absolute;
-  top: 10%;
-  right: 10%;
-  z-index: 2;
-  height: 75%;
-}
-@media (max-width: 75em) {
-  .hero-section .hero__img--1 {
-    width: 52%;
-  }
-}
-@media (max-width: 59em) {
-  .hero-section .hero__img--1 {
-    height: 75%;
-  }
-}
-.hero-section .hero__img--2 {
-  position: absolute;
-  top: 15%;
-  right: 65%;
-  z-index: 2;
-  height: 42%;
-  animation: moveImgLeft 2s ease;
-}
-.hero-section .hero__img--3 {
-  position: absolute;
-  bottom: 0%;
-  right: 40%;
-  z-index: 2;
-  height: 37%;
-  animation: moveImg3Left 2s ease;
-}
-.hero-section .hero__img--4 {
-  position: absolute;
-  top: 2%;
-  right: 1%;
-  z-index: 2;
-  height: 10%;
 }
 .hero-section .hero__description {
   padding-top: 4rem;
@@ -684,6 +641,12 @@ body {
   border: none;
   outline: none;
 }
+@media (max-width: 34em) {
+  .hero-section .email__input {
+    width: 80%;
+    margin-bottom: 2rem;
+  }
+}
 .hero-section .email__input::placeholder {
   font-size: 1.6rem;
 }
@@ -708,12 +671,6 @@ body {
   gap: 1rem;
   background-color: #0e1520;
 }
-@media (max-width: 44em) {
-  .section-banca-stats .banca-stats__card {
-    flex-direction: column;
-    text-align: center;
-  }
-}
 .section-banca-stats .banca-stats__icon-bg {
   padding: 2.5rem;
   border-radius: 50%;
@@ -734,19 +691,28 @@ body {
 
 .section-feature {
   background-color: #f6f6f6;
-  padding: 10rem 0rem;
+  padding: 5rem 0rem;
 }
 .section-feature .feature {
   text-align: center;
 }
 .section-feature .feature__cards {
   padding-top: 5rem;
-  grid-template-rows: 1fr 1fr;
   gap: 3rem;
 }
 @media (max-width: 59em) {
   .section-feature .feature__cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 44em) {
+  .section-feature .feature__cards {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 34em) {
+  .section-feature .feature__cards {
+    grid-template-columns: 1fr;
   }
 }
 .section-feature .cards-item {
@@ -755,7 +721,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #fff;
-  border: 1px solid #ebebeb;
+  border: 1px solid black;
   border-radius: 8px;
   padding: 4rem;
 }
@@ -791,7 +757,7 @@ body {
   animation: moveL 1s;
 }
 .section-feature .cards-item:not(:last-child):hover {
-  box-shadow: 0px 5.9348835945px 29.6744174957px rgba(6, 7, 46, 0.1019607843);
+  box-shadow: 0px 5.9348835945px 29.6744174957px rgba(6, 7, 46, 0.344);
 }
 
 .section-loan {
@@ -804,7 +770,7 @@ body {
   }
 }
 .section-loan .loan {
-  padding-top: 10rem;
+  padding-top: 5rem;
   gap: 2rem;
 }
 .section-loan .loan__process {
@@ -1026,7 +992,7 @@ body {
   padding: 10rem 0 5rem 0;
 }
 .section-contact-us .contact-us {
-  column-gap: 5rem;
+  gap: 5rem;
 }
 @media (max-width: 44em) {
   .section-contact-us .contact-us {

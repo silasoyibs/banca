@@ -3,12 +3,20 @@
   background-color: #000000;
   color: $color-white;
   .footer {
-    column-gap: 3rem;
+    gap: 3rem;
+    @media(max-width:34em){
+      grid-template-columns: repeat(2,1fr);
+      justify-items: center;
+      gap: 2rem;
+    }
     &__mission {
       padding-right: 4rem;
       .mission-tittle,
       .mission-text {
         padding-bottom: 3rem;
+      }
+      @media(max-width:34em){
+        padding-right: 0rem;
       }
     }
     &__nav-heading {
@@ -27,6 +35,9 @@
     }
     &__socials {
       grid-column: 2/-1;
+      @media(max-width:34em){
+        grid-column: 1/-1;
+      }
       .socials-items {
         width: 100%;
         .socials-links {
