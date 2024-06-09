@@ -721,7 +721,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #fff;
-  border: 1px solid black;
+  border: 1px solid #ebebeb;
   border-radius: 8px;
   padding: 4rem;
 }
