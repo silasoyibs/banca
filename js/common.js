@@ -27,15 +27,15 @@ export function tabletNav(){
   const tabletNav = document.querySelector('.tablet-nav--container');
   const closeMenuBtn = document.querySelector('.tablet-nav--container-btn-close');
   const tabHamburgerMenu = document.querySelector(".navbar-toggler");
-  // const fixedBody=document.querySelector('body');
+  const fixedBody=document.querySelector('html');
 
   tabHamburgerMenu.addEventListener('click',()=>{
     tabletNav.classList.toggle('open-tablet-menu');
-    // fixedBody.classList.toggle('fixed')
+    fixedBody.classList.toggle('fixed')
   })
   closeMenuBtn.addEventListener('click',()=>{
     tabletNav.classList.remove('open-tablet-menu');
-    // fixedBody.classList.remove('fixed');
+    fixedBody.classList.remove('fixed');
   })
 }
 
