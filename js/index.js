@@ -7,7 +7,7 @@ import {
   toast,
   validateEmail,
 } from "./common";
-import { addDoc } from "./firebase/firestore";
+import { addDoc } from "/firebase/firestore";
 import { emailSubcriber, contactUs, loanApplication } from "./firebase";
 // variables declaration
 
