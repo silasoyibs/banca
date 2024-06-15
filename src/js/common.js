@@ -9,7 +9,7 @@ export const navLinkActive = function (navLinks) {
         link.classList.remove("activeLink");
       });
       e.target.classList.add("activeLink");
-    });
+    }); 
   });
 };
 
