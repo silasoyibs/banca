@@ -9,7 +9,7 @@ import {
 } from "./common.js";
 import { addDoc } from "firebase/firestore";
 import { emailSubcriber, contactUs, loanApplication } from "./firebase.js";
-// variables declaration
+
 
 // HomePage
 class Home {
