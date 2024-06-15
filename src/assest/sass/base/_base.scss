@@ -1,0 +1,45 @@
+*,
+*::after,
+*::before {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: inherit;
+}
+
+li {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: $color-text;
+}
+
+html {
+  /* Setting HTML font to 62.5% allows user to zoon in and out while giving us the 10px base from 16px default */
+  /* Later allows for easier use of rem - note: rem not compatible with ES9 */
+  // This defines what 1rem is
+  font-size: 62.5%; //1rem = 10px 10px/16px = 62.5%
+  overflow-x: hidden;
+
+
+  // 1200px larger desktop
+  @media (max-width:75em){
+    font-size: 56.25%;
+  }
+  // 940px tablet and smaller desktop
+  @media (max-width:59em){
+    font-size: 50%;
+  }
+}
+
+html.fixed{
+  overflow:hidden;
+}
+
+body {
+  box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
+}
+
+

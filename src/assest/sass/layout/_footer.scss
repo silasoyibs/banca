@@ -1,0 +1,76 @@
+.section-footer {
+  padding: 10rem 0;
+  background-color: #000000;
+  color: $color-white;
+  .footer {
+    gap: 3rem;
+    @media(max-width:34em){
+      grid-template-columns: repeat(2,1fr);
+      justify-items: center;
+      gap: 2rem;
+    }
+    &__mission {
+      padding-right: 4rem;
+      .mission-tittle,
+      .mission-text {
+        padding-bottom: 3rem;
+      }
+      @media(max-width:34em){
+        padding-right: 0rem;
+      }
+    }
+    &__nav-heading {
+      font-weight: 800;
+      padding-bottom: 3rem;
+    }
+    &_links-item li:not(:last-child) {
+      padding-bottom: 3rem;
+    }
+    &__link {
+      color: #dcdada;
+      font-weight: 100;
+    }
+    &__link:hover {
+      color: $color-blue;
+    }
+    &__socials {
+      grid-column: 2/-1;
+      @media(max-width:34em){
+        grid-column: 1/-1;
+      }
+      .socials-items {
+        width: 100%;
+        .socials-links {
+          gap: 1rem;
+          & .socials-icons {
+            color: $color-white;
+            font-size: 2.5rem;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            padding: 1rem;
+          }
+          & .socials-icons:hover {
+            color: $color-blue;
+            border: 1px solid $color-blue;
+          }
+        }
+        .footer-line {
+          height: 2px;
+          width: 50%;
+          background-color: #fff;
+          margin: 0 1rem 0 1rem;
+        }
+      }
+    }
+    &__copy-right {
+      padding-top: 2rem;
+      gap: 2rem;
+      & a {
+        color: #ebebeb;
+      }
+      & a:hover {
+        color: $color-blue;
+      }
+    }
+  }
+}

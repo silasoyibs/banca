@@ -1,0 +1,84 @@
+// Cta Button Animation
+@keyframes fillButton {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0%;
+  }
+}
+@keyframes unfillButton {
+  0% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Hero animation
+// img-2 animation
+@keyframes moveImgLeft {
+  0% {
+    opacity: 0;
+    right: 50%;
+  }
+  30% {
+    opacity: 0;
+    right: 50%;
+  }
+  100% {
+    opacity: 1;
+    right: 70%;
+  }
+}
+// img-3 animation
+@keyframes moveImg3Left {
+  0% {
+    opacity: 0;
+    right: 20%;
+  }
+  30% {
+    opacity: 0;
+    right: 20%;
+  }
+  100% {
+    opacity: 1;
+    right: 50%;
+  }
+}
+
+// Feature Arrow animation
+@keyframes moveR {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(10px);
+  }
+}
+@keyframes moveL {
+  0% {
+    transform: translateX(10px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+// Loan Section Link Animation
+@keyframes moveLeft {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 21rem;
+  }
+}
+@keyframes moveRight {
+  0% {
+    width: 21rem;
+  }
+  100% {
+    width: 0rem;
+  }
+}
