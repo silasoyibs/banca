@@ -587,7 +587,6 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var _commonJs = require("./common.js");
 var _firestore = require("firebase/firestore");
 var _firebaseJs = require("./firebase.js");
-// variables declaration
 // HomePage
 class Home {
     constructor(){
