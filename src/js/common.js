@@ -51,7 +51,7 @@ class Toast {
   generateErrorMarkup(message) {
     return `
        <div class="toast">
-          <ion-icon class="toast-close-icon" name="close-outline"></ion-icon>
+          <ion-icon class="toast-close-icon" name="close"></ion-icon>
           <ion-icon
             class="toast-icon toast-icon--error"
             name="close-circle"
@@ -63,10 +63,11 @@ class Toast {
         </div> 
     `;
   }
+
   generateSuccessMarkup(message) {
     return `
       <div class="toast ">
-            <ion-icon class="toast-close-icon" name="close-outline"></ion-icon>
+            <ion-icon class="toast-close-icon" name="close"></ion-icon>
             <ion-icon
               class="toast-icon toast-icon--success"
               name="checkmark-circle"
