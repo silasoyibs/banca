@@ -1,0 +1,479 @@
+.hero-section {
+  padding-top: 4.8rem;
+  background-color: $color-blue--light;
+  .hero {
+    padding-bottom:8rem;
+    gap:3rem;
+    @media(max-width:75em){
+      gap:1rem;
+    }
+    @media(max-width:59em){
+      grid-template-columns: 1fr;
+      gap:3rem;
+      padding-bottom:2rem;
+    }
+    &__left {
+      padding-top: 5rem;
+      @media(max-width:59em){
+        text-align: center;
+      }
+ 
+    }
+    &__right{
+      figure img{
+        width:100%;
+      }
+
+
+    }
+   
+    &__description {
+      padding-top: 4rem;
+      line-height: 1.5;
+      color: $color-text;
+    }
+    &__market-condition {
+      padding-top: 3rem;
+      display: flex;
+      gap: 3rem;
+    @media(max-width:59em){
+      justify-content: center;
+    }
+      & span {
+        color: $color-text;
+      }
+    }
+  }
+  .email {
+    padding-top: 2rem;
+    width: 100%;
+    &__input {
+      width: 55%;
+      height: 5.2rem;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+      @media(max-width:34em){
+        width:80%;
+        margin-bottom: 2rem;
+      }
+      &::placeholder {
+        font-size: 1.6rem;
+      }
+    }
+  }
+  input[type="text"] {
+    padding: 0 1rem;
+    font-size: 2rem;
+  }
+}
+
+// section banca
+.section-banca-stats {
+  background-color: $color-blue--black;
+  padding: 5rem 0rem;
+
+  .banca-stats {
+    &--container{
+      gap:2rem;
+      @media (max-width:44em){
+        grid-template-columns: 1fr;
+      }
+    }
+    &__card {
+      gap: 1rem;
+      background-color: $color-blue--black;
+    }
+    &__icon-bg {
+      padding: 2.5rem;
+      border-radius: 50%;
+      background-color: $color-white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &__icon {
+      color: $color-blue;
+      font-size: 3rem;
+    }
+    &__text {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: $color-white;
+    }
+  }
+}
+
+// section features
+.section-feature {
+  background-color: $color-light--grey;
+  padding: 5rem 0rem;
+  .feature {
+    text-align: center;
+    &__cards {
+      padding-top: 5rem;
+      gap: 3rem;
+      @media(max-width:59em){
+        grid-template-columns: repeat(3,1fr);
+      }
+      @media(max-width:44em){
+        grid-template-columns: repeat(2,1fr);
+      }
+      @media(max-width:34em){
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+  .cards-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border: 1px solid $color-shade--gray;
+    border-radius: 8px;
+    padding: 4rem;
+
+    &__svg {
+      padding-bottom: 3rem;
+      & img {
+        height: 5vw;
+      }
+    }
+    &__tittle {
+      font-size: 2rem;
+      padding-bottom: 2rem;
+      font-weight: 600;
+    }
+    &:last-child {
+      background-color: $color-blue;
+      color: $color-white;
+      .cards-item__tittle {
+        font-size: 5rem;
+        font-weight: 800;
+      }
+      .card-item__text--link {
+        font-size: 2rem;
+        margin-right: 2px;
+        transition: all 1s ease;
+        color: $color-white;
+        &:hover .card-item__arrow {
+          animation: moveR 1s forwards;
+        }
+        &:not(:hover) .card-item__arrow {
+          animation: moveL 1s;
+        }
+      }
+    }
+  }
+
+  .cards-item:not(:last-child):hover {
+    box-shadow: 0px 5.9348835945px 29.6744174957px rgba(6, 7, 46, 0.344);
+  }
+}
+
+// section loan
+.section-loan {
+  background-color: $color-white;
+  padding: 5rem 0rem;
+  & > div{
+    @media (max-width:44em){
+      grid-template-columns: 1fr;
+    }
+  }
+ 
+  .loan {
+    padding-top: 5rem;
+    gap: 2rem;
+    &__process {
+      align-self: center;
+    }
+    &__text {
+      padding-top: 4rem;
+      line-height: 1.5;
+    }
+    &__list-item {
+      padding-top: 4rem;
+      color: $color-text--list;
+      font-family: "Roboto", sans-serif;
+      font-weight: 600;
+
+      & li:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+    }
+    &__link {
+      margin-top: 5rem;
+      color: $color-blue;
+      font-family: "Roboto", sans-serif;
+      font-weight: 600;
+      font-size: 1.7rem;
+      position: relative;
+      transition: all 0.5s ease-in-out;
+      &::before {
+        content: "";
+        height: 2px;
+        width: 0rem;
+        background-color: $color-blue;
+        position: absolute;
+        bottom: -2px;
+      }
+      &:hover::before {
+        animation: moveLeft 0.5s ease-in-out forwards;
+      }
+      &:not(:hover)::before {
+        animation: moveRight 0.5s ease-in-out;
+      }
+    }
+
+    &__stats {
+      align-self: center;
+      padding-top: 3rem;
+      grid-template-rows: min-content;
+      grid-template-columns: repeat(2, min-content);
+      column-gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      &--num {
+        color: $color-heading--primary;
+        font-size: 5rem;
+        font-weight: 600;
+      }
+      &--text {
+        line-height: 1.5;
+        color: $color-text;
+      }
+    }
+    &__img {
+      display: grid;
+      grid-template-rows: min-content 29rem min-content;
+      & > figure {
+        width: 100%;
+      }
+      &--1 {
+        margin-bottom: -2rem;
+        width: 100%;
+      }
+      &--2 {
+        margin-top: -1rem;
+        width: 100%;
+      }
+      &--customer {
+        width: 100%;
+      }
+
+      .loan__message {
+        position: relative;
+        overflow: hidden;
+        &::before {
+          content: "";
+          height: 47rem;
+          width: 47rem;
+          background: radial-gradient(
+            50% 50% at 50% 50%,
+            #dc1f353b 39.06%,
+            rgba(238, 106, 45, 0) 100%
+          );
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        &-img--1 {
+          top: 0%;
+          left: 30%;
+          position: absolute;
+        }
+        &-img--2 {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        &-img--3 {
+          position: absolute;
+          left: 50%;
+          bottom: 0%;
+          height: 9.4rem;
+        }
+      }
+    }
+
+    &__card-holder {
+      position: relative;
+      height: 50rem;
+      &::before {
+        content: "";
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        background: radial-gradient(
+          100% 100% at 20% 30%,
+          rgba(175, 255, 238, 0.62) 40%,
+          rgba(247, 173, 83, 0.526) 60%
+        );
+        background-repeat: no-repeat;
+        background-size: cover;
+        border-radius: 50%;
+        filter: blur(60px);
+      }
+      &-img--1 {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+      }
+      &-img--2 {
+        position: absolute;
+        z-index: 2;
+        top: 75%;
+        transform: translateY(-50%);
+        height: 20rem;
+      }
+    }
+  }
+}
+
+// Sector Loan-calculator
+.section-loan-calculator {
+  padding: 5rem 2.5rem;
+  text-align: center;
+  // background: url("./img/calculator-bg.png"), #0e1520;
+  & h2 {
+    padding-bottom: 5rem;
+  }
+
+.loan-calculator--container{
+  max-width:45rem;
+  margin: 0 auto;
+    .loan-calculator {
+      width: 100%;
+      background-color: $color-white;
+      border-radius: 5px;
+      padding: 3rem;
+      @media (max-width:44em){
+        width: 100%;
+      }
+      & h3 {
+        font-size: 3rem;
+        text-align: left;
+        font-weight: 700;
+        padding-bottom: 2rem;
+      }
+      &__form {
+        text-align: start;
+        & label {
+          display: block;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+        & input,
+        select {
+          width: 100%;
+          margin-bottom: 3rem;
+          outline: $color-blue;
+          background-color: #f2f2f2;
+          color: #9199a1;
+          font-family: "Roboto", sans-serif;
+          font-weight: 400;
+          border-radius: 4px;
+          height: 5rem;
+          font-size: 1.6rem;
+          border-color: transparent;
+        }
+        & input:focus,
+        select:focus {
+          border: 1px solid $color-blue;
+          border-radius: 5px;
+        }
+        input[type="text"],
+        input[type="number"] {
+          padding: 0 1rem;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        div:nth-child(2) > div,
+        div:nth-child(4) > div {
+          position: relative;
+        }
+        div:nth-child(2) div > span,
+        div:nth-child(4) div > span {
+          position: absolute;
+          top: 35%;
+          right: 2%;
+          transform: translate(-50%, -50%);
+        }
+
+        & Button {
+          width: 100%;
+        }
+      }
+    }
+}
+  
+}
+
+// section contact-us
+.section-contact-us {
+  background-color: #f6f6f6;
+  padding: 10rem 0 5rem 0;
+  .contact-us {
+    gap: 5rem;
+    @media(max-width:44em){
+      grid-template-columns: 1fr;
+    }
+    &__form {
+      background-color: #fff;
+      border: 1px solid $color-shade--gray;
+      border-radius: 8px;
+      padding: 5rem;
+      width: 100%;
+      & > h3 {
+        font-size: 3rem;
+        padding-bottom: 5rem;
+      }
+      & div input {
+        width: 100%;
+        margin-bottom: 2rem;
+        background-color: #f2f2f2;
+        color: #9199a1;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        border-radius: 5px;
+        line-height: 40px;
+        font-size: 1.6rem;
+        border-color: transparent;
+        outline: none;
+      }
+      & div input[name="message"] {
+        width: 100%;
+        display: block;
+        padding-bottom: 7rem;
+      }
+      & div input & > input:focus {
+        border: 1px solid $color-blue;
+        border-radius: 5px;
+      }
+      & > input[type="text"] {
+        padding: 0 1rem;
+      }
+    }
+    &__stats {
+      padding-top: 3rem;
+      .stats-tittle {
+        padding-bottom: 1rem;
+      }
+      .stats-text {
+        padding-bottom: 3rem;
+      }
+      .stats-num .stats-num--contact-us {
+        color: $color-heading--primary;
+        font-size: 5rem;
+        font-weight: 600;
+      }
+    }
+  }
+}
