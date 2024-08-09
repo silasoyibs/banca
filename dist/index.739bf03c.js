@@ -26510,7 +26510,7 @@ const loanApplication = (0, _firestore.collection)(db, "loan-application"); // =
  //   }).then(emailForm.reset());
  // });
 
-},{"firebase/app":"aM3Fo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","firebase/firestore":"8A4BC"}],"aM3Fo":[function(require,module,exports) {
+},{"firebase/app":"aM3Fo","firebase/firestore":"8A4BC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aM3Fo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _app = require("@firebase/app");
