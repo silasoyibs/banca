@@ -55,7 +55,7 @@
 }
 // tablet and mobile menu container
 .tablet-nav--container {
-  position: absolute;
+  position: fixed;
   right: 0;
   background-color: rgba(0, 0, 0, 0.8784313725);
   height: 100vh;

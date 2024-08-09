@@ -146,10 +146,6 @@ html {
   }
 }
 
-html.fixed {
-  overflow: hidden;
-}
-
 body {
   box-sizing: border-box;
   position: relative;
@@ -497,7 +493,7 @@ body {
 }
 
 .tablet-nav--container {
-  position: absolute;
+  position: fixed;
   right: 0;
   background-color: rgba(0, 0, 0, 0.8784313725);
   height: 100vh;
