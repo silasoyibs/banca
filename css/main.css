@@ -133,6 +133,7 @@ html {
   /* Later allows for easier use of rem - note: rem not compatible with ES9 */
   font-size: 62.5%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 @media (max-width: 75em) {
   html {
