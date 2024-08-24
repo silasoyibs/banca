@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/sass/main.scss" />
+    <title>Dashbord</title>
+  </head>
+  <body>
+    <div class="container--dashboard">
+      <div class="dashboard-sidebar">
+        <nav class="nav">
+          <div class="nav__logo">
+            <img src="src/img/Logo-copy.png" alt="banca logo" />
+          </div>
+          <a href="#" class="nav__link">
+            <svg class="nav__icon">
+              <use xlink:href="src/img/sprite.svg#icon-th-small-outline"></use>
+            </svg>
+            <span>Dashboard</span></a
+          >
+          <a href="#" class="nav__link">
+            <svg class="nav__icon">
+              <use xlink:href="src/img/sprite.svg#icon-swap_horiz"></use>
+            </svg>
+            <span>Transactions</span></a
+          >
+
+          <a href="#" class="nav__link active">
+            <svg class="nav__icon">
+              <use xlink:href="src/img/sprite.svg#icon-credit-card"></use>
+            </svg>
+            <span>Fund Account</span></a
+          >
+
+          <a href="#" class="nav__link">
+            <svg class="nav__icon">
+              <use xlink:href="src/img/sprite.svg#icon-money"></use>
+            </svg>
+            <span>Apply For Loan</span></a
+          >
+
+          <a href="#" class="nav__link">
+            <svg class="nav__icon">
+              <use xlink:href="src/img/sprite.svg#icon-settings"></use>
+            </svg>
+            <span>Account Settings</span></a
+          >
+        </nav>
+      </div>
+      <div class="dashboard-main">
+        <div class="header-nav">
+          <div class="header-nav__left">
+            <div class="customer-info">
+              <span class="customer-info__name">welcome back silas</span>
+              <figure class="customer-info__img">
+                <img src="src/img/silas.jpg" />
+              </figure>
+            </div>
+          </div>
+          <div class="header-nav__right">
+            <div class="header-icons">
+              <ion-icon name="wallet">₦<span>5,000</span></ion-icon>
+              <ion-icon name="sunny"></ion-icon>
+              <div class="notification">
+                <span class="notification__count">1</span>
+              </div>
+              <ion-icon name="notifications-outline"></ion-icon>
+            </div>
+          </div>
+        </div>
+        <main>
+          <div class="customer-account">
+            <div class="customer-account__left">
+              <div class="account-info">
+                <div>
+                  <p>Account Name</p>
+                  <p class="account-info__name">Silas Oyibo</p>
+                </div>
+                <div>
+                  <p>Account Number</p>
+                  <p>2023040404</p>
+                </div>
+                <div>
+                  <p>Balance</p>
+                  <p class="account-info__balance"></p>
+                </div>
+              </div>
+
+              <div class="account-stats">
+                <div>
+                  <p>Income</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span>4334</p>
+                </div>
+                <div>
+                  <p>Expense</p>
+                  <p>
+                    <ion-icon name="arrow-down"></ion-icon><span>₦</span>6334
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="customer-account__right">
+              <img src="src/img/dashboard-img-card.png" />
+            </div>
+          </div>
+          <div>
+            <div class="transaction-history">transaction-history</div>
+            <div class="send-money">send money</div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+  </body>
+</html>
