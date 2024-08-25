@@ -9,7 +9,7 @@ export const navLinkActive = function (navLinks) {
         link.classList.remove("activeLink");
       });
       e.target.classList.add("activeLink");
-    }); 
+    });
   });
 };
 
@@ -23,20 +23,22 @@ export const showBtnAnimation = function (btnCta) {
 };
 
 // Tablet Navigation
-export function tabletNav(){
-  const tabletNav = document.querySelector('.tablet-nav--container');
-  const closeMenuBtn = document.querySelector('.tablet-nav--container-btn-close');
+export function tabletNav() {
+  const tabletNav = document.querySelector(".tablet-nav--container");
+  const closeMenuBtn = document.querySelector(
+    ".tablet-nav--container-btn-close"
+  );
   const tabHamburgerMenu = document.querySelector(".navbar-toggler");
-  const fixedBody=document.querySelector('html');
+  const fixedBody = document.querySelector("html");
 
-  tabHamburgerMenu.addEventListener('click',()=>{
-    tabletNav.classList.toggle('open-tablet-menu');
-    fixedBody.classList.toggle('fixed')
-  })
-  closeMenuBtn.addEventListener('click',()=>{
-    tabletNav.classList.remove('open-tablet-menu');
-    fixedBody.classList.remove('fixed');
-  })
+  tabHamburgerMenu.addEventListener("click", () => {
+    tabletNav.classList.toggle("open-tablet-menu");
+    fixedBody.classList.toggle("fixed");
+  });
+  closeMenuBtn.addEventListener("click", () => {
+    tabletNav.classList.remove("open-tablet-menu");
+    fixedBody.classList.remove("fixed");
+  });
 }
 
 // Toast notification
@@ -125,4 +127,7 @@ export function validateEmail(email) {
   return emailRegex.test(email);
 }
 
-
+// change text
+export function changeSubmitText(elementclass, text) {
+  return (elementclass.textContent = text);
+}

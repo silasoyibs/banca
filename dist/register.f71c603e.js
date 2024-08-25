@@ -35853,6 +35853,8 @@ parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
 parcelHelpers.export(exports, "toast", ()=>toast);
 // email validation function
 parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
+// change text
+parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -35964,6 +35966,9 @@ const toast = new Toast();
 function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+}
+function changeSubmitText(elementclass, text) {
+    return elementclass.textContent = text;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["1G5Oa"], null, "parcelRequiree06a")
