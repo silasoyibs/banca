@@ -207,6 +207,51 @@ body {
   }
 }
 
+.user-picture img, .user-picture--welcome img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.user-picture--transaction img {
+  width: 30px;
+  height: 30px;
+}
+
+.user-picture--welcome {
+  position: relative;
+}
+
+.user-picture--welcome:after {
+  content: "";
+  background-color: #28a745;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  display: block;
+  position: absolute;
+  top: 1%;
+  right: 7%;
+}
+
+.credit {
+  color: #28a745;
+}
+
+.debit {
+  color: #ff5724;
+}
+
+.container-dashboard-shadow {
+  border-radius: 5px;
+  flex-direction: column;
+  gap: 15px;
+  padding: 2rem 1rem;
+  display: flex;
+  box-shadow: 0 2px 4px #0000001a, 0 4px 8px #0003;
+}
+
 .btn-cta {
   color: #fff;
   background-color: #0050b2;
@@ -369,7 +414,7 @@ body {
 }
 
 .u-gap-small {
-  gap: 3px;
+  gap: 5px;
 }
 
 .section-footer {
@@ -1330,23 +1375,27 @@ body {
   display: flex;
 }
 
-.dashboard-main .header-nav__left .customer-info {
+.dashboard-main .header-nav__left .customer-welcome {
   align-items: center;
   gap: 10px;
   display: flex;
 }
 
-.dashboard-main .header-nav__left .customer-info__img {
+.dashboard-main .header-nav__left .customer-welcome p span {
+  margin-left: 5px;
+}
+
+.dashboard-main .header-nav__left .customer-welcome__img {
   position: relative;
 }
 
-.dashboard-main .header-nav__left .customer-info__img img {
+.dashboard-main .header-nav__left .customer-welcome__img img {
   border-radius: 50%;
   width: 50px;
   height: 50px;
 }
 
-.dashboard-main .header-nav__left .customer-info__img:after {
+.dashboard-main .header-nav__left .customer-welcome__img:after {
   content: "";
   background-color: #28a745;
   border: 1px solid #fff;
@@ -1361,9 +1410,8 @@ body {
 
 .dashboard-main .header-nav__right .header-icons {
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   display: flex;
-  position: relative;
 }
 
 .dashboard-main .header-nav__right .header-icons ion-icon {
@@ -1374,7 +1422,11 @@ body {
   color: #fbbf24;
 }
 
-.dashboard-main .header-nav__right .header-icons .notification {
+.dashboard-main .header-nav__right .header-icons .notification-container {
+  position: relative;
+}
+
+.dashboard-main .header-nav__right .header-icons .notification-container .notification {
   z-index: 2;
   color: #fff;
   background-color: red;
@@ -1447,5 +1499,103 @@ body {
 
 .dashboard-main main .customer-account__right img {
   width: 30rem;
+}
+
+.dashboard-main main .transaction {
+  grid-template-columns: 3fr 2fr;
+  column-gap: 30px;
+  margin: 3rem 0;
+  display: grid;
+}
+
+.dashboard-main main .transaction__history__heading {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.dashboard-main main .transaction__history__heading span {
+  color: #334155;
+}
+
+.dashboard-main main .transaction__history__heading a {
+  color: #0050b2;
+  border-bottom: 1px dotted;
+  display: inline-block;
+}
+
+.dashboard-main main .transaction__history__heading a:hover {
+  color: #334155;
+}
+
+.dashboard-main main .transaction__history__item {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+.dashboard-main main .transaction__history__item .transaction-details__date, .dashboard-main main .transaction__history__send-money {
+  color: #94a3b8;
+}
+
+.dashboard-main main .transaction__history__send-money span {
+  color: #334155;
+}
+
+.dashboard-main main .transaction__history__send-money .view-contacts span {
+  color: #94a3b8;
+}
+
+.dashboard-main main .transaction__history__send-money .view-contacts ion-icon[name="arrow-forward"] {
+  font-size: 18px;
+}
+
+.dashboard-main main .transaction__history__send-money .pay label, .dashboard-main main .transaction__history__send-money .pay + .amount label {
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.dashboard-main main .transaction__history__send-money .pay input, .dashboard-main main .transaction__history__send-money .pay + .amount input {
+  border: 1px solid #a79f9f;
+  border-radius: 5px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.dashboard-main main .transaction__history__send-money .pay input:focus, .dashboard-main main .transaction__history__send-money .pay + .amount input:focus {
+  outline: 1px solid #0050b2;
+}
+
+.dashboard-main main .transaction__history__send-money .pay input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dashboard-main main .transaction__history__send-money .pay input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dashboard-main main .transaction__history__send-money .pay + .amount input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dashboard-main main .transaction__history__send-money .pay + .amount input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dashboard-main main .transaction__history__send-money .total p {
+  color: #334155;
+}
+
+.dashboard-main main .transaction__history__send-money button {
+  color: #fff;
+  background-color: #0050b2;
+  border: none;
+  border-radius: 5px;
+  padding: 1rem 0;
 }
 /*# sourceMappingURL=index.f7626f62.css.map */

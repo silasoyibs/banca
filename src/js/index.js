@@ -8,8 +8,12 @@ import {
   validateEmail,
 } from "./common.js";
 import { addDoc } from "firebase/firestore";
-import { emailSubcriber, contactUs, loanApplication } from "./firebase.js";
-
+import {
+  emailSubcriber,
+  contactUs,
+  loanApplication,
+  checkEmailSubcriber,
+} from "./firebase.js";
 
 // HomePage
 class Home {
@@ -34,11 +38,7 @@ class Home {
         if (!email) {
           throw new Error("please enter your email");
         }
-        if (email === "idrissaidu@gmail.com") {
-          throw new Error(
-            "this is the 50th time you are subcribing dakun idris pay us our 200k"
-          );
-        }
+        await checkEmailSubcriber(email);
         if (!validateEmail(email)) {
           throw new Error("please enter a valid email");
         }
@@ -49,7 +49,7 @@ class Home {
         await addDoc(emailSubcriber, {
           email: email,
         });
-        toast.success("Thanks you for subscribing!");
+        toast.success("Thanks for subscribing!");
         toast.hide();
         setTimeout(() => {
           this.changeSubmitText(btnSubcriberText, "Get Started");
@@ -181,4 +181,3 @@ class Home {
 document.addEventListener("DOMContentLoaded", function () {
   const home = new Home();
 });
-

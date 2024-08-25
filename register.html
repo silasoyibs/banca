@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/sass/main.scss" />
-    <title>login</title>
-</head>
-<body>
+    <script src="src/js/register.js" type="module" defer></script>
+    <title>Register</title>
+  </head>
+  <body>
     <section class="login-section">
-            <div class="login u-flex u-flex-d-col">
-                <img src="src/img/Logo-2.png"/>
-                <h1>CREATE YOUR <span>BANCA ACCOUNT</span></h1>
-                <form  class="login__form">
-                    <div>
-                        <label>Email address</label>
-                        <div class="login__form__input">
-                            <ion-icon name="person"></ion-icon>
-                            <input type="text" placeholder="Enter Your Email" required/>
-                        </div>
-                    </div>
-                    <div>
-                         <label>Password</label>
-                        <div class="login__form__input">
-                            <ion-icon name="key"></ion-icon>
-                            <input type="password" placeholder="Enter Your Password" required/>
-                        </div>
-                       
-                    </div>
-                    <button>Create Account</button>
-                </form>
+      <!-- toast container -->
+      <div class="toastBox"></div>
+      <div class="login u-flex u-flex-d-col">
+        <img src="src/img/Logo-2.png" />
+        <h1>CREATE YOUR <span>BANCA ACCOUNT</span></h1>
+        <form class="login__form" id="form">
+          <div>
+            <label>Email address</label>
+            <div class="login__form__input">
+              <ion-icon name="person"></ion-icon>
+              <input
+                type="text"
+                id="email"
+                placeholder="Enter Your Email"
+                required
+              />
             </div>
+          </div>
+          <div>
+            <label>Password</label>
+            <div class="login__form__input">
+              <ion-icon name="key"></ion-icon>
+              <input
+                type="password"
+                placeholder="Enter Your Password"
+                id="password"
+                required
+              />
+            </div>
+          </div>
+          <button>Create Account</button>
+        </form>
+      </div>
     </section>
-</body>
-<script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+  </body>
+  <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
 </html>
