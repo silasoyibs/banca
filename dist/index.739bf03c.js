@@ -703,7 +703,6 @@ class Home {
                     message: message
                 });
                 (0, _commonJs.toast).success("thanks for contacting us");
-                (0, _commonJs.toast).hide();
                 setTimeout(()=>{
                     this.changeSubmitText(btnContactUsText, "Submit");
                 }, 6000);
@@ -711,7 +710,6 @@ class Home {
             } catch (error) {
                 this.changeSubmitText(btnContactUsText, "Submit");
                 (0, _commonJs.toast).error(error.message);
-                (0, _commonJs.toast).hide();
             }
         });
     }

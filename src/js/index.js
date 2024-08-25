@@ -161,7 +161,6 @@ class Home {
           message: message,
         });
         toast.success("thanks for contacting us");
-        toast.hide();
         setTimeout(() => {
           this.changeSubmitText(btnContactUsText, "Submit");
         }, 6000);
@@ -169,7 +168,6 @@ class Home {
       } catch (error) {
         this.changeSubmitText(btnContactUsText, "Submit");
         toast.error(error.message);
-        toast.hide();
       }
     });
   }
