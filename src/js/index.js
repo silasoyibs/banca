@@ -6,6 +6,7 @@ import {
   btnCta,
   toast,
   validateEmail,
+  changeSubmitText,
 } from "./common.js";
 import { addDoc } from "firebase/firestore";
 import {
@@ -42,7 +43,7 @@ class Home {
         if (!validateEmail(email)) {
           throw new Error("please enter a valid email");
         }
-        this.changeSubmitText(btnSubcriberText, "submitting...");
+        changeSubmitText(btnSubcriberText, "Submitting...");
         if (!navigator.onLine) {
           throw new Error("please check your internet connection");
         }
@@ -52,11 +53,11 @@ class Home {
         toast.success("Thanks for subscribing!");
         toast.hide();
         setTimeout(() => {
-          this.changeSubmitText(btnSubcriberText, "Get Started");
+          changeSubmitText(btnSubcriberText, "Get Started");
         }, 6000);
         emailForm.reset();
       } catch (error) {
-        this.changeSubmitText(btnSubcriberText, "Get Started");
+        changeSubmitText(btnSubcriberText, "Get Started");
         toast.error(error.message);
         toast.hide();
       }
@@ -111,7 +112,7 @@ class Home {
         if (!loanType || !amountOfMoney || !accountNumber || !repayments) {
           throw new Error("please fill all fields");
         }
-        this.changeSubmitText(btnLoan, "Applying...");
+        changeSubmitText(btnLoan, "Applying...");
         if (!navigator.onLine) {
           throw new Error("please check your internet connection");
         }
@@ -124,11 +125,11 @@ class Home {
         toast.success("Congratulations! Your application was successful!");
         toast.hide();
         setTimeout(() => {
-          this.changeSubmitText(btnLoan, "Apply For Loans");
+          changeSubmitText(btnLoan, "Apply For Loans");
         }, 6000);
         loanForm.reset();
       } catch (error) {
-        this.changeSubmitText(btnLoan, "Apply For Loans");
+        changeSubmitText(btnLoan, "Apply For Loans");
         toast.error(error.message);
         toast.hide();
         loanForm.reset();
@@ -154,7 +155,7 @@ class Home {
         if (!navigator.onLine) {
           throw new Error("please check your internet connection");
         }
-        this.changeSubmitText(btnContactUsText, "Submitting...");
+        changeSubmitText(btnContactUsText, "Submitting...");
         await addDoc(contactUs, {
           fullname: fullname,
           email: email,
@@ -162,18 +163,14 @@ class Home {
         });
         toast.success("thanks for contacting us");
         setTimeout(() => {
-          this.changeSubmitText(btnContactUsText, "Submit");
+          changeSubmitText(btnContactUsText, "Submit");
         }, 6000);
         contactUsForm.reset();
       } catch (error) {
-        this.changeSubmitText(btnContactUsText, "Submit");
+        changeSubmitText(btnContactUsText, "Submit");
         toast.error(error.message);
       }
     });
-  }
-
-  changeSubmitText(elementclass, text) {
-    return (elementclass.textContent = text);
   }
 }
 document.addEventListener("DOMContentLoaded", function () {

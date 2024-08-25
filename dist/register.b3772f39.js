@@ -588,16 +588,21 @@ var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
 var _common = require("./common");
 const form = document.querySelector("#form");
+const btnSubmit = document.querySelector("#submit-button");
 form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
         // Signed up
+        (0, _common.changeSubmitText)(btnSubmit, "Registering...");
         const user = userCredential.user;
         console.log(user);
         (0, _common.toast).success("Thanks for Registering!");
-    // toast.hide();
+        (0, _common.toast).hide();
+        setTimeout(()=>{
+            (0, _common.changeSubmitText)(btnSubmit, "Register");
+        }, 6000);
     }).catch((error)=>{
         const errorCode = error.code;
         let errorMessage;
@@ -614,12 +619,141 @@ form.addEventListener("submit", (e)=>{
             default:
                 errorMessage = error.message;
         }
-        console.log(errorMessage);
         (0, _common.toast).error(errorMessage);
         (0, _common.toast).hide();
     });
 });
 
-},{"firebase/auth":"79vzg","./firebase":"5VmhM","./common":"2ASYY"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+},{"firebase/auth":"79vzg","./firebase":"5VmhM","./common":"2ASYY"}],"2ASYY":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "navLinks", ()=>navLinks);
+parcelHelpers.export(exports, "btnCta", ()=>btnCta);
+parcelHelpers.export(exports, "navLinkActive", ()=>navLinkActive);
+parcelHelpers.export(exports, "showBtnAnimation", ()=>showBtnAnimation);
+// Tablet Navigation
+parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
+parcelHelpers.export(exports, "toast", ()=>toast);
+// email validation function
+parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
+// change text
+parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
+const navLinks = document.querySelectorAll(".nav__link");
+const btnCta = document.querySelectorAll(".btn-cta");
+const navLinkActive = function(navLinks) {
+    navLinks.forEach((link)=>{
+        link.addEventListener("click", (e)=>{
+            navLinks.forEach((link)=>{
+                link.classList.remove("activeLink");
+            });
+            e.target.classList.add("activeLink");
+        });
+    });
+};
+const showBtnAnimation = function(btnCta) {
+    btnCta.forEach((btnCta)=>{
+        btnCta.addEventListener("mouseover", ()=>{
+            btnCta.classList.add("show-unfillanimation");
+        });
+    });
+};
+function tabletNav() {
+    const tabletNav = document.querySelector(".tablet-nav--container");
+    const closeMenuBtn = document.querySelector(".tablet-nav--container-btn-close");
+    const tabHamburgerMenu = document.querySelector(".navbar-toggler");
+    const fixedBody = document.querySelector("html");
+    tabHamburgerMenu.addEventListener("click", ()=>{
+        tabletNav.classList.toggle("open-tablet-menu");
+        fixedBody.classList.toggle("fixed");
+    });
+    closeMenuBtn.addEventListener("click", ()=>{
+        tabletNav.classList.remove("open-tablet-menu");
+        fixedBody.classList.remove("fixed");
+    });
+}
+// Toast notification
+class Toast {
+    _parentElement = document.querySelector(".toastBox");
+    render(markup) {
+        this._parentElement.innerHTML = "";
+        this._parentElement.classList.add("active");
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    generateErrorMarkup(message) {
+        return `
+       <div class="toast">
+          <ion-icon class="toast-close-icon" name="close"></ion-icon>
+          <ion-icon
+            class="toast-icon toast-icon--error"
+            name="close-circle"
+          ></ion-icon>
+          <div>
+            <span class="toast-message--tittle">Error</span>
+            <span class="toast-message--text">${message}</span>
+          </div>
+        </div> 
+    `;
+    }
+    generateSuccessMarkup(message) {
+        return `
+      <div class="toast ">
+            <ion-icon class="toast-close-icon" name="close"></ion-icon>
+            <ion-icon
+              class="toast-icon toast-icon--success"
+              name="checkmark-circle"
+            ></ion-icon>
+            <div>
+              <span class="toast-message--tittle">Success</span>
+              <span class="toast-message--text">${message}</span>
+            </div>
+        </div>
+    `;
+    }
+    renderSuccessMessage(message) {
+        const markupSucess = this.generateSuccessMarkup(message);
+        this.render(markupSucess);
+    }
+    renderErrorMessage(message) {
+        const markupError = this.generateErrorMarkup(message);
+        this.render(markupError);
+    }
+    close() {
+        const toastClose = document.querySelector(".toast-close-icon");
+        toastClose.addEventListener("click", ()=>{
+            this._parentElement.classList.remove("active");
+        });
+    }
+    active() {
+        const toast = document.querySelector(".toast");
+        setTimeout(()=>{
+            toast.classList.add("active");
+        }, 10);
+    }
+    hide() {
+        setTimeout(()=>{
+            this._parentElement.classList.remove("active");
+        }, 6000);
+    }
+    success(message) {
+        this.renderSuccessMessage(message);
+        this.active();
+        this.close();
+    }
+    error(message) {
+        this.renderErrorMessage(message);
+        this.active();
+        this.close();
+    }
+}
+const toast = new Toast();
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+function changeSubmitText(elementclass, text) {
+    return elementclass.textContent = text;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
 
 //# sourceMappingURL=register.b3772f39.js.map

@@ -1,7 +1,8 @@
 import { auth } from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { toast } from "./common";
+import { toast, changeSubmitText } from "./common";
 const form = document.querySelector("#form");
+const btnSubmit = document.querySelector("#submit-button");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -10,10 +11,14 @@ form.addEventListener("submit", (e) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed up
+      changeSubmitText(btnSubmit, "Registering...");
       const user = userCredential.user;
       console.log(user);
       toast.success("Thanks for Registering!");
-      // toast.hide();
+      toast.hide();
+      setTimeout(() => {
+        changeSubmitText(btnSubmit, "Register");
+      }, 6000);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -31,7 +36,6 @@ form.addEventListener("submit", (e) => {
         default:
           errorMessage = error.message;
       }
-      console.log(errorMessage);
       toast.error(errorMessage);
       toast.hide();
     });
