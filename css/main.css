@@ -189,6 +189,52 @@ body {
     display: none;
   }
 }
+.user-picture img,
+.user-picture--welcome img {
+  width: 100%;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.user-picture--transaction img {
+  height: 30px;
+  width: 30px;
+}
+
+.user-picture--welcome {
+  position: relative;
+}
+.user-picture--welcome::after {
+  display: block;
+  content: "";
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  background-color: #28a745;
+  position: absolute;
+  top: 1%;
+  right: 7%;
+}
+
+.credit {
+  color: #28a745;
+}
+
+.debit {
+  color: #ff5724;
+}
+
+.container-dashboard-shadow {
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .btn-cta {
   padding: 1.5rem 3.5rem;
   background-color: #0050b2;
@@ -338,7 +384,7 @@ body {
 }
 
 .u-gap-small {
-  gap: 3px;
+  gap: 5px;
 }
 
 .section-footer {
@@ -1233,21 +1279,24 @@ body {
   padding: 2rem 3rem;
   border-bottom: 1px solid #e6e8e7;
 }
-.dashboard-main .header-nav__left .customer-info {
+.dashboard-main .header-nav__left .customer-welcome {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.dashboard-main .header-nav__left .customer-info__img {
+.dashboard-main .header-nav__left .customer-welcome p span {
+  margin-left: 5px;
+}
+.dashboard-main .header-nav__left .customer-welcome__img {
   position: relative;
 }
-.dashboard-main .header-nav__left .customer-info__img img {
+.dashboard-main .header-nav__left .customer-welcome__img img {
   width: 100%;
   height: 50px;
   width: 50px;
   border-radius: 50%;
 }
-.dashboard-main .header-nav__left .customer-info__img::after {
+.dashboard-main .header-nav__left .customer-welcome__img::after {
   display: block;
   content: "";
   height: 10px;
@@ -1260,10 +1309,9 @@ body {
   right: 7%;
 }
 .dashboard-main .header-nav__right .header-icons {
-  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
 }
 .dashboard-main .header-nav__right .header-icons ion-icon {
   font-size: 30px;
@@ -1271,7 +1319,10 @@ body {
 .dashboard-main .header-nav__right .header-icons ion-icon[name=sunny] {
   color: #fbbf24;
 }
-.dashboard-main .header-nav__right .header-icons .notification {
+.dashboard-main .header-nav__right .header-icons .notification-container {
+  position: relative;
+}
+.dashboard-main .header-nav__right .header-icons .notification-container .notification {
   position: absolute;
   top: -12%;
   right: -4%;
@@ -1334,4 +1385,80 @@ body {
 }
 .dashboard-main main .customer-account__right img {
   width: 30rem;
+}
+.dashboard-main main .transaction {
+  margin: 3rem 0;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  column-gap: 30px;
+}
+.dashboard-main main .transaction__history__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.dashboard-main main .transaction__history__heading span {
+  color: #334155;
+}
+.dashboard-main main .transaction__history__heading a {
+  display: inline-block;
+  color: #0050b2;
+  border-bottom: 1px currentColor dotted;
+}
+.dashboard-main main .transaction__history__heading a:hover {
+  color: #334155;
+}
+.dashboard-main main .transaction__history__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dashboard-main main .transaction__history__item .transaction-details__date {
+  color: #94a3b8;
+}
+.dashboard-main main .transaction__history__send-money {
+  color: #94a3b8;
+}
+.dashboard-main main .transaction__history__send-money span {
+  color: #334155;
+}
+.dashboard-main main .transaction__history__send-money .view-contacts span {
+  color: #94a3b8;
+}
+.dashboard-main main .transaction__history__send-money .view-contacts ion-icon[name=arrow-forward] {
+  font-size: 18px;
+}
+.dashboard-main main .transaction__history__send-money .pay label,
+.dashboard-main main .transaction__history__send-money .pay + .amount label {
+  display: block;
+  margin-bottom: 1rem;
+}
+.dashboard-main main .transaction__history__send-money .pay input,
+.dashboard-main main .transaction__history__send-money .pay + .amount input {
+  width: 100%;
+  padding: 1rem 1rem;
+  border: solid 1px #a79f9f;
+  border-radius: 5px;
+}
+.dashboard-main main .transaction__history__send-money .pay input:focus,
+.dashboard-main main .transaction__history__send-money .pay + .amount input:focus {
+  outline: solid 1px #0050b2;
+}
+.dashboard-main main .transaction__history__send-money .pay input[type=number]::-webkit-inner-spin-button,
+.dashboard-main main .transaction__history__send-money .pay input[type=number]::-webkit-outer-spin-button,
+.dashboard-main main .transaction__history__send-money .pay + .amount input[type=number]::-webkit-inner-spin-button,
+.dashboard-main main .transaction__history__send-money .pay + .amount input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.dashboard-main main .transaction__history__send-money .total p {
+  color: #334155;
+}
+.dashboard-main main .transaction__history__send-money button {
+  padding: 1rem 0rem;
+  border-radius: 5px;
+  border: none;
+  background-color: #0050b2;
+  color: #fff;
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/index.f7626f62.css">
+    <script src="/register.f71c603e.js"></script><script defer="" src="/index.45e6bf19.js"></script>
     <title>Banca</title>
   </head>
   <body>
@@ -28,35 +29,37 @@
             <a href="#contact-us" class="nav__link">CONTACT US</a>
           </li>
         </ul>
-        <a class="btn-cta ml-auto d-none-tablet" href="/dashboard.html">
+        <a class="btn-cta ml-auto d-none-tablet" href="/login.html">
           <span>Login</span>
         </a>
         <a class="btn-cta ml-auto d-none-tablet" href="/register.html">
           <span>Register Now</span>
         </a>
         <!-- hamburger menu button start -->
-      <div class="tab-component-container ml-auto">
-        <button class="navbar-toggler">
-           <span><img src="/tablet-menu.c2a200ac.svg" alt="" class="tablet-toggler"></span>
-        </button>
-      </div>
-         <!-- hamburger menu button ends  -->
+        <div class="tab-component-container ml-auto">
+          <button class="navbar-toggler">
+            <span><img src="/tablet-menu.c2a200ac.svg" alt="" class="tablet-toggler"></span>
+          </button>
+        </div>
+        <!-- hamburger menu button ends  -->
       </nav>
       <!-- hamburger menu start -->
       <div class="tablet-nav--container">
-        <button class="tablet-nav--container-btn-close"><ion-icon name="close-circle-outline"></ion-icon></button>
-           <ul class="tablet-nav--container__links">
-             <li><a href="#home">HOME</a></li>
-             <li><a href="#loan">LOAN</a></li>
-             <li><a href="#what-we-offer">WHAT WE CAN OFFER</a></li>
-             <li><a href="#contact-us">CONTACT US</a></li>
-           </ul>
-           <div class="tab-register">
-             <a href="btn">Register Now</a>
-             <a href="btn">Login</a>
-           </div>
-       </div>
- <!-- hamburger menu  end-->
+        <button class="tablet-nav--container-btn-close">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </button>
+        <ul class="tablet-nav--container__links">
+          <li><a href="#home">HOME</a></li>
+          <li><a href="#loan">LOAN</a></li>
+          <li><a href="#what-we-offer">WHAT WE CAN OFFER</a></li>
+          <li><a href="#contact-us">CONTACT US</a></li>
+        </ul>
+        <div class="tab-register">
+          <a href="btn">Register Now</a>
+          <a href="btn">Login</a>
+        </div>
+      </div>
+      <!-- hamburger menu  end-->
     </header>
     <!-- section main start-->
     <main>
@@ -86,9 +89,9 @@
             </div>
           </div>
           <div class="hero__right u-flex u-flex-d-col">
-              <figure>
-                <img src="/hero-img.51daf8b1.png" alt="" class="hero__img">
-              </figure>      
+            <figure>
+              <img src="/hero-img.51daf8b1.png" alt="" class="hero__img">
+            </figure>
           </div>
         </div>
       </section>
@@ -250,41 +253,40 @@
         <h2 class="header-primary header-primary--light">
           Calculate and confirm your loans
         </h2>
-      <div class="loan-calculator--container">
-        <div class="loan-calculator">
-          <h3>Loan Calculator</h3>
-          <form class="loan-calculator__form" method="POST">
-            <div>
-              <label>Type of Loan</label>
-              <select name="typeOfLoan">
-                <option value="Debt-Loan">Debt Loan</option>
-                <option value="installment-loan">Installment Loan</option>
-              </select>
-            </div>
-            <div>
-              <label>Amount of money</label>
+        <div class="loan-calculator--container">
+          <div class="loan-calculator">
+            <h3>Loan Calculator</h3>
+            <form class="loan-calculator__form" method="POST">
               <div>
-                <input type="number" placeholder="Enter Amount" name="amountOfMoney">
-                <span>₦</span>
+                <label>Type of Loan</label>
+                <select name="typeOfLoan">
+                  <option value="Debt-Loan">Debt Loan</option>
+                  <option value="installment-loan">Installment Loan</option>
+                </select>
               </div>
-            </div>
-            <div>
-              <label>Enter your banca account number</label>
-              <input class="loan-account-number" type="number" placeholder="Enter Account number" name="bancaAccountNumber">
-            </div>
-            <div>
-              <label>Repayments</label>
               <div>
-                <input type="number" placeholder="Enter Amount" name="repayments" disabled=""><span>₦</span>
+                <label>Amount of money</label>
+                <div>
+                  <input type="number" placeholder="Enter Amount" name="amountOfMoney">
+                  <span>₦</span>
+                </div>
               </div>
-            </div>
-            <button class="btn-cta">
-              <span class="btn-loan-text">Apply For Loans</span>
-            </button>
-          </form>
+              <div>
+                <label>Enter your banca account number</label>
+                <input class="loan-account-number" type="number" placeholder="Enter Account number" name="bancaAccountNumber">
+              </div>
+              <div>
+                <label>Repayments</label>
+                <div>
+                  <input type="number" placeholder="Enter Amount" name="repayments" disabled=""><span>₦</span>
+                </div>
+              </div>
+              <button class="btn-cta">
+                <span class="btn-loan-text">Apply For Loans</span>
+              </button>
+            </form>
+          </div>
         </div>
-      </div>
-       
       </section>
       <!-- section Contact us -->
       <section class="section-contact-us" id="contact-us">
