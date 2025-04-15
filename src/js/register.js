@@ -1,11 +1,6 @@
 import { auth } from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import {
-  toast,
-  changeSubmitText,
-  loadingSpinner,
-  clearLoadingSpinner,
-} from "./common";
+import { toast, loadingSpinner, clearLoadingSpinner } from "./common";
 const form = document.querySelector("#form");
 const btnRegister = document.getElementById("register-button");
 

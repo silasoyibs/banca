@@ -149,7 +149,7 @@
 69C:\Users\USER\Desktop\banca\node_modules\es-abstract\2016\ToObject.js133879172721316023 0
 88C:\Users\USER\Desktop\banca\node_modules\caniuse-lite\data\features\input-file-accept.js133879172657526118 0
 60C:\Users\USER\Desktop\banca\node_modules\@firebase\util\dist133879172639113851 1
-46C:\Users\USER\Desktop\banca\src\js\register.js133892225466897711 0
+46C:\Users\USER\Desktop\banca\src\js\register.js133892226682700061 0
 99C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\firestore\src\api\bytes.d.ts133879172669132122 0
 111C:\Users\USER\Desktop\banca\node_modules\@parcel\optimizer-svgo\node_modules\css-tree\lib\syntax\scope\index.js133879172636427529 0
 76C:\Users\USER\Desktop\banca\node_modules\typescript\lib\lib.es2017.full.d.ts133879172659411409 0
