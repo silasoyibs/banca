@@ -131,3 +131,11 @@ export function validateEmail(email) {
 export function changeSubmitText(elementclass, text) {
   return (elementclass.textContent = text);
 }
+
+// Adding Loading Spinner
+export function loadingSpinner(buttonId) {
+  const markup = `<span class="button-spinner"></span>`;
+  const buttonEl = document.getElementById(buttonId);
+  buttonEl.innerHTML = "";
+  buttonEl.insertAdjacentHTML("afterbegin", markup);
+}

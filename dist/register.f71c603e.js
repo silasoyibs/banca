@@ -35855,6 +35855,8 @@ parcelHelpers.export(exports, "toast", ()=>toast);
 parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
 // change text
 parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
+// Adding Loading Spinner
+parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -35969,6 +35971,12 @@ function validateEmail(email) {
 }
 function changeSubmitText(elementclass, text) {
     return elementclass.textContent = text;
+}
+function loadingSpinner(buttonId) {
+    const markup = `<span class="button-spinner"></span>`;
+    const buttonEl = document.getElementById(buttonId);
+    buttonEl.innerHTML = "";
+    buttonEl.insertAdjacentHTML("afterbegin", markup);
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["1G5Oa"], null, "parcelRequiree06a")

@@ -288,6 +288,28 @@ body {
   animation: .5s unfillButton;
 }
 
+.button-spinner {
+  vertical-align: middle;
+  border: 3px solid #fff;
+  border-bottom-color: #0000;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: 8px;
+  animation: .6s linear infinite spin;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .toastBox {
   z-index: 100;
   transition: transform 2s cubic-bezier(.17, .67, .91, 1.26);
