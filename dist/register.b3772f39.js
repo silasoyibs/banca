@@ -587,22 +587,35 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
 var _common = require("./common");
+var _model = require("./dashboard/model");
 const form = document.querySelector("#form");
 const btnRegister = document.getElementById("register-button");
-form.addEventListener("submit", (e)=>{
+const formInput = document.querySelectorAll("input");
+// clear form input
+function clearForm() {
+    formInput.forEach((input)=>{
+        input.value = "";
+    });
+}
+// form submittion
+form.addEventListener("submit", async (e)=>{
     e.preventDefault();
+    const FullName = document.querySelector("#FullName").value;
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
-    (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
+    (0, _common.loadingSpinner)(btnRegister);
+    try {
+        const userCredential = await (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password);
         // Signed up
-        (0, _common.loadingSpinner)(btnRegister);
         const user = userCredential.user;
+        await (0, _model.createUserData)(user, FullName, email);
+        clearForm();
         (0, _common.toast).success("Thanks for Registering!");
         (0, _common.toast).hide();
         setTimeout(()=>{
             (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
         }, 6000);
-    }).catch((error)=>{
+    } catch (error) {
         const errorCode = error.code;
         let errorMessage;
         switch(errorCode){
@@ -620,9 +633,44 @@ form.addEventListener("submit", (e)=>{
         }
         (0, _common.toast).error(errorMessage);
         (0, _common.toast).hide();
-    });
+    } finally{
+        setTimeout(()=>{
+            (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
+        }, 6000);
+    }
 });
 
-},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"k67WZ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// Creating New Banca user Data
+parcelHelpers.export(exports, "createUserData", ()=>createUserData);
+var _firestore = require("firebase/firestore");
+var _firebase = require("../firebase");
+async function createUserData(user, fullName, email) {
+    // banca account number for new user
+    const accountNumber = generateAccountNum();
+    // Add New User to th Users database
+    (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
+        fullName: fullName,
+        email: email,
+        balance: 0,
+        accountNumber: accountNumber
+    });
+    //   initializing user transaction
+    await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
+        type: "initial deposit",
+        amount: 0,
+        timestamp: (0, _firestore.serverTimestamp)(),
+        description: "Account created, no initial deposit"
+    });
+}
+// Generating 10 Digit Banca Account Number
+function generateAccountNum() {
+    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+    return randomNumber;
+}
+
+},{"firebase/firestore":"8A4BC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../firebase":"5VmhM"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
 
 //# sourceMappingURL=register.b3772f39.js.map

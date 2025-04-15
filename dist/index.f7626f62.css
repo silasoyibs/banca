@@ -1351,10 +1351,6 @@ body {
   margin-left: 7px;
 }
 
-.login__form > div {
-  padding-bottom: 5px;
-}
-
 .login p {
   text-align: center;
 }
@@ -1376,7 +1372,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   display: flex;
 }
 
@@ -1414,7 +1409,7 @@ body {
 
 .register__form input, .register__form button {
   width: 100%;
-  padding: 1.5rem;
+  padding: 1.1rem;
 }
 
 .register__form input {
@@ -1446,10 +1441,6 @@ body {
 .register__form__input__icon {
   width: 1.5rem;
   margin-left: 7px;
-}
-
-.register__form > div {
-  padding-bottom: 5px;
 }
 
 .register p {

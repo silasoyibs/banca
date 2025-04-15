@@ -14,7 +14,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 // get database
-const db = getFirestore();
+export const db = getFirestore();
 // get collection from database
 export const emailSubcriber = collection(db, "email-subcriber");
 export const contactUs = collection(db, "contact-us-form");
@@ -27,7 +27,6 @@ export async function checkEmailSubcriber(emailToCheck) {
     id: doc.id,
     ...doc.data(),
   }));
-  console.log(emailSubcribers);
   const emailExist = emailSubcribers.some(
     (subcriber) => subcriber.email === emailToCheck
   );

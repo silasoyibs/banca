@@ -146,3 +146,6 @@ export function clearLoadingSpinner(button, text) {
   buttonEl.innerHTML = "";
   buttonEl.insertAdjacentHTML("afterbegin", text);
 }
+
+// Clear Input Fields
+export function clearInputField() {}
