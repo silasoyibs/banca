@@ -588,13 +588,13 @@ var _common = require("./common");
 var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
 const form = document.querySelector("#form");
-const loginBtnId = "submit-button";
+const loginBtn = document.getElementById("login-button");
 form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _auth.signInWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
-        (0, _common.loadingSpinner)(loginBtnId);
+        (0, _common.loadingSpinner)(loginBtn);
         // Signed in
         const user = userCredential.user;
         window.location.href = "http://localhost:1234/dashboard.html";
@@ -605,6 +605,6 @@ form.addEventListener("submit", (e)=>{
     });
 });
 
-},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
+},{"./common":"2ASYY","./firebase":"5VmhM","firebase/auth":"79vzg"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
 
 //# sourceMappingURL=login.333b87f1.js.map

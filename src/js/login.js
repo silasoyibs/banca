@@ -2,7 +2,7 @@ import { loadingSpinner } from "./common";
 import { auth } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 const form = document.querySelector("#form");
-const loginBtnId = "submit-button";
+const loginBtn = document.getElementById("login-button");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -10,7 +10,7 @@ form.addEventListener("submit", (e) => {
   const password = document.querySelector("#password").value;
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      loadingSpinner(loginBtnId);
+      loadingSpinner(loginBtn);
       // Signed in
       const user = userCredential.user;
       window.location.href = "http://localhost:1234/dashboard.html";

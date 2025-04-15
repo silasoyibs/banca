@@ -588,20 +588,19 @@ var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
 var _common = require("./common");
 const form = document.querySelector("#form");
-const btnSubmit = document.querySelector("#submit-button");
+const btnRegister = document.getElementById("register-button");
 form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
         // Signed up
-        (0, _common.changeSubmitText)(btnSubmit, "Registering...");
+        (0, _common.loadingSpinner)(btnRegister);
         const user = userCredential.user;
-        console.log(user);
         (0, _common.toast).success("Thanks for Registering!");
         (0, _common.toast).hide();
         setTimeout(()=>{
-            (0, _common.changeSubmitText)(btnSubmit, "Register");
+            (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
         }, 6000);
     }).catch((error)=>{
         const errorCode = error.code;
@@ -624,6 +623,6 @@ form.addEventListener("submit", (e)=>{
     });
 });
 
-},{"firebase/auth":"79vzg","./firebase":"5VmhM","./common":"2ASYY"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
 
 //# sourceMappingURL=register.b3772f39.js.map

@@ -10,13 +10,17 @@
   <body>
     <section class="login-section">
       <div class="login u-flex u-flex-d-col">
-        <img src="src/img/Logo-2.png" />
+        <img class="login__banca__logo" src="src/img/Logo-2.png" />
         <h1>LOG IN TO <span>BANCA DASHBOARD</span></h1>
         <form class="login__form" id="form">
           <div>
             <label>Email address</label>
             <div class="login__form__input" id="form">
-              <ion-icon name="person"></ion-icon>
+              <img
+                class="login__form__input__icon"
+                src="src/img/SVG/user.svg"
+                alt="user profile icon"
+              />
               <input
                 type="text"
                 placeholder="Enter Your Email"
@@ -28,7 +32,11 @@
           <div>
             <label>Password</label>
             <div class="login__form__input">
-              <ion-icon name="key"></ion-icon>
+              <img
+                class="login__form__input__icon"
+                src="src/img/SVG/password.svg"
+                alt="user profile password icon"
+              />
               <input
                 type="password"
                 id="password"
@@ -37,8 +45,11 @@
               />
             </div>
           </div>
-          <button id="submit-button">Login</button>
+          <button id="login-button">Login</button>
         </form>
+        <p>
+          You don't have an account yet? <a href="register.html">Sign Up</a>
+        </p>
       </div>
     </section>
   </body>

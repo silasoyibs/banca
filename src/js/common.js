@@ -133,9 +133,16 @@ export function changeSubmitText(elementclass, text) {
 }
 
 // Adding Loading Spinner
-export function loadingSpinner(buttonId) {
+export function loadingSpinner(button) {
   const markup = `<span class="button-spinner"></span>`;
-  const buttonEl = document.getElementById(buttonId);
+  const buttonEl = button;
   buttonEl.innerHTML = "";
   buttonEl.insertAdjacentHTML("afterbegin", markup);
+}
+
+// Setting Button Text to Normal
+export function clearLoadingSpinner(button, text) {
+  const buttonEl = button;
+  buttonEl.innerHTML = "";
+  buttonEl.insertAdjacentHTML("afterbegin", text);
 }

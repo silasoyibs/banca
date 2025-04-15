@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/index.f7626f62.css">
-    <script src="/register.f71c603e.js"></script><script src="/register.b3772f39.js" defer=""></script>
+    <script src="/login.0f324447.js"></script><script src="/register.b3772f39.js" defer=""></script>
     <title>Register</title>
   </head>
   <body>
@@ -12,25 +12,26 @@
       <!-- toast container -->
       <div class="toastBox"></div>
       <div class="login u-flex u-flex-d-col">
-        <img src="/Logo-2.039d4a1d.png">
+        <img class="register__banca__logo" src="/Logo-2.039d4a1d.png">
         <h1>CREATE YOUR <span>BANCA ACCOUNT</span></h1>
-        <form class="login__form" id="form">
+        <form class="register__form" id="form">
           <div>
             <label>Email address</label>
-            <div class="login__form__input">
-              <ion-icon name="person"></ion-icon>
+            <div class="register__form__input">
+              <img class="register__form__input__icon" src="/user.fb821901.svg" alt="user profile icon">
               <input type="text" id="email" placeholder="Enter Your Email" required="">
             </div>
           </div>
           <div>
             <label>Password</label>
-            <div class="login__form__input">
-              <ion-icon name="key"></ion-icon>
+            <div class="register__form__input">
+              <img class="register__form__input__icon" src="/password.27342a73.svg" alt="user profile password icon">
               <input type="password" placeholder="Enter Your Password" id="password" required="">
             </div>
           </div>
-          <button id="submit-button">Create Account</button>
+          <button id="register-button">Create Account</button>
         </form>
+        <p>already have an account? <a href="/login.html">Sign In</a></p>
       </div>
     </section>
   </body>
