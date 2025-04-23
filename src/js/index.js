@@ -29,6 +29,7 @@ class Home {
     this.getContactUs();
     this.getLoanApplication();
   }
+
   getEmailSubcriber() {
     const emailForm = document.querySelector(".email");
     const btnSubcriberText = document.querySelector(".email-subcriber-text");

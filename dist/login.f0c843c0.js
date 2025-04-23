@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"fIStW":[function(require,module,exports) {
+})({"gdZHP":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "9405528ea7514126";
+module.bundle.HMR_BUNDLE_ID = "60024516f0c843c0";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -582,6 +582,36 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
         }
     });
 }
+
+},{}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
 
 },{}],"5VmhM":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -3739,36 +3769,6 @@ process.chdir = function(dir) {
 };
 process.umask = function() {
     return 0;
-};
-
-},{}],"gkKU3":[function(require,module,exports) {
-exports.interopDefault = function(a) {
-    return a && a.__esModule ? a : {
-        default: a
-    };
-};
-exports.defineInteropFlag = function(a) {
-    Object.defineProperty(a, "__esModule", {
-        value: true
-    });
-};
-exports.exportAll = function(source, dest) {
-    Object.keys(source).forEach(function(key) {
-        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
-        Object.defineProperty(dest, key, {
-            enumerable: true,
-            get: function() {
-                return source[key];
-            }
-        });
-    });
-    return dest;
-};
-exports.export = function(dest, destName, get) {
-    Object.defineProperty(dest, destName, {
-        enumerable: true,
-        get: get
-    });
 };
 
 },{}],"fZmft":[function(require,module,exports) {
@@ -35840,154 +35840,6 @@ exports.default = {
     __disposeResources: __disposeResources
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2ASYY":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "navLinks", ()=>navLinks);
-parcelHelpers.export(exports, "btnCta", ()=>btnCta);
-parcelHelpers.export(exports, "navLinkActive", ()=>navLinkActive);
-parcelHelpers.export(exports, "showBtnAnimation", ()=>showBtnAnimation);
-// Tablet Navigation
-parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
-parcelHelpers.export(exports, "toast", ()=>toast);
-// email validation function
-parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
-// change text
-parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
-// Adding Loading Spinner
-parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
-// Setting Button Text to Normal
-parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
-// Clear Input Fields
-parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
-const navLinks = document.querySelectorAll(".nav__link");
-const btnCta = document.querySelectorAll(".btn-cta");
-const navLinkActive = function(navLinks) {
-    navLinks.forEach((link)=>{
-        link.addEventListener("click", (e)=>{
-            navLinks.forEach((link)=>{
-                link.classList.remove("activeLink");
-            });
-            e.target.classList.add("activeLink");
-        });
-    });
-};
-const showBtnAnimation = function(btnCta) {
-    btnCta.forEach((btnCta)=>{
-        btnCta.addEventListener("mouseover", ()=>{
-            btnCta.classList.add("show-unfillanimation");
-        });
-    });
-};
-function tabletNav() {
-    const tabletNav = document.querySelector(".tablet-nav--container");
-    const closeMenuBtn = document.querySelector(".tablet-nav--container-btn-close");
-    const tabHamburgerMenu = document.querySelector(".navbar-toggler");
-    const fixedBody = document.querySelector("html");
-    tabHamburgerMenu.addEventListener("click", ()=>{
-        tabletNav.classList.toggle("open-tablet-menu");
-        fixedBody.classList.toggle("fixed");
-    });
-    closeMenuBtn.addEventListener("click", ()=>{
-        tabletNav.classList.remove("open-tablet-menu");
-        fixedBody.classList.remove("fixed");
-    });
-}
-// Toast notification
-class Toast {
-    _parentElement = document.querySelector(".toastBox");
-    render(markup) {
-        this._parentElement.innerHTML = "";
-        this._parentElement.classList.add("active");
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    generateErrorMarkup(message) {
-        return `
-       <div class="toast">
-          <ion-icon class="toast-close-icon" name="close"></ion-icon>
-          <ion-icon
-            class="toast-icon toast-icon--error"
-            name="close-circle"
-          ></ion-icon>
-          <div>
-            <span class="toast-message--tittle">Error</span>
-            <span class="toast-message--text">${message}</span>
-          </div>
-        </div> 
-    `;
-    }
-    generateSuccessMarkup(message) {
-        return `
-      <div class="toast ">
-            <ion-icon class="toast-close-icon" name="close"></ion-icon>
-            <ion-icon
-              class="toast-icon toast-icon--success"
-              name="checkmark-circle"
-            ></ion-icon>
-            <div>
-              <span class="toast-message--tittle">Success</span>
-              <span class="toast-message--text">${message}</span>
-            </div>
-        </div>
-    `;
-    }
-    renderSuccessMessage(message) {
-        const markupSucess = this.generateSuccessMarkup(message);
-        this.render(markupSucess);
-    }
-    renderErrorMessage(message) {
-        const markupError = this.generateErrorMarkup(message);
-        this.render(markupError);
-    }
-    close() {
-        const toastClose = document.querySelector(".toast-close-icon");
-        toastClose.addEventListener("click", ()=>{
-            this._parentElement.classList.remove("active");
-        });
-    }
-    active() {
-        const toast = document.querySelector(".toast");
-        setTimeout(()=>{
-            toast.classList.add("active");
-        }, 10);
-    }
-    hide() {
-        setTimeout(()=>{
-            this._parentElement.classList.remove("active");
-        }, 6000);
-    }
-    success(message) {
-        this.renderSuccessMessage(message);
-        this.active();
-        this.close();
-    }
-    error(message) {
-        this.renderErrorMessage(message);
-        this.active();
-        this.close();
-    }
-}
-const toast = new Toast();
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-function changeSubmitText(elementclass, text) {
-    return elementclass.textContent = text;
-}
-function loadingSpinner(button) {
-    const markup = `<span class="button-spinner"></span>`;
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", markup);
-}
-function clearLoadingSpinner(button, text) {
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", text);
-}
-function clearInputField() {}
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gdZHP"], null, "parcelRequiree06a")
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fIStW"], null, "parcelRequiree06a")
-
-//# sourceMappingURL=register.a7514126.js.map
+//# sourceMappingURL=login.f0c843c0.js.map

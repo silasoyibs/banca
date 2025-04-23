@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"ed6Mz":[function(require,module,exports) {
+})({"a2UUf":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "ba77c333333b87f1";
+module.bundle.HMR_BUNDLE_ID = "ee3833300e2d23cb";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -583,187 +583,250 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"47T64":[function(require,module,exports) {
-var _common = require("./common");
-var _firebase = require("./firebase");
-var _auth = require("firebase/auth");
-const form = document.querySelector("#form");
-const loginBtn = document.getElementById("login-button");
-form.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    const email = document.querySelector("#email").value;
-    const password = document.querySelector("#password").value;
-    (0, _auth.signInWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
-        (0, _common.loadingSpinner)(loginBtn);
-        // Signed in
-        const user = userCredential.user;
-        window.location.href = "http://localhost:1234/dashboard.html";
-    }).catch((error)=>{
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-    // const errorCode = error.code;
-    // let errorMessage;
-    // switch (errorCode) {
-    //   case "auth/invalid-login-credentials":
-    //     errorMessage = "invalid login details";
-    //     break;
-    //   default:
-    //     errorMessage = error.message;
-    // }
-    // toast.error(errorMessage);
-    // toast.hide();
-    });
-});
+},{}],"56wmq":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _modelJs = require("./model.js");
+var _dashboardViewJs = require("./views/dashboardView.js");
+var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
+const controlDashboard = function() {
+    //   update view
+    //   dasboardView.render(model.getCurrentUserData());
+    //   dashboardView.check();
+    const test = _modelJs.getCurrentUserData();
+    console.log(test);
+};
+controlDashboard();
 
-},{"./common":"2ASYY","./firebase":"5VmhM","firebase/auth":"79vzg"}],"2ASYY":[function(require,module,exports) {
+},{"./model.js":"k67WZ","./views/dashboardView.js":"ieOe3","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "navLinks", ()=>navLinks);
-parcelHelpers.export(exports, "btnCta", ()=>btnCta);
-parcelHelpers.export(exports, "navLinkActive", ()=>navLinkActive);
-parcelHelpers.export(exports, "showBtnAnimation", ()=>showBtnAnimation);
-// Tablet Navigation
-parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
-parcelHelpers.export(exports, "toast", ()=>toast);
-// email validation function
-parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
-// change text
-parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
-// Adding Loading Spinner
-parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
-// Setting Button Text to Normal
-parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
-// Clear Input Fields
-parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
-const navLinks = document.querySelectorAll(".nav__link");
-const btnCta = document.querySelectorAll(".btn-cta");
-const navLinkActive = function(navLinks) {
-    navLinks.forEach((link)=>{
-        link.addEventListener("click", (e)=>{
-            navLinks.forEach((link)=>{
-                link.classList.remove("activeLink");
-            });
-            e.target.classList.add("activeLink");
-        });
-    });
+parcelHelpers.export(exports, "state", ()=>state);
+// Creating New Banca user Data
+parcelHelpers.export(exports, "createUserData", ()=>createUserData);
+// Get User Data From Firebase
+parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
+var _firestore = require("firebase/firestore");
+var _firebase = require("../firebase");
+var _auth = require("firebase/auth");
+const state = {
+    user: {},
+    transactions: []
 };
-const showBtnAnimation = function(btnCta) {
-    btnCta.forEach((btnCta)=>{
-        btnCta.addEventListener("mouseover", ()=>{
-            btnCta.classList.add("show-unfillanimation");
-        });
+async function createUserData(user, fullName, email) {
+    // banca account number for new user
+    const accountNumber = generateAccountNum();
+    const userName = generateUserName(fullName);
+    // Add New User to th Users database
+    (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
+        fullName: fullName,
+        userName: userName,
+        email: email,
+        balance: 0,
+        accountNumber: accountNumber
     });
-};
-function tabletNav() {
-    const tabletNav = document.querySelector(".tablet-nav--container");
-    const closeMenuBtn = document.querySelector(".tablet-nav--container-btn-close");
-    const tabHamburgerMenu = document.querySelector(".navbar-toggler");
-    const fixedBody = document.querySelector("html");
-    tabHamburgerMenu.addEventListener("click", ()=>{
-        tabletNav.classList.toggle("open-tablet-menu");
-        fixedBody.classList.toggle("fixed");
-    });
-    closeMenuBtn.addEventListener("click", ()=>{
-        tabletNav.classList.remove("open-tablet-menu");
-        fixedBody.classList.remove("fixed");
+    //   initializing user transaction
+    await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
+        type: "initial deposit",
+        amount: 0,
+        timestamp: (0, _firestore.serverTimestamp)(),
+        description: "Account created, no initial deposit"
     });
 }
-// Toast notification
-class Toast {
-    _parentElement = document.querySelector(".toastBox");
-    render(markup) {
-        this._parentElement.innerHTML = "";
-        this._parentElement.classList.add("active");
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+// Generating 10 Digit Banca Account Number
+function generateAccountNum() {
+    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+    return randomNumber;
+}
+// Generate UserName
+function generateUserName(fullName) {
+    const firstName = fullName.split(" ");
+    return firstName[0];
+}
+function getCurrentUserData() {
+    const auth = (0, _auth.getAuth)();
+    (0, _auth.onAuthStateChanged)(auth, async (user)=>{
+        if (!user) return;
+        try {
+            const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+            const userSnap = await (0, _firestore.getDoc)(userRef);
+            if (userSnap.exists()) {
+                const userData = {
+                    id: userSnap.id,
+                    ...userSnap.data()
+                };
+                const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+                const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
+                const transactions = await transactionsSnap.docs.map((doc)=>doc.data());
+                state.user = {
+                    ...userData
+                };
+                state.transactions = [
+                    ...transactions
+                ];
+                // console.log({ ...userData, transactions });
+                // console.log(state);
+                return state;
+            } else return null;
+        } catch (error) {
+            console.error(error.message);
+        }
+    });
+}
+
+},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ieOe3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../view.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+class DashboardView extends (0, _viewJsDefault.default) {
+    check() {
+        console.log(this._data);
     }
-    generateErrorMarkup(message) {
+    _parentElement = document.querySelector(".dashboard");
+    _generateMarkup() {
         return `
-       <div class="toast">
-          <ion-icon class="toast-close-icon" name="close"></ion-icon>
-          <ion-icon
-            class="toast-icon toast-icon--error"
-            name="close-circle"
-          ></ion-icon>
-          <div>
-            <span class="toast-message--tittle">Error</span>
-            <span class="toast-message--text">${message}</span>
-          </div>
-        </div> 
-    `;
-    }
-    generateSuccessMarkup(message) {
-        return `
-      <div class="toast ">
-            <ion-icon class="toast-close-icon" name="close"></ion-icon>
-            <ion-icon
-              class="toast-icon toast-icon--success"
-              name="checkmark-circle"
-            ></ion-icon>
-            <div>
-              <span class="toast-message--tittle">Success</span>
-              <span class="toast-message--text">${message}</span>
+         <div class="customer-account">
+            <div class="customer-account__left">
+              <div class="account-info">
+                <div>
+                  <p>Account Name</p>
+                  <p class="account-info__name">Silas Oyibo</p>
+                </div>
+                <div>
+                  <p>Account Number</p>
+                  <p class="account-info__number">${this._data.accountNumber}</p>
+                </div>
+              </div>
+
+              <div class="account-stats">
+                <div>
+                  <p>Income</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>4334</p>
+                </div>
+                <div>
+                  <p>Expense</p>
+                  <p>
+                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>6334
+                  </p>
+                </div>
+              </div>
             </div>
-        </div>
+            <div class="customer-account__right">
+              <img src="src/img/dashboard-img-card.png" />
+            </div>
+          </div>
+          <div class="transaction">
+            <div class="transaction__history container-dashboard-shadow">
+              <div class="transaction__history__heading">
+                <span>Transactions</span>
+                <a href="">View all</a>
+              </div>
+              <!-- item 1 -->
+              <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src="src/img/silas.jpg" alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>Idris Saidu</p>
+                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="credit">\u{20A6}<span class="credit">700</span></p>
+                </div>
+              </div>
+              <!-- item 2 -->
+              <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src="src/img/silas.jpg" alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>Idris Saidu</p>
+                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="debit">\u{20A6}<span>700</span></p>
+                </div>
+              </div>
+              <!-- item 3 -->
+              <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src="src/img/silas.jpg" alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>Idris Saidu</p>
+                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="credit">\u{20A6}<span>700</span></p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="transaction__history__send-money container-dashboard-shadow"
+            >
+              <span>Send Money</span>
+              <div class="u-flex u-flex-v-center u-gap-small">
+                <figure class="user-picture user-picture--transaction">
+                  <img src="src/img/silas.jpg" alt="user-picture" />
+                </figure>
+                <figure class="user-picture user-picture--transaction">
+                  <img src="src/img/silas.jpg" alt="user-picture" />
+                </figure>
+                <figure class="user-picture user-picture--transaction">
+                  <img src="src/img/silas.jpg" alt="user-picture" />
+                </figure>
+              </div>
+              <div
+                class="view-contacts u-flex u-flex-v-center u-flex-space-between"
+              >
+                <span>View All Contacts</span>
+                <a href=""><ion-icon name="arrow-forward"></ion-icon></a>
+              </div>
+              <div class="pay">
+                <label> Pay to </label>
+                <input type="number" placeholder="Enter Banca Account Number" />
+              </div>
+              <div class="amount">
+                <label> Amount(\u{20A6}) </label>
+                <input type="number" placeholder="Amount" />
+              </div>
+              <div class="total u-flex u-flex-v-center u-flex-space-between">
+                <span>Total</span>
+                <p>\u{20A6}<span>3</span></p>
+              </div>
+              <button id="submit">Send Money</button>
+            </div>
+          </div>
+
     `;
     }
-    renderSuccessMessage(message) {
-        const markupSucess = this.generateSuccessMarkup(message);
-        this.render(markupSucess);
-    }
-    renderErrorMessage(message) {
-        const markupError = this.generateErrorMarkup(message);
-        this.render(markupError);
-    }
-    close() {
-        const toastClose = document.querySelector(".toast-close-icon");
-        toastClose.addEventListener("click", ()=>{
-            this._parentElement.classList.remove("active");
-        });
-    }
-    active() {
-        const toast = document.querySelector(".toast");
-        setTimeout(()=>{
-            toast.classList.add("active");
-        }, 10);
-    }
-    hide() {
-        setTimeout(()=>{
-            this._parentElement.classList.remove("active");
-        }, 6000);
-    }
-    success(message) {
-        this.renderSuccessMessage(message);
-        this.active();
-        this.close();
-    }
-    error(message) {
-        this.renderErrorMessage(message);
-        this.active();
-        this.close();
-    }
 }
-const toast = new Toast();
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-function changeSubmitText(elementclass, text) {
-    return elementclass.textContent = text;
-}
-function loadingSpinner(button) {
-    const markup = `<span class="button-spinner"></span>`;
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", markup);
-}
-function clearLoadingSpinner(button, text) {
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", text);
-}
-function clearInputField() {}
+exports.default = new DashboardView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
+},{"../view.js":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"38NyO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class View {
+    _data;
+    render(data) {
+        if (!data) return;
+        this._data = data;
+        const markup = this._generateMarkup();
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbgin", markup);
+    }
+    _clear() {
+        this._parentElement.insertAdjacentHTML = "";
+    }
+}
+exports.default = View;
 
-//# sourceMappingURL=login.333b87f1.js.map
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
+
+//# sourceMappingURL=dashboard.0e2d23cb.js.map

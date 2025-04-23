@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"ed6Mz":[function(require,module,exports) {
+})({"gn59S":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "ba77c333333b87f1";
+module.bundle.HMR_BUNDLE_ID = "1cd935c620f3c10a";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -583,187 +583,64 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"47T64":[function(require,module,exports) {
-var _common = require("./common");
-var _firebase = require("./firebase");
-var _auth = require("firebase/auth");
-const form = document.querySelector("#form");
-const loginBtn = document.getElementById("login-button");
-form.addEventListener("submit", (e)=>{
-    e.preventDefault();
-    const email = document.querySelector("#email").value;
-    const password = document.querySelector("#password").value;
-    (0, _auth.signInWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
-        (0, _common.loadingSpinner)(loginBtn);
-        // Signed in
-        const user = userCredential.user;
-        window.location.href = "http://localhost:1234/dashboard.html";
-    }).catch((error)=>{
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-    // const errorCode = error.code;
-    // let errorMessage;
-    // switch (errorCode) {
-    //   case "auth/invalid-login-credentials":
-    //     errorMessage = "invalid login details";
-    //     break;
-    //   default:
-    //     errorMessage = error.message;
-    // }
-    // toast.error(errorMessage);
-    // toast.hide();
-    });
-});
-
-},{"./common":"2ASYY","./firebase":"5VmhM","firebase/auth":"79vzg"}],"2ASYY":[function(require,module,exports) {
+},{}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "navLinks", ()=>navLinks);
-parcelHelpers.export(exports, "btnCta", ()=>btnCta);
-parcelHelpers.export(exports, "navLinkActive", ()=>navLinkActive);
-parcelHelpers.export(exports, "showBtnAnimation", ()=>showBtnAnimation);
-// Tablet Navigation
-parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
-parcelHelpers.export(exports, "toast", ()=>toast);
-// email validation function
-parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
-// change text
-parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
-// Adding Loading Spinner
-parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
-// Setting Button Text to Normal
-parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
-// Clear Input Fields
-parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
-const navLinks = document.querySelectorAll(".nav__link");
-const btnCta = document.querySelectorAll(".btn-cta");
-const navLinkActive = function(navLinks) {
-    navLinks.forEach((link)=>{
-        link.addEventListener("click", (e)=>{
-            navLinks.forEach((link)=>{
-                link.classList.remove("activeLink");
-            });
-            e.target.classList.add("activeLink");
-        });
+// Creating New Banca user Data
+parcelHelpers.export(exports, "createUserData", ()=>createUserData);
+// Get User Data From Firebase
+parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
+var _firestore = require("firebase/firestore");
+var _firebase = require("../firebase");
+async function createUserData(user, fullName, email) {
+    // banca account number for new user
+    const accountNumber = generateAccountNum();
+    // Add New User to th Users database
+    (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
+        fullName: fullName,
+        email: email,
+        balance: 0,
+        accountNumber: accountNumber
     });
-};
-const showBtnAnimation = function(btnCta) {
-    btnCta.forEach((btnCta)=>{
-        btnCta.addEventListener("mouseover", ()=>{
-            btnCta.classList.add("show-unfillanimation");
-        });
-    });
-};
-function tabletNav() {
-    const tabletNav = document.querySelector(".tablet-nav--container");
-    const closeMenuBtn = document.querySelector(".tablet-nav--container-btn-close");
-    const tabHamburgerMenu = document.querySelector(".navbar-toggler");
-    const fixedBody = document.querySelector("html");
-    tabHamburgerMenu.addEventListener("click", ()=>{
-        tabletNav.classList.toggle("open-tablet-menu");
-        fixedBody.classList.toggle("fixed");
-    });
-    closeMenuBtn.addEventListener("click", ()=>{
-        tabletNav.classList.remove("open-tablet-menu");
-        fixedBody.classList.remove("fixed");
+    //   initializing user transaction
+    await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
+        type: "initial deposit",
+        amount: 0,
+        timestamp: (0, _firestore.serverTimestamp)(),
+        description: "Account created, no initial deposit"
     });
 }
-// Toast notification
-class Toast {
-    _parentElement = document.querySelector(".toastBox");
-    render(markup) {
-        this._parentElement.innerHTML = "";
-        this._parentElement.classList.add("active");
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+// Generating 10 Digit Banca Account Number
+function generateAccountNum() {
+    const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
+    return randomNumber;
+}
+async function getCurrentUserData() {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        console.log("no user");
+        return null;
     }
-    generateErrorMarkup(message) {
-        return `
-       <div class="toast">
-          <ion-icon class="toast-close-icon" name="close"></ion-icon>
-          <ion-icon
-            class="toast-icon toast-icon--error"
-            name="close-circle"
-          ></ion-icon>
-          <div>
-            <span class="toast-message--tittle">Error</span>
-            <span class="toast-message--text">${message}</span>
-          </div>
-        </div> 
-    `;
-    }
-    generateSuccessMarkup(message) {
-        return `
-      <div class="toast ">
-            <ion-icon class="toast-close-icon" name="close"></ion-icon>
-            <ion-icon
-              class="toast-icon toast-icon--success"
-              name="checkmark-circle"
-            ></ion-icon>
-            <div>
-              <span class="toast-message--tittle">Success</span>
-              <span class="toast-message--text">${message}</span>
-            </div>
-        </div>
-    `;
-    }
-    renderSuccessMessage(message) {
-        const markupSucess = this.generateSuccessMarkup(message);
-        this.render(markupSucess);
-    }
-    renderErrorMessage(message) {
-        const markupError = this.generateErrorMarkup(message);
-        this.render(markupError);
-    }
-    close() {
-        const toastClose = document.querySelector(".toast-close-icon");
-        toastClose.addEventListener("click", ()=>{
-            this._parentElement.classList.remove("active");
-        });
-    }
-    active() {
-        const toast = document.querySelector(".toast");
-        setTimeout(()=>{
-            toast.classList.add("active");
-        }, 10);
-    }
-    hide() {
-        setTimeout(()=>{
-            this._parentElement.classList.remove("active");
-        }, 6000);
-    }
-    success(message) {
-        this.renderSuccessMessage(message);
-        this.active();
-        this.close();
-    }
-    error(message) {
-        this.renderErrorMessage(message);
-        this.active();
-        this.close();
+    try {
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+            const userData = {
+                id: userSnap.id,
+                ...userSnap.data()
+            };
+            console.log(userData);
+            return userData;
+        } else {
+            console.log("no user found");
+            return null;
+        }
+    } catch (error) {
+        console.error(error.message);
     }
 }
-const toast = new Toast();
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-function changeSubmitText(elementclass, text) {
-    return elementclass.textContent = text;
-}
-function loadingSpinner(button) {
-    const markup = `<span class="button-spinner"></span>`;
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", markup);
-}
-function clearLoadingSpinner(button, text) {
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", text);
-}
-function clearInputField() {}
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
+},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["gn59S","k67WZ"], "k67WZ", "parcelRequiree06a")
 
-//# sourceMappingURL=login.333b87f1.js.map
+//# sourceMappingURL=dashboard.20f3c10a.js.map
