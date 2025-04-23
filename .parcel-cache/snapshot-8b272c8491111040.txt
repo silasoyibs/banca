@@ -55,7 +55,7 @@
 65C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\pbts.d.ts133898895149679287 0
 74C:\Users\USER\Desktop\banca\node_modules\es-abstract\2022\IsPropertyKey.js133898895051920555 0
 73C:\Users\USER\Desktop\banca\node_modules\set-function-length\package.json133898894927535287 0
-32C:\Users\USER\Desktop\banca\dist133898909033587958 1
+32C:\Users\USER\Desktop\banca\dist133898914107981553 1
 82C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\lodash\has.js133898895057726269 0
 91C:\Users\USER\Desktop\banca\node_modules\eslint-visitor-keys\dist\eslint-visitor-keys.d.cts133898894914010243 0
 79C:\Users\USER\Desktop\banca\node_modules\es-abstract\2022\CodePointsToString.js133898895002230219 0
@@ -81,7 +81,7 @@
 56C:\Users\USER\Desktop\banca\src\sass\layout\_header.scss133879163786075493 0
 97C:\Users\USER\Desktop\banca\node_modules\@firebase\logger\node_modules\tslib\modules\package.json133898894929719484 0
 69C:\Users\USER\Desktop\banca\node_modules\nth-check\lib\compile.js.map133898894938613032 0
-40C:\Users\USER\Desktop\banca\package.json133898860373285005 0
+40C:\Users\USER\Desktop\banca\package.json133898914069012089 0
 64C:\Users\USER\Desktop\banca\node_modules\resolve\example\sync.js133898894976200296 0
 38C:\Users\USER\Desktop\banca\.gitignore133898812259228907 0
 90C:\Users\USER\Desktop\banca\node_modules\es-abstract\2024\OrdinaryCreateFromConstructor.js133898895075019771 0
@@ -492,7 +492,7 @@
 93C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\lodash\fp\functionsIn.js133898895056625675 0
 51C:\Users\USER\Desktop\banca\node_modules\prelude-ls133898894935836225 1
 85C:\Users\USER\Desktop\banca\node_modules\eslint-plugin-n\node_modules\.bin\semver.cmd133898895191935932 0
-58C:\Users\USER\Desktop\banca\dist\cash-outline.bd3eb748.svg133898908796556964 0
+58C:\Users\USER\Desktop\banca\dist\cash-outline.bd3eb748.svg133898914106343166 0
 59C:\Users\USER\Desktop\banca\node_modules\tsconfig-paths\lib133898894962266834 1
 57C:\Users\USER\Desktop\banca\node_modules\eslint\lib\rules133898895024497213 1
 103C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\underscore\amd\_shallowProperty.js133898895026810799 0
@@ -3669,7 +3669,7 @@
 75C:\Users\USER\Desktop\banca\node_modules\es-abstract\2020\CharacterRange.js133898895000142654 0
 72C:\Users\USER\Desktop\banca\node_modules\undici-types\balanced-pool.d.ts133898894922504798 0
 70C:\Users\USER\Desktop\banca\node_modules\typed-array-buffer\index.d.ts133898894935820678 0
-50C:\Users\USER\Desktop\banca\dist\login.0f324447.js133898908795978128 0
+50C:\Users\USER\Desktop\banca\dist\login.0f324447.js133898914107684051 0
 59C:\Users\USER\Desktop\banca\node_modules\type-check\LICENSE133898894905795641 0
 109C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\api\bundle.d.ts133898895038303087 0
 91C:\Users\USER\Desktop\banca\node_modules\firebase\remote-config\dist\esm\compat\performance133898895173047685 1
@@ -5975,7 +5975,7 @@
 72C:\Users\USER\Desktop\banca\node_modules\caniuse-lite\data\regions\NA.js133898895033399524 0
 94C:\Users\USER\Desktop\banca\node_modules\resolve\test\resolver\symlinked\_\node_modules\foo.js133898894955902105 0
 77C:\Users\USER\Desktop\banca\node_modules\is-shared-array-buffer\tsconfig.json133898894930277994 0
-55C:\Users\USER\Desktop\banca\dist\index.f7626f62.css.map133898908793989509 0
+55C:\Users\USER\Desktop\banca\dist\index.f7626f62.css.map133898914105789228 0
 87C:\Users\USER\Desktop\banca\node_modules\resolve\test\resolver\symlinked\package\bar.js133898894948357442 0
 76C:\Users\USER\Desktop\banca\node_modules\@parcel\compressor-raw\package.json133898894918708295 0
 57C:\Users\USER\Desktop\banca\node_modules\es-errors\uri.js133898894935556539 0
@@ -6189,7 +6189,7 @@
 62C:\Users\USER\Desktop\banca\node_modules\react-refresh\LICENSE133898894905875693 0
 89C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\lodash\_baseSlice.js133898895000328095 0
 79C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\acorn\dist133898895145861324 1
-51C:\Users\USER\Desktop\banca\dist\email.25edd805.svg133898908793746715 0
+51C:\Users\USER\Desktop\banca\dist\email.25edd805.svg133898914104618166 0
 105C:\Users\USER\Desktop\banca\node_modules\@firebase\remote-config\dist\esm\src\client\retrying_client.d.ts133898894967117814 0
 96C:\Users\USER\Desktop\banca\node_modules\react-refresh\cjs\react-refresh-babel.production.min.js133898894920046004 0
 87C:\Users\USER\Desktop\banca\node_modules\firebase\compat\auth\dist\functions\index.d.ts133898895100045961 0
@@ -6205,7 +6205,7 @@
 86C:\Users\USER\Desktop\banca\node_modules\caniuse-lite\data\features\css-containment.js133898894988052049 0
 73C:\Users\USER\Desktop\banca\node_modules\react-error-overlay\package.json133898894932701436 0
 70C:\Users\USER\Desktop\banca\node_modules\react-error-overlay\README.md133898894934378816 0
-63C:\Users\USER\Desktop\banca\dist\bag-check-outline.90d86510.svg133898908793746715 0
+63C:\Users\USER\Desktop\banca\dist\bag-check-outline.90d86510.svg133898914104618166 0
 69C:\Users\USER\Desktop\banca\node_modules\queue-microtask\package.json133898894912457493 0
 92C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\browser-cjs\src\api\errors.d.ts133898895049690602 0
 94C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\underscore\cjs\_toPath.js133898895030364384 0
@@ -8458,7 +8458,7 @@
 73C:\Users\USER\Desktop\banca\node_modules\firebase\app\dist\esm\compat\app133898895061216065 1
 86C:\Users\USER\Desktop\banca\node_modules\protobufjs\cli\node_modules\lodash\without.js133898895124842679 0
 82C:\Users\USER\Desktop\banca\node_modules\es-abstract\helpers\isLeadingSurrogate.js133898895050093893 0
-59C:\Users\USER\Desktop\banca\dist\calculator-bg.80f4c458.png133898908794488559 0
+59C:\Users\USER\Desktop\banca\dist\calculator-bg.80f4c458.png133898914106684188 0
 88C:\Users\USER\Desktop\banca\node_modules\@firebase\app-compat\dist\src\public-types.d.ts133898894960415457 0
 104C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\api\authentication\token.test.d.ts133898895150488962 0
 106C:\Users\USER\Desktop\banca\node_modules\@firebase\auth-compat\dist\esm\auth-compat\test\integration\flows133898894970679072 1
@@ -9994,7 +9994,7 @@
 61C:\Users\USER\Desktop\banca\node_modules\process\package.json133898894905875693 0
 96C:\Users\USER\Desktop\banca\node_modules\@firebase\performance-compat\dist\esm\index.esm5.js.map133898894933268025 0
 82C:\Users\USER\Desktop\banca\node_modules\eslint\lib\rules\no-restricted-imports.js133898895004369406 0
-46C:\Users\USER\Desktop\banca\dist\register.html133898909033577850 0
+46C:\Users\USER\Desktop\banca\dist\register.html133898914104685217 0
 55C:\Users\USER\Desktop\banca\node_modules\prelude-ls\lib133898894930760310 1
 103C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\node\test\helpers\fake_service_worker.d.ts133898895054780678 0
 64C:\Users\USER\Desktop\banca\node_modules\prelude-ls\package.json133898894933080951 0
@@ -10422,7 +10422,7 @@
 117C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\src\platform_browser\persistence\local_storage.test.d.ts133898895095329245 0
 94C:\Users\USER\Desktop\banca\node_modules\firebase\storage\dist\compat\remote-config\index.d.ts133898895175384728 0
 76C:\Users\USER\Desktop\banca\node_modules\es-abstract\2019\thisNumberValue.js133898895098202211 0
-58C:\Users\USER\Desktop\banca\dist\bank-balance.946b3a2c.png133898908794358057 0
+58C:\Users\USER\Desktop\banca\dist\bank-balance.946b3a2c.png133898914106543779 0
 67C:\Users\USER\Desktop\banca\node_modules\object.fromentries\LICENSE133898894915371029 0
 82C:\Users\USER\Desktop\banca\node_modules\es-abstract\2017\DeletePropertyOrThrow.js133898895024529210 0
 83C:\Users\USER\Desktop\banca\node_modules\es-abstract\2017\OrdinaryGetOwnProperty.js133898895075657016 0
@@ -12282,7 +12282,7 @@
 66C:\Users\USER\Desktop\banca\node_modules\flatted\python\flatted.py133898894939735062 0
 82C:\Users\USER\Desktop\banca\node_modules\firebase\remote-config\dist\esm\analytics133898895172228020 1
 67C:\Users\USER\Desktop\banca\node_modules\flatted\python\__pycache__133898894943013786 1
-43C:\Users\USER\Desktop\banca\dist\index.html133898908796556964 0
+43C:\Users\USER\Desktop\banca\dist\index.html133898914106543779 0
 85C:\Users\USER\Desktop\banca\node_modules\firebase\installations\dist\index.cjs.js.map133898895032928110 0
 72C:\Users\USER\Desktop\banca\node_modules\@parcel\core\src\projectPath.js133898894984635056 0
 75C:\Users\USER\Desktop\banca\node_modules\firebase\firebase-remote-config.js133898894971884714 0
@@ -12391,7 +12391,7 @@
 61C:\Users\USER\Desktop\banca\node_modules\firebase\performance133898895000923516 1
 62C:\Users\USER\Desktop\banca\node_modules\firebase\storage\dist133898895177540608 1
 72C:\Users\USER\Desktop\banca\node_modules\caniuse-lite\data\regions\KP.js133898895026408536 0
-50C:\Users\USER\Desktop\banca\dist\Logo.de93424c.png133898908794358057 0
+50C:\Users\USER\Desktop\banca\dist\Logo.de93424c.png133898914106543779 0
 70C:\Users\USER\Desktop\banca\node_modules\firebase\storage\package.json133898895001408067 0
 93C:\Users\USER\Desktop\banca\node_modules\eslint-plugin-n\node_modules\semver\functions\cmp.js133898894916477909 0
 66C:\Users\USER\Desktop\banca\node_modules\firebase\storage\dist\app133898895174452204 1
@@ -12937,7 +12937,7 @@
 94C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\platform_node\index.d.ts133898895080445934 0
 74C:\Users\USER\Desktop\banca\node_modules\firebase\messaging\dist\functions133898895164152388 1
 77C:\Users\USER\Desktop\banca\node_modules\firebase\messaging\dist\index.cjs.js133898894983134678 0
-54C:\Users\USER\Desktop\banca\dist\hero-img.51daf8b1.png133898908794476341 0
+54C:\Users\USER\Desktop\banca\dist\hero-img.51daf8b1.png133898914106684188 0
 74C:\Users\USER\Desktop\banca\node_modules\firebase\messaging\dist\index.mjs133898895038874591 0
 78C:\Users\USER\Desktop\banca\node_modules\firebase\messaging\dist\index.mjs.map133898895037537308 0
 101C:\Users\USER\Desktop\banca\node_modules\firebase\compat\analytics\dist\esm\compat\app\index.cdn.d.ts133898895041874807 0
@@ -13354,7 +13354,7 @@
 82C:\Users\USER\Desktop\banca\node_modules\firebase\functions\dist\auth\react-native133898895152863472 1
 72C:\Users\USER\Desktop\banca\node_modules\eslint-compat-utils\dist\shared133898894946330017 1
 72C:\Users\USER\Desktop\banca\node_modules\caniuse-lite\data\regions\MU.js133898895032769168 0
-51C:\Users\USER\Desktop\banca\dist\msg-3.4c051561.png133898908794358057 0
+51C:\Users\USER\Desktop\banca\dist\msg-3.4c051561.png133898914106563834 0
 88C:\Users\USER\Desktop\banca\node_modules\firebase\functions\dist\auth\cordova\index.d.ts133898895152719197 0
 83C:\Users\USER\Desktop\banca\node_modules\firebase\functions\dist\app\index.cdn.d.ts133898895047993652 0
 79C:\Users\USER\Desktop\banca\node_modules\firebase\functions\dist\app\index.d.ts133898895152559320 0
@@ -14315,7 +14315,7 @@
 120C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\src\platform_browser\mfa\assertions\phone.test.d.ts133898895114846935 0
 93C:\Users\USER\Desktop\banca\node_modules\firebase\compat\functions\dist\esm\auth\react-native133898895115623844 1
 85C:\Users\USER\Desktop\banca\node_modules\firebase\analytics\dist\compat\remote-config133898895051965410 1
-54C:\Users\USER\Desktop\banca\dist\password.27342a73.svg133898908796556964 0
+54C:\Users\USER\Desktop\banca\dist\password.27342a73.svg133898914106383296 0
 100C:\Users\USER\Desktop\banca\node_modules\@grpc\grpc-js\node_modules\yargs\lib\platform-shims\esm.mjs133898894968804216 0
 93C:\Users\USER\Desktop\banca\node_modules\firebase\compat\functions\dist\compat\index.cdn.d.ts133898895044527651 0
 67C:\Users\USER\Desktop\banca\node_modules\es-abstract\2019\modulo.js133898895065941530 0
@@ -15044,7 +15044,7 @@
 96C:\Users\USER\Desktop\banca\node_modules\firebase\compat\app-check\dist\esm\compat\installations133898895086653222 1
 106C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore-compat\dist\test\util\events_accumulator.d.ts133898894964515627 0
 94C:\Users\USER\Desktop\banca\node_modules\firebase\compat\app-check\dist\esm\compat\performance133898895086745813 1
-51C:\Users\USER\Desktop\banca\dist\msg-1.f654f8dd.png133898908794295126 0
+51C:\Users\USER\Desktop\banca\dist\msg-1.f654f8dd.png133898914106543779 0
 96C:\Users\USER\Desktop\banca\node_modules\firebase\compat\app-check\dist\esm\compat\remote-config133898895086796081 1
 84C:\Users\USER\Desktop\banca\node_modules\eslint-compat-utils\node_modules\semver\bin133898894961103891 1
 60C:\Users\USER\Desktop\banca\node_modules\callsites\readme.md133898894922879750 0
@@ -17183,7 +17183,7 @@
 124C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\browser-cjs\src\platform_cordova\popup_redirect\utils.test.d.ts133898895156142165 0
 78C:\Users\USER\Desktop\banca\node_modules\@parcel\source-map\dist\utils.js.flow133898894918708295 0
 70C:\Users\USER\Desktop\banca\node_modules\eslint\lib\shared\severity.js133898895018376957 0
-63C:\Users\USER\Desktop\banca\dist\login-section-img.a8cfed28.jpg133898908792814518 0
+63C:\Users\USER\Desktop\banca\dist\login-section-img.a8cfed28.jpg133898914105104897 0
 70C:\Users\USER\Desktop\banca\node_modules\es-abstract\2017\IsPromise.js133898895051147224 0
 74C:\Users\USER\Desktop\banca\node_modules\eslint\lib\shared\string-utils.js133898895020899945 0
 71C:\Users\USER\Desktop\banca\node_modules\eslint\lib\shared\traverser.js133898895023594390 0
@@ -20747,7 +20747,7 @@
 67C:\Users\USER\Desktop\banca\node_modules\@parcel\core\src\Parcel.js133898894981812443 0
 65C:\Users\USER\Desktop\banca\node_modules\@trysound\sax\lib\sax.js133898894911999496 0
 53C:\Users\USER\Desktop\banca\node_modules\@swc\counter133898894914606808 1
-43C:\Users\USER\Desktop\banca\dist\login.html133898908796556964 0
+43C:\Users\USER\Desktop\banca\dist\login.html133898914106523726 0
 53C:\Users\USER\Desktop\banca\node_modules\@swc\helpers133898895013639136 1
 93C:\Users\USER\Desktop\banca\node_modules\@firebase\auth-compat\dist\auth-compat\src\wrap.d.ts133898894974195477 0
 51C:\Users\USER\Desktop\banca\node_modules\@swc\types133898894935301899 1
@@ -21136,7 +21136,7 @@
 73C:\Users\USER\Desktop\banca\node_modules\@swc\helpers\cjs\_instanceof.cjs133898894966431023 0
 86C:\Users\USER\Desktop\banca\node_modules\@swc\helpers\cjs\_interop_require_default.cjs133898894966938543 0
 87C:\Users\USER\Desktop\banca\node_modules\@swc\helpers\cjs\_interop_require_wildcard.cjs133898894967213101 0
-58C:\Users\USER\Desktop\banca\dist\card-outline.357e27d5.svg133898908796553583 0
+58C:\Users\USER\Desktop\banca\dist\card-outline.357e27d5.svg133898914106343166 0
 80C:\Users\USER\Desktop\banca\node_modules\@swc\helpers\cjs\_iterable_to_array.cjs133898894968723925 0
 92C:\Users\USER\Desktop\banca\node_modules\@swc\helpers\cjs\_iterable_to_array_limit_loose.cjs133898894968302682 0
 91C:\Users\USER\Desktop\banca\node_modules\@parcel\optimizer-svgo\node_modules\csso\lib\clean133898894965773436 1
@@ -22705,7 +22705,7 @@
 94C:\Users\USER\Desktop\banca\node_modules\@parcel\optimizer-htmlnano\node_modules\.bin\svgo.ps1133898895191885480 0
 92C:\Users\USER\Desktop\banca\node_modules\@parcel\optimizer-htmlnano\lib\HTMLNanoOptimizer.js133898894910711669 0
 86C:\Users\USER\Desktop\banca\node_modules\@parcel\optimizer-htmlnano\lib\svgMappings.js133898894921654686 0
-59C:\Users\USER\Desktop\banca\dist\about-arrow-2.0bf3fcd7.png133898908792814518 0
+59C:\Users\USER\Desktop\banca\dist\about-arrow-2.0bf3fcd7.png133898914104731096 0
 82C:\Users\USER\Desktop\banca\node_modules\@parcel\optimizer-css\lib\CSSOptimizer.js133898894910711669 0
 71C:\Users\USER\Desktop\banca\node_modules\@parcel\node-resolver-core\lib133898894927784431 1
 75C:\Users\USER\Desktop\banca\node_modules\@parcel\node-resolver-core\LICENSE133898894906357858 0
@@ -23749,7 +23749,7 @@
 107C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\firestore\src\lite-api\snapshot.d.ts133898895112250064 0
 86C:\Users\USER\Desktop\banca\node_modules\@firebase\storage-compat\dist\test\utils.d.ts133898894959751926 0
 98C:\Users\USER\Desktop\banca\node_modules\@firebase\storage-compat\dist\test\unit\service.test.d.ts133898894954840140 0
-67C:\Users\USER\Desktop\banca\dist\accessibility-outline.50728f80.svg133898908793746715 0
+67C:\Users\USER\Desktop\banca\dist\accessibility-outline.50728f80.svg133898914104618166 0
 87C:\Users\USER\Desktop\banca\node_modules\@firebase\storage-compat\dist\src\service.d.ts133898894953906120 0
 84C:\Users\USER\Desktop\banca\node_modules\@firebase\storage-compat\dist\src\task.d.ts133898894957341271 0
 92C:\Users\USER\Desktop\banca\node_modules\@firebase\storage-compat\dist\src\tasksnapshot.d.ts133898894958897088 0
@@ -25066,7 +25066,7 @@
 115C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\core\bundle_impl.d.ts133898895036944484 0
 122C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\core\component_provider.d.ts133898895041806969 0
 109C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\core\query.d.ts133898895097752597 0
-59C:\Users\USER\Desktop\banca\dist\about-arrow-1.cc3bb78a.png133898908792814518 0
+59C:\Users\USER\Desktop\banca\dist\about-arrow-1.cc3bb78a.png133898914104703570 0
 120C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\core\sync_engine_impl.d.ts133898895115769167 0
 123C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\core\target_id_generator.d.ts133898895116823119 0
 123C:\Users\USER\Desktop\banca\node_modules\@firebase\firestore\dist\lite\packages\firestore\src\core\transaction_options.d.ts133898895122063939 0
@@ -26233,7 +26233,7 @@
 96C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\node-esm\src\mfa\mfa_user.test.d.ts133898895101151435 0
 70C:\Users\USER\Desktop\banca\node_modules\@eslint\eslintrc\universal.js133898894954518460 0
 99C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\node-esm\src\core\action_code_url.d.ts133898895004656723 0
-50C:\Users\USER\Desktop\banca\dist\user.fb821901.svg133898908796556964 0
+50C:\Users\USER\Desktop\banca\dist\user.fb821901.svg133898914106343166 0
 83C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\node-esm\src\core\auth133898895136834682 1
 90C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\node-esm\src\core\credentials133898895139684341 1
 89C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\node-esm\src\core\index.d.ts133898895080883593 0
@@ -26530,7 +26530,7 @@
 75C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\model133898895155518767 1
 83C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\platform_node133898895080411519 1
 91C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\platform_react_native133898895124979171 1
-57C:\Users\USER\Desktop\banca\dist\register.b3772f39.js.map133898908793967716 0
+57C:\Users\USER\Desktop\banca\dist\register.b3772f39.js.map133898914105830833 0
 126C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\platform_react_native\persistence\react_native.test.d.ts133898895125705246 0
 99C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\platform_cordova\plugins.d.ts133898895116457126 0
 97C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm5\src\platform_cordova\strategies133898895135157336 1
@@ -26658,7 +26658,7 @@
 114C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\test\integration\webdriver\util\idp_page.d.ts133898895071584466 0
 117C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\test\integration\webdriver\util\test_runner.d.ts133898895146457282 0
 117C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\test\integration\webdriver\util\test_server.d.ts133898895147011369 0
-56C:\Users\USER\Desktop\banca\dist\Trustpilot.e94b536f.png133898908792814518 0
+56C:\Users\USER\Desktop\banca\dist\Trustpilot.e94b536f.png133898914104731096 0
 113C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\test\integration\webdriver\util\ui_page.d.ts133898895152559320 0
 111C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\test\integration\flows\anonymous.test.d.ts133898895009717433 0
 114C:\Users\USER\Desktop\banca\node_modules\@firebase\auth\dist\esm2017\test\integration\flows\custom.local.test.d.ts133898895038332350 0
@@ -27366,19 +27366,19 @@
 68C:\Users\USER\Desktop\banca\node_modules\.bin\update-browserslist-db133898895192086459 0
 72C:\Users\USER\Desktop\banca\node_modules\.bin\update-browserslist-db.cmd133898895192096691 0
 72C:\Users\USER\Desktop\banca\node_modules\.bin\update-browserslist-db.ps1133898895192096691 0
-57C:\Users\USER\Desktop\banca\dist\card-holder.9a85dc37.png133898908792889091 0
-59C:\Users\USER\Desktop\banca\dist\globe-outline.4319a6fd.svg133898908793746715 0
 51C:\Users\USER\Desktop\banca\dist\index.599ca509.css133898904136319799 0
 55C:\Users\USER\Desktop\banca\dist\index.599ca509.css.map133898904136888126 0
-50C:\Users\USER\Desktop\banca\dist\index.739bf03c.js133898908793746715 0
-54C:\Users\USER\Desktop\banca\dist\index.739bf03c.js.map133898908793967716 0
-51C:\Users\USER\Desktop\banca\dist\index.f7626f62.css133898908793746715 0
-54C:\Users\USER\Desktop\banca\dist\login.0f324447.js.map133898908796251372 0
-50C:\Users\USER\Desktop\banca\dist\login.333b87f1.js133898908795978128 0
-54C:\Users\USER\Desktop\banca\dist\login.333b87f1.js.map133898908796233880 0
-52C:\Users\USER\Desktop\banca\dist\Logo-2.039d4a1d.png133898908792814518 0
-60C:\Users\USER\Desktop\banca\dist\medkit-outline.f916245b.svg133898908796556964 0
-51C:\Users\USER\Desktop\banca\dist\msg-2.2da59214.png133898908794358057 0
-53C:\Users\USER\Desktop\banca\dist\register.b3772f39.js133898908793746715 0
-65C:\Users\USER\Desktop\banca\dist\speedometer-outline.221fc504.svg133898908793746715 0
-57C:\Users\USER\Desktop\banca\dist\tablet-menu.c2a200ac.svg133898908793746715 0
+57C:\Users\USER\Desktop\banca\dist\tablet-menu.c2a200ac.svg133898914104599040 0
+65C:\Users\USER\Desktop\banca\dist\speedometer-outline.221fc504.svg133898914104599040 0
+59C:\Users\USER\Desktop\banca\dist\globe-outline.4319a6fd.svg133898914104618166 0
+51C:\Users\USER\Desktop\banca\dist\index.f7626f62.css133898914104618166 0
+52C:\Users\USER\Desktop\banca\dist\Logo-2.039d4a1d.png133898914104751031 0
+53C:\Users\USER\Desktop\banca\dist\register.b3772f39.js133898914105104897 0
+50C:\Users\USER\Desktop\banca\dist\index.739bf03c.js133898914105125046 0
+57C:\Users\USER\Desktop\banca\dist\card-holder.9a85dc37.png133898914105454082 0
+54C:\Users\USER\Desktop\banca\dist\index.739bf03c.js.map133898914105819505 0
+60C:\Users\USER\Desktop\banca\dist\medkit-outline.f916245b.svg133898914106343166 0
+51C:\Users\USER\Desktop\banca\dist\msg-2.2da59214.png133898914106543779 0
+50C:\Users\USER\Desktop\banca\dist\login.333b87f1.js133898914107649978 0
+54C:\Users\USER\Desktop\banca\dist\login.333b87f1.js.map133898914107900989 0
+54C:\Users\USER\Desktop\banca\dist\login.0f324447.js.map133898914107952745 0
