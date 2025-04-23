@@ -1,6 +1,5 @@
 import { auth } from "./firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-<<<<<<< HEAD
 import { toast, loadingSpinner, clearLoadingSpinner } from "./common";
 import { createUserData } from "./dashboard/model";
 const form = document.querySelector("#form");
@@ -59,7 +58,6 @@ form.addEventListener("submit", async (e) => {
       clearLoadingSpinner(btnRegister, "Create Account");
     }, 6000);
   }
-=======
 import { toast, changeSubmitText } from "./common";
 const form = document.querySelector("#form");
 const btnSubmit = document.querySelector("#submit-button");
@@ -99,5 +97,4 @@ form.addEventListener("submit", (e) => {
       toast.error(errorMessage);
       toast.hide();
     });
->>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 });

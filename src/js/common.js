@@ -131,7 +131,6 @@ export function validateEmail(email) {
 export function changeSubmitText(elementclass, text) {
   return (elementclass.textContent = text);
 }
-<<<<<<< HEAD
 
 // Adding Loading Spinner
 export function loadingSpinner(button) {
@@ -150,5 +149,3 @@ export function clearLoadingSpinner(button, text) {
 
 // Clear Input Fields
 export function clearInputField() {}
-=======
->>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
