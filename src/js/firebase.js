@@ -16,9 +16,6 @@ export const auth = getAuth(app);
 // get database
 <<<<<<< HEAD
 export const db = getFirestore();
-=======
-const db = getFirestore();
->>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 // get collection from database
 export const emailSubcriber = collection(db, "email-subcriber");
 export const contactUs = collection(db, "contact-us-form");
