@@ -53,42 +53,40 @@ function generateUserName(fullName) {
 
 // Get User Data From Firebase
 export function getCurrentUserData() {
-  return new Promise((resolve, reject) => {
-    const auth = getAuth();
-    const stopListening = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        reject("No user is logged in");
-        stopListening();
-        return;
-      }
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = {
-            id: userSnap.id,
-            ...userSnap.data(),
-          };
-          const transactionsRef = collection(
-            db,
-            "users",
-            user.uid,
-            "transaction"
-          );
-          const transactionsSnap = await getDocs(transactionsRef);
-          const transactions = transactionsSnap.docs.map((doc) => doc.data());
-
-          const user = {
-            userData,
-            transactions,
-          };
-          resolve(user);
-        } else {
-          reject("user not found");
+  const auth = getAuth();
+  return new Promise(function (resolve, reject) {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            const data = {
+              id: userSnap.id,
+              ...userSnap.data(),
+            };
+            const transactionsRef = collection(
+              db,
+              "users",
+              user.uid,
+              "transaction"
+            );
+            const transactionsSnap = await getDocs(transactionsRef);
+            const transactions = transactionsSnap.docs.map((doc) => doc.data());
+            const currentUser = {
+              data,
+              transactions,
+            };
+            // modify existing state of current user
+            state.user = data;
+            state.transactions = [...transactions];
+            resolve(currentUser);
+          }
+        } catch (error) {
+          console.error(error.message);
         }
-      } catch (error) {
-        console.error(error.message);
-        reject(error);
+      } else {
+        reject("No User is signed in");
       }
     });
   });
