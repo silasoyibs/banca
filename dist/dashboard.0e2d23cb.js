@@ -588,12 +588,16 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
 var _dashboardViewJs = require("./views/dashboardView.js");
 var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
-const controlDashboard = function() {
+const controlDashboard = async function() {
     //   update view
     //   dasboardView.render(model.getCurrentUserData());
     //   dashboardView.check();
-    const test = _modelJs.getCurrentUserData();
-    console.log(test);
+    try {
+        const test = await _modelJs.getCurrentUserData();
+        console.log(test);
+    } catch (err) {
+        console.log(err);
+    }
 };
 controlDashboard();
 
@@ -643,33 +647,36 @@ function generateUserName(fullName) {
     return firstName[0];
 }
 function getCurrentUserData() {
-    const auth = (0, _auth.getAuth)();
-    (0, _auth.onAuthStateChanged)(auth, async (user)=>{
-        if (!user) return;
-        try {
-            const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
-            const userSnap = await (0, _firestore.getDoc)(userRef);
-            if (userSnap.exists()) {
-                const userData = {
-                    id: userSnap.id,
-                    ...userSnap.data()
-                };
-                const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
-                const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
-                const transactions = await transactionsSnap.docs.map((doc)=>doc.data());
-                state.user = {
-                    ...userData
-                };
-                state.transactions = [
-                    ...transactions
-                ];
-                // console.log({ ...userData, transactions });
-                // console.log(state);
-                return state;
-            } else return null;
-        } catch (error) {
-            console.error(error.message);
-        }
+    return new Promise((resolve, reject)=>{
+        const auth = (0, _auth.getAuth)();
+        const stopListening = (0, _auth.onAuthStateChanged)(auth, async (user)=>{
+            if (!user) {
+                reject("No user is logged in");
+                stopListening();
+                return;
+            }
+            try {
+                const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+                const userSnap = await (0, _firestore.getDoc)(userRef);
+                if (userSnap.exists()) {
+                    const userData = {
+                        id: userSnap.id,
+                        ...userSnap.data()
+                    };
+                    const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+                    const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
+                    const transactions = transactionsSnap.docs.map((doc)=>doc.data());
+                    const user = {
+                        userData,
+                        transactions
+                    };
+                    resolve(user);
+                } else reject("user not found");
+            } catch (error) {
+                console.error(error.message);
+                reject(error);
+            }
+        });
     });
 }
 
