@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-{"mappings":"AAAA,oCAAoC","sources":["src/js/dashboard/controller.js"],"sourcesContent":["// import * as model from \"./model\";\r\n"],"names":[],"version":3,"file":"index.45e6bf19.js.map","sourceRoot":"/__parcel_source_root/"}
-=======
-{"mappings":"","sources":["src/js/dashboard/controller.js"],"sourcesContent":[null],"names":[],"version":3,"file":"index.45e6bf19.js.map","sourceRoot":"/__parcel_source_root/"}
->>>>>>> 79f5a6376b044f15886be944a33fbefe47628069

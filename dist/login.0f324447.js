@@ -601,6 +601,8 @@ parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
 parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
 // Setting Button Text to Normal
 parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
+// Clear Input Fields
+parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -727,6 +729,7 @@ function clearLoadingSpinner(button, text) {
     buttonEl.innerHTML = "";
     buttonEl.insertAdjacentHTML("afterbegin", text);
 }
+function clearInputField() {}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -762,6 +765,7 @@ exports.export = function(dest, destName, get) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "auth", ()=>auth);
+parcelHelpers.export(exports, "db", ()=>db);
 parcelHelpers.export(exports, "emailSubcriber", ()=>emailSubcriber);
 parcelHelpers.export(exports, "contactUs", ()=>contactUs);
 parcelHelpers.export(exports, "loanApplication", ()=>loanApplication);
@@ -781,7 +785,6 @@ const firebaseConfig = {
 // intialize app
 const app = (0, _app.initializeApp)(firebaseConfig);
 const auth = (0, _auth.getAuth)(app);
-// get database
 const db = (0, _firestore.getFirestore)();
 const emailSubcriber = (0, _firestore.collection)(db, "email-subcriber");
 const contactUs = (0, _firestore.collection)(db, "contact-us-form");
@@ -792,7 +795,6 @@ async function checkEmailSubcriber(emailToCheck) {
             id: doc.id,
             ...doc.data()
         }));
-    console.log(emailSubcribers);
     const emailExist = emailSubcribers.some((subcriber)=>subcriber.email === emailToCheck);
     if (emailExist) throw new Error("you are already a subcriber");
 }

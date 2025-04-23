@@ -2,31 +2,28 @@
   padding-top: 4.8rem;
   background-color: $color-blue--light;
   .hero {
-    padding-bottom:8rem;
-    gap:3rem;
-    @media(max-width:75em){
-      gap:1rem;
+    padding-bottom: 8rem;
+    gap: 3rem;
+    @media (max-width: 75em) {
+      gap: 1rem;
     }
-    @media(max-width:59em){
+    @media (max-width: 59em) {
       grid-template-columns: 1fr;
-      gap:3rem;
-      padding-bottom:2rem;
+      gap: 3rem;
+      padding-bottom: 2rem;
     }
     &__left {
       padding-top: 5rem;
-      @media(max-width:59em){
+      @media (max-width: 59em) {
         text-align: center;
       }
- 
     }
-    &__right{
-      figure img{
-        width:100%;
+    &__right {
+      figure img {
+        width: 100%;
       }
-
-
     }
-   
+
     &__description {
       padding-top: 4rem;
       line-height: 1.5;
@@ -36,9 +33,9 @@
       padding-top: 3rem;
       display: flex;
       gap: 3rem;
-    @media(max-width:59em){
-      justify-content: center;
-    }
+      @media (max-width: 59em) {
+        justify-content: center;
+      }
       & span {
         color: $color-text;
       }
@@ -53,8 +50,8 @@
       border-radius: 5px;
       border: none;
       outline: none;
-      @media(max-width:34em){
-        width:80%;
+      @media (max-width: 34em) {
+        width: 80%;
         margin-bottom: 2rem;
       }
       &::placeholder {
@@ -74,9 +71,9 @@
   padding: 5rem 0rem;
 
   .banca-stats {
-    &--container{
-      gap:2rem;
-      @media (max-width:44em){
+    &--container {
+      gap: 2rem;
+      @media (max-width: 44em) {
         grid-template-columns: 1fr;
       }
     }
@@ -113,13 +110,13 @@
     &__cards {
       padding-top: 5rem;
       gap: 3rem;
-      @media(max-width:59em){
-        grid-template-columns: repeat(3,1fr);
+      @media (max-width: 59em) {
+        grid-template-columns: repeat(3, 1fr);
       }
-      @media(max-width:44em){
-        grid-template-columns: repeat(2,1fr);
+      @media (max-width: 44em) {
+        grid-template-columns: repeat(2, 1fr);
       }
-      @media(max-width:34em){
+      @media (max-width: 34em) {
         grid-template-columns: 1fr;
       }
     }
@@ -176,12 +173,12 @@
 .section-loan {
   background-color: $color-white;
   padding: 5rem 0rem;
-  & > div{
-    @media (max-width:44em){
+  & > div {
+    @media (max-width: 44em) {
       grid-template-columns: 1fr;
     }
   }
- 
+
   .loan {
     padding-top: 5rem;
     gap: 2rem;
@@ -343,15 +340,15 @@
     padding-bottom: 5rem;
   }
 
-.loan-calculator--container{
-  max-width:45rem;
-  margin: 0 auto;
+  .loan-calculator--container {
+    max-width: 45rem;
+    margin: 0 auto;
     .loan-calculator {
       width: 100%;
       background-color: $color-white;
       border-radius: 5px;
       padding: 3rem;
-      @media (max-width:44em){
+      @media (max-width: 44em) {
         width: 100%;
       }
       & h3 {
@@ -412,8 +409,7 @@
         }
       }
     }
-}
-  
+  }
 }
 
 // section contact-us
@@ -422,7 +418,7 @@
   padding: 10rem 0 5rem 0;
   .contact-us {
     gap: 5rem;
-    @media(max-width:44em){
+    @media (max-width: 44em) {
       grid-template-columns: 1fr;
     }
     &__form {
