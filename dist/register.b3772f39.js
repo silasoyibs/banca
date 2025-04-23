@@ -587,6 +587,7 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
 var _common = require("./common");
+<<<<<<< HEAD
 var _model = require("./dashboard/model");
 const form = document.querySelector("#form");
 const btnRegister = document.getElementById("register-button");
@@ -616,6 +617,25 @@ form.addEventListener("submit", async (e)=>{
             (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
         }, 6000);
     } catch (error) {
+=======
+const form = document.querySelector("#form");
+const btnSubmit = document.querySelector("#submit-button");
+form.addEventListener("submit", (e)=>{
+    e.preventDefault();
+    const email = document.querySelector("#email").value;
+    const password = document.querySelector("#password").value;
+    (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
+        // Signed up
+        (0, _common.changeSubmitText)(btnSubmit, "Registering...");
+        const user = userCredential.user;
+        console.log(user);
+        (0, _common.toast).success("Thanks for Registering!");
+        (0, _common.toast).hide();
+        setTimeout(()=>{
+            (0, _common.changeSubmitText)(btnSubmit, "Register");
+        }, 6000);
+    }).catch((error)=>{
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
         const errorCode = error.code;
         let errorMessage;
         switch(errorCode){
@@ -633,6 +653,7 @@ form.addEventListener("submit", async (e)=>{
         }
         (0, _common.toast).error(errorMessage);
         (0, _common.toast).hide();
+<<<<<<< HEAD
     } finally{
         setTimeout(()=>{
             (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
@@ -641,6 +662,12 @@ form.addEventListener("submit", async (e)=>{
 });
 
 },{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"2ASYY":[function(require,module,exports) {
+=======
+    });
+});
+
+},{"firebase/auth":"79vzg","./firebase":"5VmhM","./common":"2ASYY"}],"2ASYY":[function(require,module,exports) {
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "navLinks", ()=>navLinks);
@@ -654,12 +681,15 @@ parcelHelpers.export(exports, "toast", ()=>toast);
 parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
 // change text
 parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
+<<<<<<< HEAD
 // Adding Loading Spinner
 parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
 // Setting Button Text to Normal
 parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
 // Clear Input Fields
 parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
+=======
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -775,6 +805,7 @@ function validateEmail(email) {
 function changeSubmitText(elementclass, text) {
     return elementclass.textContent = text;
 }
+<<<<<<< HEAD
 function loadingSpinner(button) {
     const markup = `<span class="button-spinner"></span>`;
     const buttonEl = button;
@@ -868,5 +899,9 @@ function getCurrentUserData() {
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+=======
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 
 //# sourceMappingURL=register.b3772f39.js.map

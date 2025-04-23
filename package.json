@@ -5,7 +5,11 @@
   "type": "module",
   "scripts": {
     "lint": "eslint",
+<<<<<<< HEAD
     "start": "parcel index.html dashboard.html"
+=======
+    "start": "parcel index.html"
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

@@ -584,23 +584,33 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"47T64":[function(require,module,exports) {
+<<<<<<< HEAD
 var _common = require("./common");
 var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
 const form = document.querySelector("#form");
 const loginBtn = document.getElementById("login-button");
+=======
+var _firebase = require("./firebase");
+var _auth = require("firebase/auth");
+const form = document.querySelector("#form");
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _auth.signInWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
+<<<<<<< HEAD
         (0, _common.loadingSpinner)(loginBtn);
+=======
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
         // Signed in
         const user = userCredential.user;
         window.location.href = "http://localhost:1234/dashboard.html";
     }).catch((error)=>{
         const errorCode = error.code;
         const errorMessage = error.message;
+<<<<<<< HEAD
         console.log(errorCode, errorMessage);
     // const errorCode = error.code;
     // let errorMessage;
@@ -765,5 +775,12 @@ function clearLoadingSpinner(button, text) {
 function clearInputField() {}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
+=======
+        alert(errorMessage);
+    });
+});
+
+},{"./firebase":"5VmhM","firebase/auth":"79vzg"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 
 //# sourceMappingURL=login.333b87f1.js.map

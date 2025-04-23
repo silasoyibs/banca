@@ -288,6 +288,7 @@ body {
   animation: .5s unfillButton;
 }
 
+<<<<<<< HEAD
 .button-spinner {
   vertical-align: middle;
   border: 3px solid #fff;
@@ -310,6 +311,8 @@ body {
   }
 }
 
+=======
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 .toastBox {
   z-index: 100;
   transition: transform 2s cubic-bezier(.17, .67, .91, 1.26);
@@ -1299,7 +1302,11 @@ body {
   font-weight: 600;
 }
 
+<<<<<<< HEAD
 .login__banca__logo {
+=======
+.login img {
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
   width: 14rem;
   margin-bottom: 20px;
 }
@@ -1336,7 +1343,10 @@ body {
   border: none;
   border-radius: 4px;
   outline: none;
+<<<<<<< HEAD
   font-size: 17px;
+=======
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 }
 
 .login__form__input {
@@ -1346,6 +1356,7 @@ body {
   display: flex;
 }
 
+<<<<<<< HEAD
 .login__form__input__icon {
   width: 1.5rem;
   margin-left: 7px;
@@ -1450,6 +1461,14 @@ body {
 .register p a {
   color: #0050b2;
   font-weight: 700;
+=======
+.login__form__input ion-icon {
+  margin-left: 7px;
+}
+
+.login__form > div {
+  padding-bottom: 5px;
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 }
 
 .dashboard-sidebar {
