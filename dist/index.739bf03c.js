@@ -732,12 +732,15 @@ parcelHelpers.export(exports, "toast", ()=>toast);
 parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
 // change text
 parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
+<<<<<<< HEAD
 // Adding Loading Spinner
 parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
 // Setting Button Text to Normal
 parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
 // Clear Input Fields
 parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
+=======
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -853,6 +856,7 @@ function validateEmail(email) {
 function changeSubmitText(elementclass, text) {
     return elementclass.textContent = text;
 }
+<<<<<<< HEAD
 function loadingSpinner(button) {
     const markup = `<span class="button-spinner"></span>`;
     const buttonEl = button;
@@ -865,6 +869,8 @@ function clearLoadingSpinner(button, text) {
     buttonEl.insertAdjacentHTML("afterbegin", text);
 }
 function clearInputField() {}
+=======
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["l9Mez","ebWYT"], "ebWYT", "parcelRequiree06a")
 

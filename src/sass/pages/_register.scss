@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .register-section {
   background: linear-gradient(rgba(6, 8, 43, 0.7), rgba(6, 8, 43, 0.7)),
     url("../img/login-section-img.jpg") no-repeat;
@@ -77,4 +78,78 @@
       font-weight: 700;
     }
   }
+=======
+.login-section{
+ background: linear-gradient( rgba(6, 8, 43, 0.7), rgba(6, 8, 43, 0.7)),
+ url('../img/login-section-img.jpg') no-repeat;
+ background-size:cover;
+ background-position:center;
+ height:100vh;
+ display:flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+}
+
+.login{
+    max-width: 70rem;
+    background-color:$color-white;
+    padding: 4rem 2rem;
+    border-radius: 4px;
+    &>h1{
+        font-weight: 400;
+        margin-bottom: 10px;
+    }
+    &>h1>span{
+        font-weight: 600;
+    }
+ img{
+    width:14rem;
+    margin-bottom: 20px;
+    }
+  &__form{
+    div,button{
+        margin:1rem 0;
+    }
+    & label{
+        display: block;
+        font-weight: 500;
+        font-size: 14px;
+        color: #29303a;
+    }
+    & input,button{
+        width:100%;
+        padding:1.5rem;
+    }
+    & input{
+       background-color: transparent;
+       outline: none;
+       border: none;
+    }
+    & input::placeholder{
+        opacity:0.7;
+    }
+ 
+    button{
+        background-color:$color-blue;
+        color:#fff;
+        outline:none;
+        border: none;
+        border-radius: 4px;
+    }
+    &__input{
+        display: flex;
+        align-items: center;
+        border: solid 1px $color-blue;
+        border-radius: 4px;
+
+        ion-icon{
+            margin-left:7px;
+        }
+    }
+    &>div{
+        padding-bottom: 5px;
+    }
+ }
+>>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 }
