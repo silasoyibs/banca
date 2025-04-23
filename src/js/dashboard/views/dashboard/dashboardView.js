@@ -1,22 +1,60 @@
-import View from "../view.js";
+import View from "../../view.js";
+import dasboardAtmCard from "../../../../img/dashboard-img-card.png";
 
 class DashboardView extends View {
-  check() {
-    console.log(this._data);
-  }
-  _parentElement = document.querySelector(".dashboard");
+  _parentElement = document.querySelector(".dashboard-main");
   _generateMarkup() {
     return `
-         <div class="customer-account">
+         <div class="header-nav">
+          <div class="header-nav__left">
+            <div class="customer-welcome">
+              <p>
+                Welcome Back<span class="customer-welcome__name"
+                  >${this._user.data.userName}</span
+                >
+              </p>
+              <figure class="user-picture--welcome">
+                <img src="src/img/silas.jpg" />
+              </figure>
+            </div>
+          </div>
+          <div class="header-nav__right">
+            <div class="header-icons">
+              <div class="u-flex u-flex-v-center u-gap-small">
+                <ion-icon name="wallet"></ion-icon>
+                <p>₦<span>${this._user.data.balance}</span></p>
+              </div>
+              <ion-icon name="sunny"></ion-icon>
+
+              <div class="notification-container">
+                <div class="notification">
+                  <span class="notification__count">1</span>
+                </div>
+                <ion-icon name="notifications-outline"></ion-icon>
+              </div>
+              <a
+                href="http://localhost:1234/login.html"
+                class="logout u-flex u-flex-v-center u-gap-small"
+              >
+                <ion-icon name="log-out"></ion-icon>
+                <span>Log out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <main>
+          <div class="customer-account">
             <div class="customer-account__left">
               <div class="account-info">
                 <div>
                   <p>Account Name</p>
-                  <p class="account-info__name">Silas Oyibo</p>
+                  <p class="account-info__name">${this._user.data.fullName}</p>
                 </div>
                 <div>
                   <p>Account Number</p>
-                  <p class="account-info__number">${this._data.accountNumber}</p>
+                  <p class="account-info__number">
+                    ${this._user.data.accountNumber}
+                  </p>
                 </div>
               </div>
 
@@ -34,7 +72,7 @@ class DashboardView extends View {
               </div>
             </div>
             <div class="customer-account__right">
-              <img src="src/img/dashboard-img-card.png" />
+              <img src="${dasboardAtmCard}" />
             </div>
           </div>
           <div class="transaction">
@@ -125,6 +163,7 @@ class DashboardView extends View {
               <button id="submit">Send Money</button>
             </div>
           </div>
+        </main>
 
     `;
   }

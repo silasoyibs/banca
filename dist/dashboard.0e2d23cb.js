@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"8zSRm":[function(require,module,exports) {
+})({"a2UUf":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
 var HMR_USE_SSE = false;
-module.bundle.HMR_BUNDLE_ID = "44146a94b3772f39";
+module.bundle.HMR_BUNDLE_ID = "ee3833300e2d23cb";
 "use strict";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, HMR_USE_SSE, chrome, browser, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
@@ -583,248 +583,26 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
     });
 }
 
-},{}],"4C53m":[function(require,module,exports) {
-var _firebase = require("./firebase");
-var _auth = require("firebase/auth");
-var _common = require("./common");
-var _model = require("./dashboard/model");
-const form = document.querySelector("#form");
-const btnRegister = document.getElementById("register-button");
-const formInput = document.querySelectorAll("input");
-// clear form input
-function clearForm() {
-    formInput.forEach((input)=>{
-        input.value = "";
-    });
-}
-// form submittion
-form.addEventListener("submit", async (e)=>{
-    e.preventDefault();
-    const FullName = document.querySelector("#FullName").value;
-    const email = document.querySelector("#email").value;
-    const password = document.querySelector("#password").value;
-    (0, _common.loadingSpinner)(btnRegister);
-    try {
-        const userCredential = await (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password);
-        // Signed up
-        const user = userCredential.user;
-        await (0, _model.createUserData)(user, FullName, email);
-        clearForm();
-        (0, _common.toast).success("Thanks for Registering!");
-        (0, _common.toast).hide();
-        setTimeout(()=>{
-            (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
-        }, 6000);
-    } catch (error) {
-        const errorCode = error.code;
-        let errorMessage;
-        switch(errorCode){
-            case "auth/weak-password":
-                errorMessage = "password must be at least 6 characters long";
-                break;
-            case "auth/email-already-in-use":
-                errorMessage = "This email is already in use";
-                break;
-            case "auth/invalid-email":
-                errorMessage = "lease enter a valid email";
-                break;
-            default:
-                errorMessage = error.message;
-        }
-        (0, _common.toast).error(errorMessage);
-        (0, _common.toast).hide();
-    } finally{
-        setTimeout(()=>{
-            (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
-        }, 6000);
-    }
-    const form = document.querySelector("#form");
-    const btnSubmit = document.querySelector("#submit-button");
-    form.addEventListener("submit", (e)=>{
-        e.preventDefault();
-        const email = document.querySelector("#email").value;
-        const password = document.querySelector("#password").value;
-        (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
-            // Signed up
-            (0, _common.changeSubmitText)(btnSubmit, "Registering...");
-            const user = userCredential.user;
-            console.log(user);
-            (0, _common.toast).success("Thanks for Registering!");
-            (0, _common.toast).hide();
-            setTimeout(()=>{
-                (0, _common.changeSubmitText)(btnSubmit, "Register");
-            }, 6000);
-        }).catch((error)=>{
-            const errorCode = error.code;
-            let errorMessage;
-            switch(errorCode){
-                case "auth/weak-password":
-                    errorMessage = "password must be at least 6 characters long";
-                    break;
-                case "auth/email-already-in-use":
-                    errorMessage = "This email is already in use";
-                    break;
-                case "auth/invalid-email":
-                    errorMessage = "lease enter a valid email";
-                    break;
-                default:
-                    errorMessage = error.message;
-            }
-            (0, _common.toast).error(errorMessage);
-            (0, _common.toast).hide();
-        });
-    });
-});
-
-},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"2ASYY":[function(require,module,exports) {
+},{}],"56wmq":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "navLinks", ()=>navLinks);
-parcelHelpers.export(exports, "btnCta", ()=>btnCta);
-parcelHelpers.export(exports, "navLinkActive", ()=>navLinkActive);
-parcelHelpers.export(exports, "showBtnAnimation", ()=>showBtnAnimation);
-// Tablet Navigation
-parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
-parcelHelpers.export(exports, "toast", ()=>toast);
-// email validation function
-parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
-// change text
-parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
-// Adding Loading Spinner
-parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
-// Setting Button Text to Normal
-parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
-// Clear Input Fields
-parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
-const navLinks = document.querySelectorAll(".nav__link");
-const btnCta = document.querySelectorAll(".btn-cta");
-const navLinkActive = function(navLinks) {
-    navLinks.forEach((link)=>{
-        link.addEventListener("click", (e)=>{
-            navLinks.forEach((link)=>{
-                link.classList.remove("activeLink");
-            });
-            e.target.classList.add("activeLink");
-        });
-    });
-};
-const showBtnAnimation = function(btnCta) {
-    btnCta.forEach((btnCta)=>{
-        btnCta.addEventListener("mouseover", ()=>{
-            btnCta.classList.add("show-unfillanimation");
-        });
-    });
-};
-function tabletNav() {
-    const tabletNav = document.querySelector(".tablet-nav--container");
-    const closeMenuBtn = document.querySelector(".tablet-nav--container-btn-close");
-    const tabHamburgerMenu = document.querySelector(".navbar-toggler");
-    const fixedBody = document.querySelector("html");
-    tabHamburgerMenu.addEventListener("click", ()=>{
-        tabletNav.classList.toggle("open-tablet-menu");
-        fixedBody.classList.toggle("fixed");
-    });
-    closeMenuBtn.addEventListener("click", ()=>{
-        tabletNav.classList.remove("open-tablet-menu");
-        fixedBody.classList.remove("fixed");
-    });
-}
-// Toast notification
-class Toast {
-    _parentElement = document.querySelector(".toastBox");
-    render(markup) {
-        this._parentElement.innerHTML = "";
-        this._parentElement.classList.add("active");
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    generateErrorMarkup(message) {
-        return `
-       <div class="toast">
-          <ion-icon class="toast-close-icon" name="close"></ion-icon>
-          <ion-icon
-            class="toast-icon toast-icon--error"
-            name="close-circle"
-          ></ion-icon>
-          <div>
-            <span class="toast-message--tittle">Error</span>
-            <span class="toast-message--text">${message}</span>
-          </div>
-        </div> 
-    `;
-    }
-    generateSuccessMarkup(message) {
-        return `
-      <div class="toast ">
-            <ion-icon class="toast-close-icon" name="close"></ion-icon>
-            <ion-icon
-              class="toast-icon toast-icon--success"
-              name="checkmark-circle"
-            ></ion-icon>
-            <div>
-              <span class="toast-message--tittle">Success</span>
-              <span class="toast-message--text">${message}</span>
-            </div>
-        </div>
-    `;
-    }
-    renderSuccessMessage(message) {
-        const markupSucess = this.generateSuccessMarkup(message);
-        this.render(markupSucess);
-    }
-    renderErrorMessage(message) {
-        const markupError = this.generateErrorMarkup(message);
-        this.render(markupError);
-    }
-    close() {
-        const toastClose = document.querySelector(".toast-close-icon");
-        toastClose.addEventListener("click", ()=>{
-            this._parentElement.classList.remove("active");
-        });
-    }
-    active() {
-        const toast = document.querySelector(".toast");
-        setTimeout(()=>{
-            toast.classList.add("active");
-        }, 10);
-    }
-    hide() {
-        setTimeout(()=>{
-            this._parentElement.classList.remove("active");
-        }, 6000);
-    }
-    success(message) {
-        this.renderSuccessMessage(message);
-        this.active();
-        this.close();
-    }
-    error(message) {
-        this.renderErrorMessage(message);
-        this.active();
-        this.close();
+var _modelJs = require("./model.js");
+var _dashboardViewJs = require("./views/dashboard/dashboardView.js");
+var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
+// import dashboardHeaderView from "./views/dashboardHeaderView.js";
+async function controlDashboard() {
+    try {
+        // get userdata from database
+        const currentUser = await _modelJs.getCurrentUserData();
+        console.log(currentUser);
+    // update dashboard headerview
+    // dashboardView.render(currentUser);
+    } catch (err) {
+        console.log(err);
     }
 }
-const toast = new Toast();
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-function changeSubmitText(elementclass, text) {
-    return elementclass.textContent = text;
-}
-function loadingSpinner(button) {
-    const markup = `<span class="button-spinner"></span>`;
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", markup);
-}
-function clearLoadingSpinner(button, text) {
-    const buttonEl = button;
-    buttonEl.innerHTML = "";
-    buttonEl.insertAdjacentHTML("afterbegin", text);
-}
-function clearInputField() {}
+controlDashboard();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
+},{"./model.js":"k67WZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/dashboard/dashboardView.js":"iIV3a"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -903,6 +681,238 @@ function getCurrentUserData() {
     });
 }
 
-},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../../view.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _dashboardImgCardPng = require("../../../../img/dashboard-img-card.png");
+var _dashboardImgCardPngDefault = parcelHelpers.interopDefault(_dashboardImgCardPng);
+class DashboardView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".dashboard-main");
+    _generateMarkup() {
+        return `
+         <div class="header-nav">
+          <div class="header-nav__left">
+            <div class="customer-welcome">
+              <p>
+                Welcome Back<span class="customer-welcome__name"
+                  >${this._user.data.userName}</span
+                >
+              </p>
+              <figure class="user-picture--welcome">
+                <img src="src/img/silas.jpg" />
+              </figure>
+            </div>
+          </div>
+          <div class="header-nav__right">
+            <div class="header-icons">
+              <div class="u-flex u-flex-v-center u-gap-small">
+                <ion-icon name="wallet"></ion-icon>
+                <p>\u{20A6}<span>${this._user.data.balance}</span></p>
+              </div>
+              <ion-icon name="sunny"></ion-icon>
 
-//# sourceMappingURL=register.b3772f39.js.map
+              <div class="notification-container">
+                <div class="notification">
+                  <span class="notification__count">1</span>
+                </div>
+                <ion-icon name="notifications-outline"></ion-icon>
+              </div>
+              <a
+                href="http://localhost:1234/login.html"
+                class="logout u-flex u-flex-v-center u-gap-small"
+              >
+                <ion-icon name="log-out"></ion-icon>
+                <span>Log out</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <main>
+          <div class="customer-account">
+            <div class="customer-account__left">
+              <div class="account-info">
+                <div>
+                  <p>Account Name</p>
+                  <p class="account-info__name">${this._user.data.fullName}</p>
+                </div>
+                <div>
+                  <p>Account Number</p>
+                  <p class="account-info__number">
+                    ${this._user.data.accountNumber}
+                  </p>
+                </div>
+              </div>
+
+              <div class="account-stats">
+                <div>
+                  <p>Income</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>4334</p>
+                </div>
+                <div>
+                  <p>Expense</p>
+                  <p>
+                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>6334
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="customer-account__right">
+              <img src="${0, _dashboardImgCardPngDefault.default}" />
+            </div>
+          </div>
+          <div class="transaction">
+            <div class="transaction__history container-dashboard-shadow">
+              <div class="transaction__history__heading">
+                <span>Transactions</span>
+                <a href="">View all</a>
+              </div>
+              <!-- item 1 -->
+              <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src="src/img/silas.jpg" alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>Idris Saidu</p>
+                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="credit">\u{20A6}<span class="credit">700</span></p>
+                </div>
+              </div>
+              <!-- item 2 -->
+              <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src="src/img/silas.jpg" alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>Idris Saidu</p>
+                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="debit">\u{20A6}<span>700</span></p>
+                </div>
+              </div>
+              <!-- item 3 -->
+              <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src="src/img/silas.jpg" alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>Idris Saidu</p>
+                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="credit">\u{20A6}<span>700</span></p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="transaction__history__send-money container-dashboard-shadow"
+            >
+              <span>Send Money</span>
+              <div class="u-flex u-flex-v-center u-gap-small">
+                <figure class="user-picture user-picture--transaction">
+                  <img src="src/img/silas.jpg" alt="user-picture" />
+                </figure>
+                <figure class="user-picture user-picture--transaction">
+                  <img src="src/img/silas.jpg" alt="user-picture" />
+                </figure>
+                <figure class="user-picture user-picture--transaction">
+                  <img src="src/img/silas.jpg" alt="user-picture" />
+                </figure>
+              </div>
+              <div
+                class="view-contacts u-flex u-flex-v-center u-flex-space-between"
+              >
+                <span>View All Contacts</span>
+                <a href=""><ion-icon name="arrow-forward"></ion-icon></a>
+              </div>
+              <div class="pay">
+                <label> Pay to </label>
+                <input type="number" placeholder="Enter Banca Account Number" />
+              </div>
+              <div class="amount">
+                <label> Amount(\u{20A6}) </label>
+                <input type="number" placeholder="Amount" />
+              </div>
+              <div class="total u-flex u-flex-v-center u-flex-space-between">
+                <span>Total</span>
+                <p>\u{20A6}<span>3</span></p>
+              </div>
+              <button id="submit">Send Money</button>
+            </div>
+          </div>
+        </main>
+
+    `;
+    }
+}
+exports.default = new DashboardView();
+
+},{"../../view.js":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/dashboard-img-card.png":"3hLZF"}],"38NyO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class View {
+    _user;
+    render(user) {
+        if (!user) return;
+        this._user = user;
+        const markup = this._generateMarkup();
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    _clear() {
+        this._parentElement.innerHTML = "";
+    }
+}
+exports.default = View;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3hLZF":[function(require,module,exports) {
+module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
+
+},{"ac29cf51cf3f1a90":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+}
+// TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
+
+//# sourceMappingURL=dashboard.0e2d23cb.js.map

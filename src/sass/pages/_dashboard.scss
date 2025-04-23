@@ -100,6 +100,12 @@
             font-weight: 600;
           }
         }
+        .logout {
+          color: #000;
+          & ion-icon[name="log-out"] {
+            color: #000;
+          }
+        }
       }
     }
   }
@@ -239,6 +245,17 @@
             background-color: $color-blue;
             color: #fff;
           }
+        }
+      }
+    }
+    .transaction.transaction--view {
+      grid-template-columns: 1fr;
+      margin: 0;
+      .transaction__history {
+        .transaction__history__heading,
+        .transaction__history__item {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 0.5rem 0;
         }
       }
     }

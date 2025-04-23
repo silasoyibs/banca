@@ -1,17 +1,17 @@
 import * as model from "./model.js";
-import dashboardView from "./views/dashboardView.js";
-import dasboardView from "./views/dashboardView.js";
+import dashboardView from "./views/dashboard/dashboardView.js";
+// import dashboardHeaderView from "./views/dashboardHeaderView.js";
 
-const controlDashboard = async function () {
-  //   update view
-  //   dasboardView.render(model.getCurrentUserData());
-  //   dashboardView.check();
+async function controlDashboard() {
   try {
-    const test = await model.getCurrentUserData();
-    console.log(test);
+    // get userdata from database
+    const currentUser = await model.getCurrentUserData();
+    console.log(currentUser);
+    // update dashboard headerview
+    // dashboardView.render(currentUser);
   } catch (err) {
     console.log(err);
   }
-};
+}
 
 controlDashboard();
