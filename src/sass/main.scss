@@ -1,25 +1,22 @@
-// abstracts
+// // abstracts
 @import "./abstracts/variables";
-// base
+// // base
 @import "./base/animation";
 @import "./base/typography";
 @import "./base/base";
 @import "./base/utilities";
 
-// Component
+// // Component
 @import "./component/button";
-<<<<<<< HEAD
 @import "./component/spinner";
-=======
->>>>>>> 79f5a6376b044f15886be944a33fbefe47628069
 @import "./component/toast";
-// Layout
+// // Layout
 @import "./layout/container";
 @import "./layout/flex";
 @import "./layout/footer";
 @import "./layout/grid";
 @import "./layout/header";
-// Pages
+// // Pages
 @import "./pages/home";
 @import "./pages/login";
 @import "./pages/register";
