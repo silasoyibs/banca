@@ -597,7 +597,7 @@ form.addEventListener("submit", (e)=>{
         (0, _common.loadingSpinner)(loginBtn);
         // Signed in
         const user = userCredential.user;
-        window.location.href = "http://localhost:1234/dashboard.html";
+        window.location.href = "https:/banca-liard.vercel.app/dashboard.html";
     }).catch((error)=>{
         const errorCode = error.code;
         const errorMessage = error.message;
