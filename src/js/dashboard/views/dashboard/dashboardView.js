@@ -1,22 +1,29 @@
 import View from "../../view.js";
 import dasboardAtmCard from "../../../../img/dashboard-img-card.png";
 import userAvatar from "../../../../img/SVG/user.svg";
+import emptyTransaction from "../../../../img/SVG/empty-transaction.svg";
 
 class DashboardView extends View {
+  _transactions;
   _totalIncome;
   _totalExpense;
   _parentElement = document.querySelector(".dashboard-main");
-
-  setTotalIncome(transactions) {
-    this._totalIncome = transactions
+  super() {}
+  setTotalTransaction(transactions) {
+    this._transactions = transactions;
+    console.log(this._transactions);
+  }
+  setTotalIncome() {
+    this._totalIncome = this._transactions
       .filter((amount) => amount > 0)
       .reduce((acc, amount) => acc + amount, 0);
   }
-  setTotalExpense(transactions) {
-    this._totalExpense = transactions
+  setTotalExpense() {
+    this._totalExpense = this._transactions
       .filter((amount) => amount < 0)
       .reduce((acc, amount) => acc + amount, 0);
   }
+
   _generateMarkup() {
     return `
         <div class="header-nav">
@@ -94,7 +101,30 @@ class DashboardView extends View {
               <img src=${dasboardAtmCard} />
             </div>
           </div>
-          <div class="transaction">
+         <div class="transaction">
+        
+          ${
+            this._transactions.length <= 1
+              ? `
+              <div 
+           class="transaction__history container-dashboard container-dashboard--shadow"
+         >
+           <div class="transaction__history__heading">
+             <span>Transactions</span>
+           </div>
+
+           <div class="transaction__history__item empty">
+             <img src=${emptyTransaction} alt="" />
+             <span>Aww! There is nothing here!</span>
+             <p>
+               No transactions yet. Start using Banca Wallet and they’ll
+               appear here.
+             </p>
+           </div>
+          </div>  
+           
+           `
+              : `
             <div
               class="transaction__history container-dashboard container-dashboard--shadow"
             >
@@ -147,7 +177,8 @@ class DashboardView extends View {
                   <p class="credit">₦<span>700</span></p>
                 </div>
               </div>
-            </div>
+            </div>`
+          }
             <div
               class="transaction__history__send-money container-dashboard container-dashboard--shadow"
             >

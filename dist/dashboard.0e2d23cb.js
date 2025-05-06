@@ -596,13 +596,11 @@ async function controlDashboard() {
         // get userdata from database
         const currentUser = await _modelJs.getCurrentUserData();
         // render dashboard data
-        _modelJs.state.transactionsAmount.push(5000);
-        _modelJs.state.transactionsAmount.push(5000);
-        _modelJs.state.transactionsAmount.push(-200);
         // renderDashboardView(currentUser);
         (0, _dashboardViewJsDefault.default).setUser(currentUser);
-        (0, _dashboardViewJsDefault.default).setTotalIncome(_modelJs.state.transactionsAmount);
-        (0, _dashboardViewJsDefault.default).setTotalExpense(_modelJs.state.transactionsAmount);
+        (0, _dashboardViewJsDefault.default).setTotalTransaction(_modelJs.state.transactionsAmount);
+        (0, _dashboardViewJsDefault.default).setTotalIncome();
+        (0, _dashboardViewJsDefault.default).setTotalExpense();
         (0, _dashboardViewJsDefault.default).render();
     // control funding
     // fundAccountView.setUser(currentUser);
@@ -660,10 +658,7 @@ var _auth = require("firebase/auth");
 const state = {
     user: {},
     transactions: [],
-    transactionsAmount: [
-        300,
-        200
-    ],
+    transactionsAmount: [],
     dataFetched: false
 };
 async function createUserData(user, fullName, email) {
@@ -671,7 +666,7 @@ async function createUserData(user, fullName, email) {
     const accountNumber = generateAccountNum();
     const userName = generateUserName(fullName);
     // Add New User to th Users database
-    (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
+    await (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
         fullName: fullName,
         userName: userName,
         email: email,
@@ -695,44 +690,53 @@ function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
 }
-function getCurrentUserData() {
+// wait for user Auth
+function waitForUserAuth() {
     const auth = (0, _auth.getAuth)();
-    if (state.dataFetched) return Promise.resolve({
-        data: state.user,
-        transactions: state.transactions
-    });
-    return new Promise(function(resolve, reject) {
-        (0, _auth.onAuthStateChanged)(auth, async (user)=>{
-            if (user) try {
-                const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
-                const userSnap = await (0, _firestore.getDoc)(userRef);
-                if (userSnap.exists()) {
-                    const data = {
-                        id: userSnap.id,
-                        ...userSnap.data()
-                    };
-                    const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
-                    const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
-                    const transactions = transactionsSnap.docs.map((doc)=>doc.data());
-                    const currentUser = {
-                        data,
-                        transactions
-                    };
-                    // modify existing state of current user
-                    state.user = data;
-                    state.transactions = [
-                        ...transactions
-                    ];
-                    state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
-                    state.dataFetched = true;
-                    resolve(currentUser);
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-            else reject("No User is signed in");
+    return new Promise((resolve, reject)=>{
+        const unsubscribe = (0, _auth.onAuthStateChanged)(auth, (user)=>{
+            unsubscribe(); // stop listening after the first response
+            if (user) resolve(user);
+            else reject(new Error("No user signed in"));
         });
     });
+}
+async function getCurrentUserData() {
+    const user = await waitForUserAuth();
+    // Don't fetch again if we already have data
+    if (state.dataFetched && state.user.id === user?.uid) return {
+        data: state.user,
+        transactions: state.transactions
+    };
+    // No signed-in user
+    if (!user) throw new Error("No user signed in");
+    try {
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+        const userSnap = await (0, _firestore.getDoc)(userRef);
+        if (userSnap.exists()) {
+            const data = {
+                id: userSnap.id,
+                ...userSnap.data()
+            };
+            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+            const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
+            const transactions = transactionsSnap.docs.map((doc)=>doc.data());
+            const currentUser = {
+                data,
+                transactions
+            };
+            // modify existing state of current user
+            state.user = data;
+            state.transactions = [
+                ...transactions
+            ];
+            state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+            state.dataFetched = true;
+            return currentUser;
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
@@ -744,15 +748,23 @@ var _dashboardImgCardPng = require("../../../../img/dashboard-img-card.png");
 var _dashboardImgCardPngDefault = parcelHelpers.interopDefault(_dashboardImgCardPng);
 var _userSvg = require("../../../../img/SVG/user.svg");
 var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
+var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
+var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
 class DashboardView extends (0, _viewJsDefault.default) {
+    _transactions;
     _totalIncome;
     _totalExpense;
     _parentElement = document.querySelector(".dashboard-main");
-    setTotalIncome(transactions) {
-        this._totalIncome = transactions.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+    super() {}
+    setTotalTransaction(transactions) {
+        this._transactions = transactions;
+        console.log(this._transactions);
     }
-    setTotalExpense(transactions) {
-        this._totalExpense = transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
+    setTotalIncome() {
+        this._totalIncome = this._transactions.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+    }
+    setTotalExpense() {
+        this._totalExpense = this._transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
     }
     _generateMarkup() {
         return `
@@ -825,7 +837,27 @@ class DashboardView extends (0, _viewJsDefault.default) {
               <img src=${0, _dashboardImgCardPngDefault.default} />
             </div>
           </div>
-          <div class="transaction">
+         <div class="transaction">
+        
+          ${this._transactions.length <= 1 ? `
+              <div 
+           class="transaction__history container-dashboard container-dashboard--shadow"
+         >
+           <div class="transaction__history__heading">
+             <span>Transactions</span>
+           </div>
+
+           <div class="transaction__history__item empty">
+             <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
+             <span>Aww! There is nothing here!</span>
+             <p>
+               No transactions yet. Start using Banca Wallet and they\u{2019}ll
+               appear here.
+             </p>
+           </div>
+          </div>  
+           
+           ` : `
             <div
               class="transaction__history container-dashboard container-dashboard--shadow"
             >
@@ -878,7 +910,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
                   <p class="credit">\u{20A6}<span>700</span></p>
                 </div>
               </div>
-            </div>
+            </div>`}
             <div
               class="transaction__history__send-money container-dashboard container-dashboard--shadow"
             >
@@ -906,7 +938,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
 }
 exports.default = new DashboardView();
 
-},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/user.svg":"jGroa"}],"38NyO":[function(require,module,exports) {
+},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/user.svg":"jGroa","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"38NyO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class View {
@@ -982,6 +1014,9 @@ exports.getOrigin = getOrigin;
 },{}],"jGroa":[function(require,module,exports) {
 module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
 
-},{"d4d8473d968d2e31":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
+},{"d4d8473d968d2e31":"lgJ39"}],"kqXGX":[function(require,module,exports) {
+module.exports = require("aaddd35fabe4596c").getBundleURL("ks2i7") + "empty-transaction.1385f39d.svg" + "?" + Date.now();
+
+},{"aaddd35fabe4596c":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
 
 //# sourceMappingURL=dashboard.0e2d23cb.js.map

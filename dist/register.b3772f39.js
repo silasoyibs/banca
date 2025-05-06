@@ -841,10 +841,7 @@ var _auth = require("firebase/auth");
 const state = {
     user: {},
     transactions: [],
-    transactionsAmount: [
-        300,
-        200
-    ],
+    transactionsAmount: [],
     dataFetched: false
 };
 async function createUserData(user, fullName, email) {
@@ -852,7 +849,7 @@ async function createUserData(user, fullName, email) {
     const accountNumber = generateAccountNum();
     const userName = generateUserName(fullName);
     // Add New User to th Users database
-    (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
+    await (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
         fullName: fullName,
         userName: userName,
         email: email,
@@ -876,44 +873,53 @@ function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
 }
-function getCurrentUserData() {
+// wait for user Auth
+function waitForUserAuth() {
     const auth = (0, _auth.getAuth)();
-    if (state.dataFetched) return Promise.resolve({
-        data: state.user,
-        transactions: state.transactions
-    });
-    return new Promise(function(resolve, reject) {
-        (0, _auth.onAuthStateChanged)(auth, async (user)=>{
-            if (user) try {
-                const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
-                const userSnap = await (0, _firestore.getDoc)(userRef);
-                if (userSnap.exists()) {
-                    const data = {
-                        id: userSnap.id,
-                        ...userSnap.data()
-                    };
-                    const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
-                    const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
-                    const transactions = transactionsSnap.docs.map((doc)=>doc.data());
-                    const currentUser = {
-                        data,
-                        transactions
-                    };
-                    // modify existing state of current user
-                    state.user = data;
-                    state.transactions = [
-                        ...transactions
-                    ];
-                    state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
-                    state.dataFetched = true;
-                    resolve(currentUser);
-                }
-            } catch (error) {
-                console.error(error.message);
-            }
-            else reject("No User is signed in");
+    return new Promise((resolve, reject)=>{
+        const unsubscribe = (0, _auth.onAuthStateChanged)(auth, (user)=>{
+            unsubscribe(); // stop listening after the first response
+            if (user) resolve(user);
+            else reject(new Error("No user signed in"));
         });
     });
+}
+async function getCurrentUserData() {
+    const user = await waitForUserAuth();
+    // Don't fetch again if we already have data
+    if (state.dataFetched && state.user.id === user?.uid) return {
+        data: state.user,
+        transactions: state.transactions
+    };
+    // No signed-in user
+    if (!user) throw new Error("No user signed in");
+    try {
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+        const userSnap = await (0, _firestore.getDoc)(userRef);
+        if (userSnap.exists()) {
+            const data = {
+                id: userSnap.id,
+                ...userSnap.data()
+            };
+            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+            const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
+            const transactions = transactionsSnap.docs.map((doc)=>doc.data());
+            const currentUser = {
+                data,
+                transactions
+            };
+            // modify existing state of current user
+            state.user = data;
+            state.transactions = [
+                ...transactions
+            ];
+            state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+            state.dataFetched = true;
+            return currentUser;
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
