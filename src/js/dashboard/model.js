@@ -13,6 +13,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 export const state = {
   user: {},
   transactions: [],
+  transactionsAmount: [],
+  dataFetched: false,
 };
 
 // Creating New Banca user Data
@@ -22,7 +24,7 @@ export async function createUserData(user, fullName, email) {
   const userName = generateUserName(fullName);
 
   // Add New User to th Users database
-  setDoc(doc(db, "users", user.uid), {
+  await setDoc(doc(db, "users", user.uid), {
     fullName: fullName,
     userName: userName,
     email: email,
@@ -35,7 +37,6 @@ export async function createUserData(user, fullName, email) {
     type: "initial deposit",
     amount: 0,
     timestamp: serverTimestamp(),
-    description: "Account created, no initial deposit",
   });
 }
 
@@ -51,45 +52,55 @@ function generateUserName(fullName) {
   return firstName[0];
 }
 
-// Get User Data From Firebase
-export function getCurrentUserData() {
+// wait for user Auth
+function waitForUserAuth() {
+  const auth = getAuth();
   return new Promise((resolve, reject) => {
-    const auth = getAuth();
-    const stopListening = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        reject("No user is logged in");
-        stopListening();
-        return;
-      }
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const userData = {
-            id: userSnap.id,
-            ...userSnap.data(),
-          };
-          const transactionsRef = collection(
-            db,
-            "users",
-            user.uid,
-            "transaction"
-          );
-          const transactionsSnap = await getDocs(transactionsRef);
-          const transactions = transactionsSnap.docs.map((doc) => doc.data());
-
-          const user = {
-            userData,
-            transactions,
-          };
-          resolve(user);
-        } else {
-          reject("user not found");
-        }
-      } catch (error) {
-        console.error(error.message);
-        reject(error);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe(); // stop listening after the first response
+      if (user) resolve(user);
+      else reject(new Error("No user signed in"));
     });
   });
+}
+
+// Get User Data From Firebase
+export async function getCurrentUserData() {
+  const user = await waitForUserAuth();
+  // Don't fetch again if we already have data
+  if (state.dataFetched && state.user.id === user?.uid) {
+    return {
+      data: state.user,
+      transactions: state.transactions,
+    };
+  }
+  // No signed-in user
+  if (!user) throw new Error("No user signed in");
+  try {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      const data = {
+        id: userSnap.id,
+        ...userSnap.data(),
+      };
+      const transactionsRef = collection(db, "users", user.uid, "transaction");
+      const transactionsSnap = await getDocs(transactionsRef);
+      const transactions = transactionsSnap.docs.map((doc) => doc.data());
+      const currentUser = {
+        data,
+        transactions,
+      };
+      // modify existing state of current user
+      state.user = data;
+      state.transactions = [...transactions];
+      state.transactionsAmount = state.transactions.map(
+        (transaction) => transaction.amount
+      );
+      state.dataFetched = true;
+      return currentUser;
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
 }

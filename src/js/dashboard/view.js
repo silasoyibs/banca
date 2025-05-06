@@ -1,13 +1,30 @@
 export default class View {
-  _data;
-  render(data) {
-    if (!data) return;
-    this._data = data;
+  constructor() {}
+  _user;
+  render() {
     const markup = this._generateMarkup();
     this._clear();
-    this._parentElement.insertAdjacentHTML("afterbgin", markup);
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
+  renderSpinner() {
+    const markup = `
+     <div class="spinner-container">
+        <div class="page-spinner"></div> 
+     </div>
+  `;
+    this._clear();
+    this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  }
+  setUser(user) {
+    if (!user) return;
+    this._user = user;
+  }
+  // update() {
+  //   const markup = this._generateMarkup();
+  //   this._clear();
+  //   this._parentElement.insertAdjacentHTML("afterbegin", markup);
+  // }
   _clear() {
-    this._parentElement.insertAdjacentHTML = "";
+    this._parentElement.innerHTML = "";
   }
 }

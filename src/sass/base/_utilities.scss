@@ -66,11 +66,13 @@
 .debit {
   color: #ff5724;
 }
-.container-dashboard-shadow {
+.container-dashboard {
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 15px;
   border-radius: 5px;
+}
+.container-dashboard.container-dashboard--shadow {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1), 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
