@@ -591,18 +591,62 @@ var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
 // import dashboardHeaderView from "./views/dashboardHeaderView.js";
 async function controlDashboard() {
     try {
+        // render spinner
+        (0, _dashboardViewJsDefault.default).renderSpinner();
         // get userdata from database
         const currentUser = await _modelJs.getCurrentUserData();
-        console.log(currentUser);
-    // update dashboard headerview
-    // dashboardView.render(currentUser);
+        // render dashboard data
+        _modelJs.state.transactionsAmount.push(5000);
+        _modelJs.state.transactionsAmount.push(5000);
+        _modelJs.state.transactionsAmount.push(-200);
+        // renderDashboardView(currentUser);
+        (0, _dashboardViewJsDefault.default).setUser(currentUser);
+        (0, _dashboardViewJsDefault.default).setTotalIncome(_modelJs.state.transactionsAmount);
+        (0, _dashboardViewJsDefault.default).setTotalExpense(_modelJs.state.transactionsAmount);
+        (0, _dashboardViewJsDefault.default).render();
+    // control funding
+    // fundAccountView.setUser(currentUser);
+    // fundAccountView.fundAccount();
     } catch (err) {
         console.log(err);
+        console.log("not working");
     }
 }
 controlDashboard();
+// function controlDashboardView() {
+//   const navLinks = document.querySelectorAll(".nav__link");
+//   let viewTarget;
+//   navLinks.forEach((link) => {
+//     link.addEventListener("click", (e) => {
+//       // remove all active link on click
+//       navLinks.forEach((link) => {
+//         link.classList.remove("active");
+//       });
+//       // add active class to current clicked nav
+//       e.target.classList.add("active");
+//       // get view target
+//       viewTarget = e.target.dataset.view;
+//       // render dashboardview
+//       if (viewTarget === "dashboard-view") dashboardView.render();
+//       // render transaction view
+//       if (viewTarget === "transaction-view") transactionView.render();
+//       // render funding view
+//       if (viewTarget === "funding-view") fundAccountView.render();
+//     });
+//   });
+// }
+// controlDashboardView();
+// const controlTransaction = function () {
+//   controlTransaction.update();
+// };
+const init = function() {
+// transactionView.addHandlerUpdateView(controlTransaction);
+// fundAccountView.showFundingAmount();
+// fundAccountView.fundAccount();
+};
+init();
 
-},{"./model.js":"k67WZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/dashboard/dashboardView.js":"iIV3a"}],"k67WZ":[function(require,module,exports) {
+},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -615,7 +659,12 @@ var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
 const state = {
     user: {},
-    transactions: []
+    transactions: [],
+    transactionsAmount: [
+        300,
+        200
+    ],
+    dataFetched: false
 };
 async function createUserData(user, fullName, email) {
     // banca account number for new user
@@ -633,8 +682,7 @@ async function createUserData(user, fullName, email) {
     await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
         type: "initial deposit",
         amount: 0,
-        timestamp: (0, _firestore.serverTimestamp)(),
-        description: "Account created, no initial deposit"
+        timestamp: (0, _firestore.serverTimestamp)()
     });
 }
 // Generating 10 Digit Banca Account Number
@@ -649,6 +697,10 @@ function generateUserName(fullName) {
 }
 function getCurrentUserData() {
     const auth = (0, _auth.getAuth)();
+    if (state.dataFetched) return Promise.resolve({
+        data: state.user,
+        transactions: state.transactions
+    });
     return new Promise(function(resolve, reject) {
         (0, _auth.onAuthStateChanged)(auth, async (user)=>{
             if (user) try {
@@ -671,6 +723,8 @@ function getCurrentUserData() {
                     state.transactions = [
                         ...transactions
                     ];
+                    state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+                    state.dataFetched = true;
                     resolve(currentUser);
                 }
             } catch (error) {
@@ -688,11 +742,21 @@ var _viewJs = require("../../view.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
 var _dashboardImgCardPng = require("../../../../img/dashboard-img-card.png");
 var _dashboardImgCardPngDefault = parcelHelpers.interopDefault(_dashboardImgCardPng);
+var _userSvg = require("../../../../img/SVG/user.svg");
+var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
 class DashboardView extends (0, _viewJsDefault.default) {
+    _totalIncome;
+    _totalExpense;
     _parentElement = document.querySelector(".dashboard-main");
+    setTotalIncome(transactions) {
+        this._totalIncome = transactions.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+    }
+    setTotalExpense(transactions) {
+        this._totalExpense = transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
+    }
     _generateMarkup() {
         return `
-         <div class="header-nav">
+        <div class="header-nav">
           <div class="header-nav__left">
             <div class="customer-welcome">
               <p>
@@ -701,7 +765,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 >
               </p>
               <figure class="user-picture--welcome">
-                <img src="src/img/silas.jpg" />
+                <img src=${0, _userSvgDefault.default} />
               </figure>
             </div>
           </div>
@@ -729,7 +793,8 @@ class DashboardView extends (0, _viewJsDefault.default) {
             </div>
           </div>
         </div>
-        <main>
+        <main class="main-view">
+          <!-- main dashboad -->
           <div class="customer-account">
             <div class="customer-account__left">
               <div class="account-info">
@@ -739,40 +804,40 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 </div>
                 <div>
                   <p>Account Number</p>
-                  <p class="account-info__number">
-                    ${this._user.data.accountNumber}
-                  </p>
+                  <p class="account-info__number">${this._user.data.accountNumber}</p>
                 </div>
               </div>
 
               <div class="account-stats">
                 <div>
                   <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>4334</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>${this._totalIncome}</p>
                 </div>
                 <div>
                   <p>Expense</p>
                   <p>
-                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>6334
+                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>${Math.abs(this._totalExpense)}
                   </p>
                 </div>
               </div>
             </div>
             <div class="customer-account__right">
-              <img src="${0, _dashboardImgCardPngDefault.default}" />
+              <img src=${0, _dashboardImgCardPngDefault.default} />
             </div>
           </div>
           <div class="transaction">
-            <div class="transaction__history container-dashboard-shadow">
+            <div
+              class="transaction__history container-dashboard container-dashboard--shadow"
+            >
               <div class="transaction__history__heading">
                 <span>Transactions</span>
                 <a href="">View all</a>
               </div>
-              <!-- item 1 -->
+
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src="src/img/silas.jpg" alt="user-picture" />
+                    <img src=${0, _userSvgDefault.default}  alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -783,11 +848,11 @@ class DashboardView extends (0, _viewJsDefault.default) {
                   <p class="credit">\u{20A6}<span class="credit">700</span></p>
                 </div>
               </div>
-              <!-- item 2 -->
+
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src="src/img/silas.jpg" alt="user-picture" />
+                    <img src=${0, _userSvgDefault.default}  alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -798,11 +863,11 @@ class DashboardView extends (0, _viewJsDefault.default) {
                   <p class="debit">\u{20A6}<span>700</span></p>
                 </div>
               </div>
-              <!-- item 3 -->
+
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src="src/img/silas.jpg" alt="user-picture" />
+                    <img src=${0, _userSvgDefault.default}  alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -815,26 +880,11 @@ class DashboardView extends (0, _viewJsDefault.default) {
               </div>
             </div>
             <div
-              class="transaction__history__send-money container-dashboard-shadow"
+              class="transaction__history__send-money container-dashboard container-dashboard--shadow"
             >
               <span>Send Money</span>
-              <div class="u-flex u-flex-v-center u-gap-small">
-                <figure class="user-picture user-picture--transaction">
-                  <img src="src/img/silas.jpg" alt="user-picture" />
-                </figure>
-                <figure class="user-picture user-picture--transaction">
-                  <img src="src/img/silas.jpg" alt="user-picture" />
-                </figure>
-                <figure class="user-picture user-picture--transaction">
-                  <img src="src/img/silas.jpg" alt="user-picture" />
-                </figure>
-              </div>
-              <div
-                class="view-contacts u-flex u-flex-v-center u-flex-space-between"
-              >
-                <span>View All Contacts</span>
-                <a href=""><ion-icon name="arrow-forward"></ion-icon></a>
-              </div>
+          
+             
               <div class="pay">
                 <label> Pay to </label>
                 <input type="number" placeholder="Enter Banca Account Number" />
@@ -849,26 +899,42 @@ class DashboardView extends (0, _viewJsDefault.default) {
               </div>
               <button id="submit">Send Money</button>
             </div>
-          </div>
-        </main>
-
-    `;
+    
+     
+     `;
     }
 }
 exports.default = new DashboardView();
 
-},{"../../view.js":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/dashboard-img-card.png":"3hLZF"}],"38NyO":[function(require,module,exports) {
+},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/user.svg":"jGroa"}],"38NyO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class View {
+    constructor(){}
     _user;
-    render(user) {
-        if (!user) return;
-        this._user = user;
+    render() {
         const markup = this._generateMarkup();
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
+    renderSpinner() {
+        const markup = `
+     <div class="spinner-container">
+        <div class="page-spinner"></div> 
+     </div>
+  `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    setUser(user) {
+        if (!user) return;
+        this._user = user;
+    }
+    // update() {
+    //   const markup = this._generateMarkup();
+    //   this._clear();
+    //   this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    // }
     _clear() {
         this._parentElement.innerHTML = "";
     }
@@ -913,6 +979,9 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
+},{}],"jGroa":[function(require,module,exports) {
+module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
+
+},{"d4d8473d968d2e31":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
 
 //# sourceMappingURL=dashboard.0e2d23cb.js.map

@@ -14,10 +14,19 @@ function clearForm() {
   });
 }
 
+// Capitalize FullName
+function capitalizeName(name) {
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 // form submittion
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  const FullName = document.querySelector("#FullName").value;
+
+  const FullName = capitalizeName(document.querySelector("#FullName").value);
   const email = document.querySelector("#email").value;
   const password = document.querySelector("#password").value;
   loadingSpinner(btnRegister);
@@ -71,7 +80,6 @@ form.addEventListener("submit", async (e) => {
         // Signed up
         changeSubmitText(btnSubmit, "Registering...");
         const user = userCredential.user;
-        console.log(user);
         toast.success("Thanks for Registering!");
         toast.hide();
         setTimeout(() => {
