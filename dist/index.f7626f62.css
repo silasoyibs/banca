@@ -243,12 +243,15 @@ body {
   color: #ff5724;
 }
 
-.container-dashboard-shadow {
+.container-dashboard {
   border-radius: 5px;
   flex-direction: column;
   gap: 15px;
   padding: 2rem 1rem;
   display: flex;
+}
+
+.container-dashboard.container-dashboard--shadow {
   box-shadow: 0 2px 4px #0000001a, 0 4px 8px #0003;
 }
 
@@ -296,6 +299,25 @@ body {
   width: 28px;
   height: 28px;
   margin-left: 8px;
+  animation: .6s linear infinite spin;
+  display: inline-block;
+}
+
+.spinner-container {
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.page-spinner {
+  border: 3px solid #0050b2;
+  border-bottom-color: #0000;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
   animation: .6s linear infinite spin;
   display: inline-block;
 }
@@ -1564,6 +1586,10 @@ body {
   right: -4%;
 }
 
+.dashboard-main .header-nav__right .header-icons .logout, .dashboard-main .header-nav__right .header-icons .logout ion-icon[name="log-out"] {
+  color: #000;
+}
+
 .dashboard-main main {
   margin-top: 10px;
   padding: 0 3rem;
@@ -1656,7 +1682,29 @@ body {
   display: flex;
 }
 
-.dashboard-main main .transaction__history__item .transaction-details__date, .dashboard-main main .transaction__history__send-money {
+.dashboard-main main .transaction__history__item .transaction-details__date {
+  color: #94a3b8;
+}
+
+.dashboard-main main .transaction__history__item.empty {
+  flex-direction: column;
+  display: flex;
+}
+
+.dashboard-main main .transaction__history__item.empty span {
+  font-weight: 600;
+}
+
+.dashboard-main main .transaction__history__item.empty p {
+  text-align: center;
+}
+
+.dashboard-main main .transaction__history__item.empty img {
+  width: 15rem;
+  margin-bottom: 5px;
+}
+
+.dashboard-main main .transaction__history__send-money {
   color: #94a3b8;
 }
 
@@ -1713,6 +1761,62 @@ body {
 }
 
 .dashboard-main main .transaction__history__send-money button {
+  color: #fff;
+  background-color: #0050b2;
+  border: none;
+  border-radius: 5px;
+  padding: 1rem 0;
+}
+
+.dashboard-main main .transaction.transaction--view {
+  grid-template-columns: 1fr;
+  margin: 0;
+}
+
+.dashboard-main main .transaction.transaction--view .transaction__history .transaction__history__heading, .dashboard-main main .transaction.transaction--view .transaction__history .transaction__history__item {
+  border-bottom: 1px solid #0000001a;
+  padding: .5rem 0;
+}
+
+.dashboard-main main .fund {
+  grid-template-columns: 2fr 3fr;
+  column-gap: 30px;
+  margin: 3rem 0;
+  display: grid;
+}
+
+.dashboard-main main .fund .fund-account figure {
+  width: 2rem;
+}
+
+.dashboard-main main .fund .fund-account label {
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.dashboard-main main .fund .fund-account input {
+  border: 1px solid #a79f9f;
+  border-radius: 5px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.dashboard-main main .fund .fund-account input:focus {
+  outline: 1px solid #0050b2;
+}
+
+.dashboard-main main .fund .fund-account input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dashboard-main main .fund .fund-account input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dashboard-main main .fund .fund-account button {
+  cursor: pointer;
   color: #fff;
   background-color: #0050b2;
   border: none;

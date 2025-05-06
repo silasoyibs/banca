@@ -597,10 +597,14 @@ function clearForm() {
         input.value = "";
     });
 }
+// Capitalize FullName
+function capitalizeName(name) {
+    return name.split(" ").map((word)=>word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+}
 // form submittion
 form.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    const FullName = document.querySelector("#FullName").value;
+    const FullName = capitalizeName(document.querySelector("#FullName").value);
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _common.loadingSpinner)(btnRegister);
@@ -648,7 +652,6 @@ form.addEventListener("submit", async (e)=>{
             // Signed up
             (0, _common.changeSubmitText)(btnSubmit, "Registering...");
             const user = userCredential.user;
-            console.log(user);
             (0, _common.toast).success("Thanks for Registering!");
             (0, _common.toast).hide();
             setTimeout(()=>{
@@ -676,7 +679,155 @@ form.addEventListener("submit", async (e)=>{
     });
 });
 
-},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"k67WZ":[function(require,module,exports) {
+},{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"2ASYY":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "navLinks", ()=>navLinks);
+parcelHelpers.export(exports, "btnCta", ()=>btnCta);
+parcelHelpers.export(exports, "navLinkActive", ()=>navLinkActive);
+parcelHelpers.export(exports, "showBtnAnimation", ()=>showBtnAnimation);
+// Tablet Navigation
+parcelHelpers.export(exports, "tabletNav", ()=>tabletNav);
+parcelHelpers.export(exports, "toast", ()=>toast);
+// email validation function
+parcelHelpers.export(exports, "validateEmail", ()=>validateEmail);
+// change text
+parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
+// Adding Loading Spinner
+parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
+// Setting Button Text to Normal
+parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
+// Clear Input Fields
+parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
+const navLinks = document.querySelectorAll(".nav__link");
+const btnCta = document.querySelectorAll(".btn-cta");
+const navLinkActive = function(navLinks) {
+    navLinks.forEach((link)=>{
+        link.addEventListener("click", (e)=>{
+            navLinks.forEach((link)=>{
+                link.classList.remove("activeLink");
+            });
+            e.target.classList.add("activeLink");
+        });
+    });
+};
+const showBtnAnimation = function(btnCta) {
+    btnCta.forEach((btnCta)=>{
+        btnCta.addEventListener("mouseover", ()=>{
+            btnCta.classList.add("show-unfillanimation");
+        });
+    });
+};
+function tabletNav() {
+    const tabletNav = document.querySelector(".tablet-nav--container");
+    const closeMenuBtn = document.querySelector(".tablet-nav--container-btn-close");
+    const tabHamburgerMenu = document.querySelector(".navbar-toggler");
+    const fixedBody = document.querySelector("html");
+    tabHamburgerMenu.addEventListener("click", ()=>{
+        tabletNav.classList.toggle("open-tablet-menu");
+        fixedBody.classList.toggle("fixed");
+    });
+    closeMenuBtn.addEventListener("click", ()=>{
+        tabletNav.classList.remove("open-tablet-menu");
+        fixedBody.classList.remove("fixed");
+    });
+}
+// Toast notification
+class Toast {
+    _parentElement = document.querySelector(".toastBox");
+    render(markup) {
+        this._parentElement.innerHTML = "";
+        this._parentElement.classList.add("active");
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    generateErrorMarkup(message) {
+        return `
+       <div class="toast">
+          <ion-icon class="toast-close-icon" name="close"></ion-icon>
+          <ion-icon
+            class="toast-icon toast-icon--error"
+            name="close-circle"
+          ></ion-icon>
+          <div>
+            <span class="toast-message--tittle">Error</span>
+            <span class="toast-message--text">${message}</span>
+          </div>
+        </div> 
+    `;
+    }
+    generateSuccessMarkup(message) {
+        return `
+      <div class="toast ">
+            <ion-icon class="toast-close-icon" name="close"></ion-icon>
+            <ion-icon
+              class="toast-icon toast-icon--success"
+              name="checkmark-circle"
+            ></ion-icon>
+            <div>
+              <span class="toast-message--tittle">Success</span>
+              <span class="toast-message--text">${message}</span>
+            </div>
+        </div>
+    `;
+    }
+    renderSuccessMessage(message) {
+        const markupSucess = this.generateSuccessMarkup(message);
+        this.render(markupSucess);
+    }
+    renderErrorMessage(message) {
+        const markupError = this.generateErrorMarkup(message);
+        this.render(markupError);
+    }
+    close() {
+        const toastClose = document.querySelector(".toast-close-icon");
+        toastClose.addEventListener("click", ()=>{
+            this._parentElement.classList.remove("active");
+        });
+    }
+    active() {
+        const toast = document.querySelector(".toast");
+        setTimeout(()=>{
+            toast.classList.add("active");
+        }, 10);
+    }
+    hide() {
+        setTimeout(()=>{
+            this._parentElement.classList.remove("active");
+        }, 6000);
+    }
+    success(message) {
+        this.renderSuccessMessage(message);
+        this.active();
+        this.close();
+    }
+    error(message) {
+        this.renderErrorMessage(message);
+        this.active();
+        this.close();
+    }
+}
+const toast = new Toast();
+function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+function changeSubmitText(elementclass, text) {
+    return elementclass.textContent = text;
+}
+function loadingSpinner(button) {
+    const markup = `<span class="button-spinner"></span>`;
+    const buttonEl = button;
+    buttonEl.innerHTML = "";
+    buttonEl.insertAdjacentHTML("afterbegin", markup);
+}
+function clearLoadingSpinner(button, text) {
+    const buttonEl = button;
+    buttonEl.innerHTML = "";
+    buttonEl.insertAdjacentHTML("afterbegin", text);
+}
+function clearInputField() {}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -689,14 +840,16 @@ var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
 const state = {
     user: {},
-    transactions: []
+    transactions: [],
+    transactionsAmount: [],
+    dataFetched: false
 };
 async function createUserData(user, fullName, email) {
     // banca account number for new user
     const accountNumber = generateAccountNum();
     const userName = generateUserName(fullName);
     // Add New User to th Users database
-    (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
+    await (0, _firestore.setDoc)((0, _firestore.doc)((0, _firebase.db), "users", user.uid), {
         fullName: fullName,
         userName: userName,
         email: email,
@@ -707,8 +860,7 @@ async function createUserData(user, fullName, email) {
     await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
         type: "initial deposit",
         amount: 0,
-        timestamp: (0, _firestore.serverTimestamp)(),
-        description: "Account created, no initial deposit"
+        timestamp: (0, _firestore.serverTimestamp)()
     });
 }
 // Generating 10 Digit Banca Account Number
@@ -721,38 +873,53 @@ function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
 }
-function getCurrentUserData() {
+// wait for user Auth
+function waitForUserAuth() {
+    const auth = (0, _auth.getAuth)();
     return new Promise((resolve, reject)=>{
-        const auth = (0, _auth.getAuth)();
-        const stopListening = (0, _auth.onAuthStateChanged)(auth, async (user)=>{
-            if (!user) {
-                reject("No user is logged in");
-                stopListening();
-                return;
-            }
-            try {
-                const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
-                const userSnap = await (0, _firestore.getDoc)(userRef);
-                if (userSnap.exists()) {
-                    const userData = {
-                        id: userSnap.id,
-                        ...userSnap.data()
-                    };
-                    const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
-                    const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
-                    const transactions = transactionsSnap.docs.map((doc)=>doc.data());
-                    const user = {
-                        userData,
-                        transactions
-                    };
-                    resolve(user);
-                } else reject("user not found");
-            } catch (error) {
-                console.error(error.message);
-                reject(error);
-            }
+        const unsubscribe = (0, _auth.onAuthStateChanged)(auth, (user)=>{
+            unsubscribe(); // stop listening after the first response
+            if (user) resolve(user);
+            else reject(new Error("No user signed in"));
         });
     });
+}
+async function getCurrentUserData() {
+    const user = await waitForUserAuth();
+    // Don't fetch again if we already have data
+    if (state.dataFetched && state.user.id === user?.uid) return {
+        data: state.user,
+        transactions: state.transactions
+    };
+    // No signed-in user
+    if (!user) throw new Error("No user signed in");
+    try {
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+        const userSnap = await (0, _firestore.getDoc)(userRef);
+        if (userSnap.exists()) {
+            const data = {
+                id: userSnap.id,
+                ...userSnap.data()
+            };
+            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+            const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
+            const transactions = transactionsSnap.docs.map((doc)=>doc.data());
+            const currentUser = {
+                data,
+                transactions
+            };
+            // modify existing state of current user
+            state.user = data;
+            state.transactions = [
+                ...transactions
+            ];
+            state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+            state.dataFetched = true;
+            return currentUser;
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")

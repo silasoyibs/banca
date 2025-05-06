@@ -100,6 +100,12 @@
             font-weight: 600;
           }
         }
+        .logout {
+          color: #000;
+          & ion-icon[name="log-out"] {
+            color: #000;
+          }
+        }
       }
     }
   }
@@ -192,6 +198,21 @@
           }
         }
 
+        &__item.empty {
+          display: flex;
+          flex-direction: column;
+          & span {
+            font-weight: 600;
+          }
+          & p {
+            text-align: center;
+          }
+          img {
+            width: 15rem;
+            margin-bottom: 5px;
+          }
+        }
+
         &__send-money {
           color: #94a3b8;
           & span {
@@ -222,7 +243,7 @@
               }
             }
             & input[type="number"]::-webkit-inner-spin-button,
-            input[type="number"]::-webkit-outer-spin-button {
+            & input[type="number"]::-webkit-outer-spin-button {
               -webkit-appearance: none;
               margin: 0;
             }
@@ -239,6 +260,54 @@
             background-color: $color-blue;
             color: #fff;
           }
+        }
+      }
+    }
+    .transaction.transaction--view {
+      grid-template-columns: 1fr;
+      margin: 0;
+      .transaction__history {
+        .transaction__history__heading,
+        .transaction__history__item {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 0.5rem 0;
+        }
+      }
+    }
+    .fund {
+      margin: 3rem 0;
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      column-gap: 30px;
+      .fund-account {
+        & figure {
+          width: 2rem;
+        }
+        & label {
+          display: block;
+          margin-bottom: 1rem;
+        }
+        & input {
+          width: 100%;
+          padding: 1rem 1rem;
+          border: solid 1px #a79f9f;
+          border-radius: 5px;
+          &:focus {
+            outline: solid 1px $color-blue;
+          }
+        }
+        & input[type="number"]::-webkit-inner-spin-button,
+        & input[type="number"]::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        button {
+          cursor: pointer;
+          padding: 1rem 0rem;
+          border-radius: 5px;
+          border: none;
+          background-color: $color-blue;
+          color: #fff;
         }
       }
     }
