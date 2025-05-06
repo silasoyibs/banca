@@ -602,9 +602,9 @@ async function controlDashboard() {
         (0, _dashboardViewJsDefault.default).setTotalIncome();
         (0, _dashboardViewJsDefault.default).setTotalExpense();
         (0, _dashboardViewJsDefault.default).render();
-    // control funding
-    // fundAccountView.setUser(currentUser);
-    // fundAccountView.fundAccount();
+        // control funding
+        fundAccountView.setUser(currentUser);
+        fundAccountView.fundAccount();
     } catch (err) {
         console.log(err);
         console.log("not working");
@@ -755,7 +755,6 @@ class DashboardView extends (0, _viewJsDefault.default) {
     _totalIncome;
     _totalExpense;
     _parentElement = document.querySelector(".dashboard-main");
-    super() {}
     setTotalTransaction(transactions) {
         this._transactions = transactions;
         console.log(this._transactions);
@@ -766,6 +765,8 @@ class DashboardView extends (0, _viewJsDefault.default) {
     setTotalExpense() {
         this._totalExpense = this._transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
     }
+    sendMoney() {}
+    showSendMoneyAmount() {}
     _generateMarkup() {
         return `
         <div class="header-nav">
