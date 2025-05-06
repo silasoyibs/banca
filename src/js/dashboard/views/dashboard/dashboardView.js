@@ -1,11 +1,25 @@
 import View from "../../view.js";
 import dasboardAtmCard from "../../../../img/dashboard-img-card.png";
+import userAvatar from "../../../../img/SVG/user.svg";
 
 class DashboardView extends View {
+  _totalIncome;
+  _totalExpense;
   _parentElement = document.querySelector(".dashboard-main");
+
+  setTotalIncome(transactions) {
+    this._totalIncome = transactions
+      .filter((amount) => amount > 0)
+      .reduce((acc, amount) => acc + amount, 0);
+  }
+  setTotalExpense(transactions) {
+    this._totalExpense = transactions
+      .filter((amount) => amount < 0)
+      .reduce((acc, amount) => acc + amount, 0);
+  }
   _generateMarkup() {
     return `
-         <div class="header-nav">
+        <div class="header-nav">
           <div class="header-nav__left">
             <div class="customer-welcome">
               <p>
@@ -14,7 +28,7 @@ class DashboardView extends View {
                 >
               </p>
               <figure class="user-picture--welcome">
-                <img src="src/img/silas.jpg" />
+                <img src=${userAvatar} />
               </figure>
             </div>
           </div>
@@ -42,7 +56,8 @@ class DashboardView extends View {
             </div>
           </div>
         </div>
-        <main>
+        <main class="main-view">
+          <!-- main dashboad -->
           <div class="customer-account">
             <div class="customer-account__left">
               <div class="account-info">
@@ -52,40 +67,46 @@ class DashboardView extends View {
                 </div>
                 <div>
                   <p>Account Number</p>
-                  <p class="account-info__number">
-                    ${this._user.data.accountNumber}
-                  </p>
+                  <p class="account-info__number">${
+                    this._user.data.accountNumber
+                  }</p>
                 </div>
               </div>
 
               <div class="account-stats">
                 <div>
                   <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span>4334</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span>${
+                    this._totalIncome
+                  }</p>
                 </div>
                 <div>
                   <p>Expense</p>
                   <p>
-                    <ion-icon name="arrow-down"></ion-icon><span>₦</span>6334
+                    <ion-icon name="arrow-down"></ion-icon><span>₦</span>${Math.abs(
+                      this._totalExpense
+                    )}
                   </p>
                 </div>
               </div>
             </div>
             <div class="customer-account__right">
-              <img src="${dasboardAtmCard}" />
+              <img src=${dasboardAtmCard} />
             </div>
           </div>
           <div class="transaction">
-            <div class="transaction__history container-dashboard-shadow">
+            <div
+              class="transaction__history container-dashboard container-dashboard--shadow"
+            >
               <div class="transaction__history__heading">
                 <span>Transactions</span>
                 <a href="">View all</a>
               </div>
-              <!-- item 1 -->
+
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src="src/img/silas.jpg" alt="user-picture" />
+                    <img src=${userAvatar}  alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -96,11 +117,11 @@ class DashboardView extends View {
                   <p class="credit">₦<span class="credit">700</span></p>
                 </div>
               </div>
-              <!-- item 2 -->
+
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src="src/img/silas.jpg" alt="user-picture" />
+                    <img src=${userAvatar}  alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -111,11 +132,11 @@ class DashboardView extends View {
                   <p class="debit">₦<span>700</span></p>
                 </div>
               </div>
-              <!-- item 3 -->
+
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src="src/img/silas.jpg" alt="user-picture" />
+                    <img src=${userAvatar}  alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -128,26 +149,11 @@ class DashboardView extends View {
               </div>
             </div>
             <div
-              class="transaction__history__send-money container-dashboard-shadow"
+              class="transaction__history__send-money container-dashboard container-dashboard--shadow"
             >
               <span>Send Money</span>
-              <div class="u-flex u-flex-v-center u-gap-small">
-                <figure class="user-picture user-picture--transaction">
-                  <img src="src/img/silas.jpg" alt="user-picture" />
-                </figure>
-                <figure class="user-picture user-picture--transaction">
-                  <img src="src/img/silas.jpg" alt="user-picture" />
-                </figure>
-                <figure class="user-picture user-picture--transaction">
-                  <img src="src/img/silas.jpg" alt="user-picture" />
-                </figure>
-              </div>
-              <div
-                class="view-contacts u-flex u-flex-v-center u-flex-space-between"
-              >
-                <span>View All Contacts</span>
-                <a href=""><ion-icon name="arrow-forward"></ion-icon></a>
-              </div>
+          
+             
               <div class="pay">
                 <label> Pay to </label>
                 <input type="number" placeholder="Enter Banca Account Number" />
@@ -162,10 +168,9 @@ class DashboardView extends View {
               </div>
               <button id="submit">Send Money</button>
             </div>
-          </div>
-        </main>
-
-    `;
+    
+     
+     `;
   }
 }
 

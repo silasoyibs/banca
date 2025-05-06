@@ -597,10 +597,14 @@ function clearForm() {
         input.value = "";
     });
 }
+// Capitalize FullName
+function capitalizeName(name) {
+    return name.split(" ").map((word)=>word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+}
 // form submittion
 form.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    const FullName = document.querySelector("#FullName").value;
+    const FullName = capitalizeName(document.querySelector("#FullName").value);
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _common.loadingSpinner)(btnRegister);
@@ -648,7 +652,6 @@ form.addEventListener("submit", async (e)=>{
             // Signed up
             (0, _common.changeSubmitText)(btnSubmit, "Registering...");
             const user = userCredential.user;
-            console.log(user);
             (0, _common.toast).success("Thanks for Registering!");
             (0, _common.toast).hide();
             setTimeout(()=>{
@@ -837,7 +840,12 @@ var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
 const state = {
     user: {},
-    transactions: []
+    transactions: [],
+    transactionsAmount: [
+        300,
+        200
+    ],
+    dataFetched: false
 };
 async function createUserData(user, fullName, email) {
     // banca account number for new user
@@ -855,8 +863,7 @@ async function createUserData(user, fullName, email) {
     await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
         type: "initial deposit",
         amount: 0,
-        timestamp: (0, _firestore.serverTimestamp)(),
-        description: "Account created, no initial deposit"
+        timestamp: (0, _firestore.serverTimestamp)()
     });
 }
 // Generating 10 Digit Banca Account Number
@@ -871,6 +878,10 @@ function generateUserName(fullName) {
 }
 function getCurrentUserData() {
     const auth = (0, _auth.getAuth)();
+    if (state.dataFetched) return Promise.resolve({
+        data: state.user,
+        transactions: state.transactions
+    });
     return new Promise(function(resolve, reject) {
         (0, _auth.onAuthStateChanged)(auth, async (user)=>{
             if (user) try {
@@ -893,6 +904,8 @@ function getCurrentUserData() {
                     state.transactions = [
                         ...transactions
                     ];
+                    state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+                    state.dataFetched = true;
                     resolve(currentUser);
                 }
             } catch (error) {

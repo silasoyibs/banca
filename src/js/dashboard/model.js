@@ -13,6 +13,8 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 export const state = {
   user: {},
   transactions: [],
+  transactionsAmount: [300, 200],
+  dataFetched: false,
 };
 
 // Creating New Banca user Data
@@ -35,7 +37,6 @@ export async function createUserData(user, fullName, email) {
     type: "initial deposit",
     amount: 0,
     timestamp: serverTimestamp(),
-    description: "Account created, no initial deposit",
   });
 }
 
@@ -54,6 +55,13 @@ function generateUserName(fullName) {
 // Get User Data From Firebase
 export function getCurrentUserData() {
   const auth = getAuth();
+  if (state.dataFetched) {
+    return Promise.resolve({
+      data: state.user,
+      transactions: state.transactions,
+    });
+  }
+
   return new Promise(function (resolve, reject) {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -80,6 +88,10 @@ export function getCurrentUserData() {
             // modify existing state of current user
             state.user = data;
             state.transactions = [...transactions];
+            state.transactionsAmount = state.transactions.map(
+              (transaction) => transaction.amount
+            );
+            state.dataFetched = true;
             resolve(currentUser);
           }
         } catch (error) {
