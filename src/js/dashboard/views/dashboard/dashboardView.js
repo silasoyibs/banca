@@ -8,7 +8,6 @@ class DashboardView extends View {
   _totalIncome;
   _totalExpense;
   _parentElement = document.querySelector(".dashboard-main");
-  super() {}
   setTotalTransaction(transactions) {
     this._transactions = transactions;
     console.log(this._transactions);
@@ -23,7 +22,8 @@ class DashboardView extends View {
       .filter((amount) => amount < 0)
       .reduce((acc, amount) => acc + amount, 0);
   }
-
+  sendMoney() {}
+  showSendMoneyAmount() {}
   _generateMarkup() {
     return `
         <div class="header-nav">

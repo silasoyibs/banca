@@ -17,8 +17,8 @@ async function controlDashboard() {
     dashboardView.setTotalExpense();
     dashboardView.render();
     // control funding
-    // fundAccountView.setUser(currentUser);
-    // fundAccountView.fundAccount();
+    fundAccountView.setUser(currentUser);
+    fundAccountView.fundAccount();
   } catch (err) {
     console.log(err);
     console.log("not working");
