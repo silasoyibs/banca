@@ -797,7 +797,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 <ion-icon name="notifications-outline"></ion-icon>
               </div>
               <a
-                href="http://localhost:1234/login.html"
+                href="/login.html"
                 class="logout u-flex u-flex-v-center u-gap-small"
               >
                 <ion-icon name="log-out"></ion-icon>
