@@ -9,14 +9,12 @@ async function controlDashboard() {
     // get userdata from database
     const currentUser = await model.getCurrentUserData();
     // render dashboard data
-    model.state.transactionsAmount.push(5000);
-    model.state.transactionsAmount.push(5000);
-    model.state.transactionsAmount.push(-200);
 
     // renderDashboardView(currentUser);
     dashboardView.setUser(currentUser);
-    dashboardView.setTotalIncome(model.state.transactionsAmount);
-    dashboardView.setTotalExpense(model.state.transactionsAmount);
+    dashboardView.setTotalTransaction(model.state.transactionsAmount);
+    dashboardView.setTotalIncome();
+    dashboardView.setTotalExpense();
     dashboardView.render();
     // control funding
     // fundAccountView.setUser(currentUser);
