@@ -13,7 +13,7 @@ form.addEventListener("submit", (e) => {
       loadingSpinner(loginBtn);
       // Signed in
       const user = userCredential.user;
-      window.location.href = "https:/banca-liard.vercel.app/dashboard.html";
+      window.location.href = "dashboard.html";
     })
     .catch((error) => {
       const errorCode = error.code;
