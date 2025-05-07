@@ -596,18 +596,15 @@ async function controlDashboard() {
         // get userdata from database
         const currentUser = await _modelJs.getCurrentUserData();
         // render dashboard data
-        // renderDashboardView(currentUser);
-        (0, _dashboardViewJsDefault.default).setUser(currentUser);
-        (0, _dashboardViewJsDefault.default).setTotalTransaction(_modelJs.state.transactionsAmount);
-        (0, _dashboardViewJsDefault.default).setTotalIncome();
-        (0, _dashboardViewJsDefault.default).setTotalExpense();
-        (0, _dashboardViewJsDefault.default).render();
-        // control funding
-        fundAccountView.setUser(currentUser);
-        fundAccountView.fundAccount();
+        // model.state.transactionsAmount.push(100);
+        (0, _dashboardViewJsDefault.default).render(_modelJs.state);
+    // Send Money to Another Banca User
+    // dashboardView.showSendMoneyAmount();
+    // control funding
+    // fundAccountView.setUser(currentUser);
+    // fundAccountView.fundAccount();
     } catch (err) {
         console.log(err);
-        console.log("not working");
     }
 }
 controlDashboard();
@@ -638,6 +635,7 @@ controlDashboard();
 //   controlTransaction.update();
 // };
 const init = function() {
+// dashboardView.addHandlerShowAmount();
 // transactionView.addHandlerUpdateView(controlTransaction);
 // fundAccountView.showFundingAmount();
 // fundAccountView.fundAccount();
@@ -731,8 +729,8 @@ async function getCurrentUserData() {
                 ...transactions
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
-            state.dataFetched = true;
-            return currentUser;
+        // state.dataFetched = true;
+        // return currentUser;
         }
     } catch (error) {
         console.error(error.message);
@@ -750,31 +748,56 @@ var _userSvg = require("../../../../img/SVG/user.svg");
 var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
 var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
 var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
+var _commonJs = require("../../../common.js");
 class DashboardView extends (0, _viewJsDefault.default) {
     _transactions;
     _totalIncome;
     _totalExpense;
     _parentElement = document.querySelector(".dashboard-main");
-    setTotalTransaction(transactions) {
-        this._transactions = transactions;
-        console.log(this._transactions);
+    _addEventHandler() {
+        this._addHandlerShowAmount();
     }
-    setTotalIncome() {
-        this._totalIncome = this._transactions.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+    addHandlerSendMoney(handler) {
+        this._parentElement.addEventListener("click", async (e)=>{
+            const sendMoneyBtn = e.target.closest(".send-money-button");
+            if (!sendMoneyBtn) return;
+            e.preventDefault();
+            // disable button
+            sendMoneyBtn.disable = true;
+            (0, _commonJs.loadingSpinner)(sendMoneyBtn);
+            // get values of input field
+            const accountNumber = document.querySelector(".send-account-input").value;
+            const transferAmount = document.querySelector(".send-amount-input").value;
+            if (!accountNumber || !transferAmount) {
+                (0, _commonJs.toast).error("please fill all fields");
+                (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
+            }
+            return {
+                accountNumber,
+                transferAmount
+            };
+        });
     }
-    setTotalExpense() {
-        this._totalExpense = this._transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
+    _addHandlerShowAmount() {
+        const totalAmount = document.querySelector(".send-total-amount");
+        const sendAmountField = document.querySelector(".send-amount-input");
+        sendAmountField.addEventListener("input", (e)=>{
+            e.preventDefault();
+            console.log(e.target.value);
+            totalAmount.textContent = Number(e.target.value);
+        });
     }
-    sendMoney() {}
-    showSendMoneyAmount() {}
     _generateMarkup() {
+        const transactions = this._data.transactionsAmount;
+        const totalIncome = transactions.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+        const totalExpense = transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
         return `
         <div class="header-nav">
           <div class="header-nav__left">
             <div class="customer-welcome">
               <p>
                 Welcome Back<span class="customer-welcome__name"
-                  >${this._user.data.userName}</span
+                  >${this._data.user.userName}</span
                 >
               </p>
               <figure class="user-picture--welcome">
@@ -786,7 +809,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
             <div class="header-icons">
               <div class="u-flex u-flex-v-center u-gap-small">
                 <ion-icon name="wallet"></ion-icon>
-                <p>\u{20A6}<span>${this._user.data.balance}</span></p>
+                <p>\u{20A6}<span>${this._data.user.balance}</span></p>
               </div>
               <ion-icon name="sunny"></ion-icon>
 
@@ -813,23 +836,23 @@ class DashboardView extends (0, _viewJsDefault.default) {
               <div class="account-info">
                 <div>
                   <p>Account Name</p>
-                  <p class="account-info__name">${this._user.data.fullName}</p>
+                  <p class="account-info__name">${this._data.user.fullName}</p>
                 </div>
                 <div>
                   <p>Account Number</p>
-                  <p class="account-info__number">${this._user.data.accountNumber}</p>
+                  <p class="account-info__number">${this._data.user.accountNumber}</p>
                 </div>
               </div>
 
               <div class="account-stats">
                 <div>
                   <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>${this._totalIncome}</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>${totalIncome}</p>
                 </div>
                 <div>
                   <p>Expense</p>
                   <p>
-                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>${Math.abs(this._totalExpense)}
+                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>${Math.abs(totalExpense)}
                   </p>
                 </div>
               </div>
@@ -840,7 +863,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
           </div>
          <div class="transaction">
         
-          ${this._transactions.length <= 1 ? `
+          ${transactions.length <= 1 ? `
               <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
          >
@@ -885,7 +908,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default}  alt="user-picture" />
+                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -920,17 +943,17 @@ class DashboardView extends (0, _viewJsDefault.default) {
              
               <div class="pay">
                 <label> Pay to </label>
-                <input type="number" placeholder="Enter Banca Account Number" />
+                <input class="send-account-input" type="number" placeholder="Enter Banca Account Number" />
               </div>
               <div class="amount">
                 <label> Amount(\u{20A6}) </label>
-                <input type="number" placeholder="Amount" />
+                <input class="send-amount-input" type="number" placeholder="Amount" />
               </div>
               <div class="total u-flex u-flex-v-center u-flex-space-between">
                 <span>Total</span>
-                <p>\u{20A6}<span>3</span></p>
+                <p>\u{20A6}<span class="send-total-amount"></span></p>
               </div>
-              <button id="submit">Send Money</button>
+              <button class="send-money-button" id="submit">Send Money</button>
             </div>
     
      
@@ -939,16 +962,17 @@ class DashboardView extends (0, _viewJsDefault.default) {
 }
 exports.default = new DashboardView();
 
-},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/user.svg":"jGroa","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"38NyO":[function(require,module,exports) {
+},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/user.svg":"jGroa","../../../../img/SVG/empty-transaction.svg":"kqXGX","../../../common.js":"2ASYY"}],"38NyO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class View {
-    constructor(){}
-    _user;
-    render() {
+    _data;
+    render(data) {
+        this._data = data;
         const markup = this._generateMarkup();
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
+        this._addEventHandler?.();
     }
     renderSpinner() {
         const markup = `
@@ -959,10 +983,7 @@ class View {
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
-    setUser(user) {
-        if (!user) return;
-        this._user = user;
-    }
+    _addEventHandler() {}
     // update() {
     //   const markup = this._generateMarkup();
     //   this._clear();

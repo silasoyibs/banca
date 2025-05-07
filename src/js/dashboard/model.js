@@ -97,8 +97,8 @@ export async function getCurrentUserData() {
       state.transactionsAmount = state.transactions.map(
         (transaction) => transaction.amount
       );
-      state.dataFetched = true;
-      return currentUser;
+      // state.dataFetched = true;
+      // return currentUser;
     }
   } catch (error) {
     console.error(error.message);
