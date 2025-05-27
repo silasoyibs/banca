@@ -1,10 +1,11 @@
 export default class View {
-  constructor() {}
-  _user;
-  render() {
+  _data;
+  render(data) {
+    this._data = data;
     const markup = this._generateMarkup();
     this._clear();
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    this._addEventHandler?.();
   }
   renderSpinner() {
     const markup = `
@@ -15,10 +16,8 @@ export default class View {
     this._clear();
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
-  setUser(user) {
-    if (!user) return;
-    this._user = user;
-  }
+  _addEventHandler() {}
+
   // update() {
   //   const markup = this._generateMarkup();
   //   this._clear();
@@ -26,5 +25,9 @@ export default class View {
   // }
   _clear() {
     this._parentElement.innerHTML = "";
+  }
+  clearForm(formElements) {
+    console.log(formElements);
+    formElements.forEach((formElement) => (formElement.value = ""));
   }
 }

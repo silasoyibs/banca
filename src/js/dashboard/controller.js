@@ -9,23 +9,22 @@ async function controlDashboard() {
     // get userdata from database
     const currentUser = await model.getCurrentUserData();
     // render dashboard data
-
-    // renderDashboardView(currentUser);
-    dashboardView.setUser(currentUser);
-    dashboardView.setTotalTransaction(model.state.transactionsAmount);
-    dashboardView.setTotalIncome();
-    dashboardView.setTotalExpense();
-    dashboardView.render();
+    model.state.transactionsAmount.push(100);
+    dashboardView.render(model.state);
+    // Send Money to Another Banca User
+    // await model.sendMoney();
+    // dashboardView.showSendMoneyAmount();
     // control funding
-    fundAccountView.setUser(currentUser);
-    fundAccountView.fundAccount();
+    // fundAccountView.setUser(currentUser);
+    // fundAccountView.fundAccount();
   } catch (err) {
     console.log(err);
-    console.log("not working");
   }
 }
 
-controlDashboard();
+async function controlSendMoney(transfer) {
+  return (transferStatus = await model.sendMoney(transfer));
+}
 
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
@@ -56,6 +55,9 @@ controlDashboard();
 // };
 
 const init = function () {
+  controlDashboard();
+  dashboardView.addHandlerSendMoney(controlSendMoney);
+  // dashboardView.addHandlerShowAmount();
   // transactionView.addHandlerUpdateView(controlTransaction);
   // fundAccountView.showFundingAmount();
   // fundAccountView.fundAccount();

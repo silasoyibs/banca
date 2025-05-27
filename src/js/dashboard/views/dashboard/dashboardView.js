@@ -2,36 +2,72 @@ import View from "../../view.js";
 import dasboardAtmCard from "../../../../img/dashboard-img-card.png";
 import userAvatar from "../../../../img/SVG/user.svg";
 import emptyTransaction from "../../../../img/SVG/empty-transaction.svg";
+import { toast, loadingSpinner, clearLoadingSpinner } from "../../../common.js";
 
 class DashboardView extends View {
   _transactions;
   _totalIncome;
   _totalExpense;
   _parentElement = document.querySelector(".dashboard-main");
-  setTotalTransaction(transactions) {
-    this._transactions = transactions;
-    console.log(this._transactions);
+
+  _addEventHandler() {
+    this._addHandlerShowAmount();
   }
-  setTotalIncome() {
-    this._totalIncome = this._transactions
+
+  addHandlerSendMoney(handler) {
+    this._parentElement.addEventListener("click", async (e) => {
+      const sendMoneyBtn = e.target.closest(".send-money-button");
+      if (!sendMoneyBtn) return;
+      e.preventDefault();
+      // disable button
+      sendMoneyBtn.disable = true;
+      loadingSpinner(sendMoneyBtn);
+      // get values of input field
+      const accountNumber = document.querySelector(".send-account-input");
+      const transferAmount = document.querySelector(".send-amount-input");
+      const recipientAccountNumber = Number(accountNumber.value);
+      const amount = Number(transferAmount.value);
+      if (!recipientAccountNumber || !amount) {
+        toast.error("please fill all fields");
+        clearLoadingSpinner(sendMoneyBtn, "Send Money");
+      }
+      // get transfer status from model
+      const transferStatus = await handler({ recipientAccountNumber, amount });
+      console.log(transferStatus);
+      toast.success(transferStatus);
+      // clear form
+      console.log(this.clearForm([accountNumber, transferAmount]));
+      toast.hide();
+      // reset spinner to default
+      setTimeout(() => {
+        clearLoadingSpinner(sendMoneyBtn, "Send Money");
+      }, 6000);
+    });
+  }
+  _addHandlerShowAmount() {
+    const totalAmount = document.querySelector(".send-total-amount");
+    const sendAmountField = document.querySelector(".send-amount-input");
+    sendAmountField.addEventListener("input", (e) => {
+      e.preventDefault();
+      console.log(e.target.value);
+      totalAmount.textContent = Number(e.target.value);
+    });
+  }
+  _generateMarkup() {
+    const transactions = this._data.transactionsAmount;
+    const totalIncome = transactions
       .filter((amount) => amount > 0)
       .reduce((acc, amount) => acc + amount, 0);
-  }
-  setTotalExpense() {
-    this._totalExpense = this._transactions
+    const totalExpense = transactions
       .filter((amount) => amount < 0)
       .reduce((acc, amount) => acc + amount, 0);
-  }
-  sendMoney() {}
-  showSendMoneyAmount() {}
-  _generateMarkup() {
     return `
         <div class="header-nav">
           <div class="header-nav__left">
             <div class="customer-welcome">
               <p>
                 Welcome Back<span class="customer-welcome__name"
-                  >${this._user.data.userName}</span
+                  >${this._data.user.userName}</span
                 >
               </p>
               <figure class="user-picture--welcome">
@@ -43,7 +79,7 @@ class DashboardView extends View {
             <div class="header-icons">
               <div class="u-flex u-flex-v-center u-gap-small">
                 <ion-icon name="wallet"></ion-icon>
-                <p>₦<span>${this._user.data.balance}</span></p>
+                <p>₦<span>${this._data.user.balance}</span></p>
               </div>
               <ion-icon name="sunny"></ion-icon>
 
@@ -70,12 +106,12 @@ class DashboardView extends View {
               <div class="account-info">
                 <div>
                   <p>Account Name</p>
-                  <p class="account-info__name">${this._user.data.fullName}</p>
+                  <p class="account-info__name">${this._data.user.fullName}</p>
                 </div>
                 <div>
                   <p>Account Number</p>
                   <p class="account-info__number">${
-                    this._user.data.accountNumber
+                    this._data.user.accountNumber
                   }</p>
                 </div>
               </div>
@@ -83,15 +119,13 @@ class DashboardView extends View {
               <div class="account-stats">
                 <div>
                   <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span>${
-                    this._totalIncome
-                  }</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span>${totalIncome}</p>
                 </div>
                 <div>
                   <p>Expense</p>
                   <p>
                     <ion-icon name="arrow-down"></ion-icon><span>₦</span>${Math.abs(
-                      this._totalExpense
+                      totalExpense
                     )}
                   </p>
                 </div>
@@ -104,7 +138,7 @@ class DashboardView extends View {
          <div class="transaction">
         
           ${
-            this._transactions.length <= 1
+            transactions.length <= 1
               ? `
               <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
@@ -151,7 +185,7 @@ class DashboardView extends View {
               <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src=${userAvatar}  alt="user-picture" />
+                    <img src=${userAvatar} alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
                     <p>Idris Saidu</p>
@@ -187,17 +221,17 @@ class DashboardView extends View {
              
               <div class="pay">
                 <label> Pay to </label>
-                <input type="number" placeholder="Enter Banca Account Number" />
+                <input class="send-account-input" type="number" placeholder="Enter Banca Account Number" />
               </div>
               <div class="amount">
                 <label> Amount(₦) </label>
-                <input type="number" placeholder="Amount" />
+                <input class="send-amount-input" type="number" placeholder="Amount" />
               </div>
               <div class="total u-flex u-flex-v-center u-flex-space-between">
                 <span>Total</span>
-                <p>₦<span>3</span></p>
+                <p>₦<span class="send-total-amount"></span></p>
               </div>
-              <button id="submit">Send Money</button>
+              <button class="send-money-button" id="submit">Send Money</button>
             </div>
     
      
