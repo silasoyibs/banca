@@ -601,8 +601,6 @@ parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
 parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
 // Setting Button Text to Normal
 parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
-// Clear Input Fields
-parcelHelpers.export(exports, "clearInputField", ()=>clearInputField);
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -729,7 +727,6 @@ function clearLoadingSpinner(button, text) {
     buttonEl.innerHTML = "";
     buttonEl.insertAdjacentHTML("afterbegin", text);
 }
-function clearInputField() {}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
