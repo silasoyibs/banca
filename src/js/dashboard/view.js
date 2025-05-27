@@ -1,6 +1,5 @@
 export default class View {
   _data;
-
   render(data) {
     this._data = data;
     const markup = this._generateMarkup();
@@ -26,5 +25,9 @@ export default class View {
   // }
   _clear() {
     this._parentElement.innerHTML = "";
+  }
+  clearForm(formElements) {
+    console.log(formElements);
+    formElements.forEach((formElement) => (formElement.value = ""));
   }
 }

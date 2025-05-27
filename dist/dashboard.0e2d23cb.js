@@ -596,9 +596,10 @@ async function controlDashboard() {
         // get userdata from database
         const currentUser = await _modelJs.getCurrentUserData();
         // render dashboard data
-        // model.state.transactionsAmount.push(100);
+        _modelJs.state.transactionsAmount.push(100);
         (0, _dashboardViewJsDefault.default).render(_modelJs.state);
     // Send Money to Another Banca User
+    // await model.sendMoney();
     // dashboardView.showSendMoneyAmount();
     // control funding
     // fundAccountView.setUser(currentUser);
@@ -607,7 +608,9 @@ async function controlDashboard() {
         console.log(err);
     }
 }
-controlDashboard();
+async function controlSendMoney(transfer) {
+    return transferStatus = await _modelJs.sendMoney(transfer);
+}
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
 //   let viewTarget;
@@ -635,6 +638,8 @@ controlDashboard();
 //   controlTransaction.update();
 // };
 const init = function() {
+    controlDashboard();
+    (0, _dashboardViewJsDefault.default).addHandlerSendMoney(controlSendMoney);
 // dashboardView.addHandlerShowAmount();
 // transactionView.addHandlerUpdateView(controlTransaction);
 // fundAccountView.showFundingAmount();
@@ -650,6 +655,8 @@ parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
 // Get User Data From Firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
+// send money to another banca user (transfer)
+parcelHelpers.export(exports, "sendMoney", ()=>sendMoney);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -702,10 +709,12 @@ function waitForUserAuth() {
 async function getCurrentUserData() {
     const user = await waitForUserAuth();
     // Don't fetch again if we already have data
-    if (state.dataFetched && state.user.id === user?.uid) return {
-        data: state.user,
-        transactions: state.transactions
-    };
+    // if (state.dataFetched && state.user.id === user?.uid) {
+    //   return {
+    //     data: state.user,
+    //     transactions: state.transactions,
+    //   };
+    // }
     // No signed-in user
     if (!user) throw new Error("No user signed in");
     try {
@@ -734,6 +743,47 @@ async function getCurrentUserData() {
         }
     } catch (error) {
         console.error(error.message);
+    }
+}
+async function sendMoney(transfer) {
+    try {
+        const { recipientAccountNumber, amount } = transfer;
+        const usersRef = (0, _firestore.collection)((0, _firebase.db), "users");
+        const getRecipientDetails = (0, _firestore.query)(usersRef, (0, _firestore.where)("accountNumber", "==", recipientAccountNumber));
+        const querySnapshot = await (0, _firestore.getDocs)(getRecipientDetails);
+        if (querySnapshot.empty) {
+            console.log("No user found with this account number.");
+            return null;
+        }
+        // Get the matched reciepientUser
+        const userDoc = querySnapshot.docs[0];
+        const userId = userDoc.id;
+        const recipientDetails = {
+            id: userId,
+            ...userDoc.data()
+        };
+        // Now get transactions from subcollection
+        const transactionsRef = (0, _firestore.collection)((0, _firebase.db), `users/${userId}/transaction`);
+        const transactionsSnapshot = await (0, _firestore.getDocs)(transactionsRef);
+        const transactions = transactionsSnapshot.docs.map((doc)=>({
+                id: doc.id,
+                ...doc.data()
+            }));
+        // calculate recipient new balance
+        const newBalance = recipientDetails.balance + amount;
+        console.log(newBalance);
+        console.log(amount);
+        console.log(recipientDetails, transactions);
+        // update banca reciever balance
+        const recienpientRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
+        await (0, _firestore.updateDoc)(recienpientRef, {
+            balance: newBalance
+        });
+        console.log("update sucessful");
+        return "transfer sucessful!";
+    } catch (error) {
+        console.error("Error updating document", error);
+        return "transfer failed";
     }
 }
 
@@ -766,16 +816,31 @@ class DashboardView extends (0, _viewJsDefault.default) {
             sendMoneyBtn.disable = true;
             (0, _commonJs.loadingSpinner)(sendMoneyBtn);
             // get values of input field
-            const accountNumber = document.querySelector(".send-account-input").value;
-            const transferAmount = document.querySelector(".send-amount-input").value;
-            if (!accountNumber || !transferAmount) {
+            const accountNumber = document.querySelector(".send-account-input");
+            const transferAmount = document.querySelector(".send-amount-input");
+            const recipientAccountNumber = Number(accountNumber.value);
+            const amount = Number(transferAmount.value);
+            if (!recipientAccountNumber || !amount) {
                 (0, _commonJs.toast).error("please fill all fields");
                 (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
             }
-            return {
+            // get transfer status from model
+            const transferStatus = await handler({
+                recipientAccountNumber,
+                amount
+            });
+            console.log(transferStatus);
+            (0, _commonJs.toast).success(transferStatus);
+            // clear form
+            console.log(this.clearForm([
                 accountNumber,
                 transferAmount
-            };
+            ]));
+            (0, _commonJs.toast).hide();
+            // reset spinner to default
+            setTimeout(()=>{
+                (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
+            }, 6000);
         });
     }
     _addHandlerShowAmount() {
@@ -991,6 +1056,10 @@ class View {
     // }
     _clear() {
         this._parentElement.innerHTML = "";
+    }
+    clearForm(formElements) {
+        console.log(formElements);
+        formElements.forEach((formElement)=>formElement.value = "");
     }
 }
 exports.default = View;

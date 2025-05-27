@@ -23,13 +23,25 @@ class DashboardView extends View {
       sendMoneyBtn.disable = true;
       loadingSpinner(sendMoneyBtn);
       // get values of input field
-      const accountNumber = document.querySelector(".send-account-input").value;
-      const transferAmount = document.querySelector(".send-amount-input").value;
-      if (!accountNumber || !transferAmount) {
+      const accountNumber = document.querySelector(".send-account-input");
+      const transferAmount = document.querySelector(".send-amount-input");
+      const recipientAccountNumber = Number(accountNumber.value);
+      const amount = Number(transferAmount.value);
+      if (!recipientAccountNumber || !amount) {
         toast.error("please fill all fields");
         clearLoadingSpinner(sendMoneyBtn, "Send Money");
       }
-      return { accountNumber, transferAmount };
+      // get transfer status from model
+      const transferStatus = await handler({ recipientAccountNumber, amount });
+      console.log(transferStatus);
+      toast.success(transferStatus);
+      // clear form
+      console.log(this.clearForm([accountNumber, transferAmount]));
+      toast.hide();
+      // reset spinner to default
+      setTimeout(() => {
+        clearLoadingSpinner(sendMoneyBtn, "Send Money");
+      }, 6000);
     });
   }
   _addHandlerShowAmount() {

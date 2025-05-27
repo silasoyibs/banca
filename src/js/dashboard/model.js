@@ -4,8 +4,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  query,
   serverTimestamp,
   setDoc,
+  where,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -68,12 +71,12 @@ function waitForUserAuth() {
 export async function getCurrentUserData() {
   const user = await waitForUserAuth();
   // Don't fetch again if we already have data
-  if (state.dataFetched && state.user.id === user?.uid) {
-    return {
-      data: state.user,
-      transactions: state.transactions,
-    };
-  }
+  // if (state.dataFetched && state.user.id === user?.uid) {
+  //   return {
+  //     data: state.user,
+  //     transactions: state.transactions,
+  //   };
+  // }
   // No signed-in user
   if (!user) throw new Error("No user signed in");
   try {
@@ -102,5 +105,49 @@ export async function getCurrentUserData() {
     }
   } catch (error) {
     console.error(error.message);
+  }
+}
+
+// send money to another banca user (transfer)
+export async function sendMoney(transfer) {
+  try {
+    const { recipientAccountNumber, amount } = transfer;
+    const usersRef = collection(db, "users");
+    const getRecipientDetails = query(
+      usersRef,
+      where("accountNumber", "==", recipientAccountNumber)
+    );
+    const querySnapshot = await getDocs(getRecipientDetails);
+
+    if (querySnapshot.empty) {
+      console.log("No user found with this account number.");
+      return null;
+    }
+    // Get the matched reciepientUser
+    const userDoc = querySnapshot.docs[0];
+    const userId = userDoc.id;
+    const recipientDetails = { id: userId, ...userDoc.data() };
+    // Now get transactions from subcollection
+    const transactionsRef = collection(db, `users/${userId}/transaction`);
+    const transactionsSnapshot = await getDocs(transactionsRef);
+    const transactions = transactionsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    // calculate recipient new balance
+    const newBalance = recipientDetails.balance + amount;
+    console.log(newBalance);
+    console.log(amount);
+    console.log(recipientDetails, transactions);
+    // update banca reciever balance
+    const recienpientRef = doc(db, "users", userId);
+    await updateDoc(recienpientRef, {
+      balance: newBalance,
+    });
+    console.log("update sucessful");
+    return "transfer sucessful!";
+  } catch (error) {
+    console.error("Error updating document", error);
+    return "transfer failed";
   }
 }
