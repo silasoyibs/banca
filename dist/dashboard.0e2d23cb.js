@@ -816,10 +816,11 @@ class DashboardView extends (0, _viewJsDefault.default) {
             sendMoneyBtn.disable = true;
             (0, _commonJs.loadingSpinner)(sendMoneyBtn);
             // get values of input field
-            const accountNumber = document.querySelector(".send-account-input");
-            const transferAmount = document.querySelector(".send-amount-input");
-            const recipientAccountNumber = Number(accountNumber.value);
-            const amount = Number(transferAmount.value);
+            const accountNumberInput = document.querySelector(".send-account-input");
+            const transferAmountInput = document.querySelector(".send-amount-input");
+            const recipientAccountNumber = Number(accountNumberInput.value);
+            // set total amount to user amount input
+            const amount = Number(transferAmountInput.value);
             if (!recipientAccountNumber || !amount) {
                 (0, _commonJs.toast).error("please fill all fields");
                 (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
@@ -829,18 +830,21 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 recipientAccountNumber,
                 amount
             });
-            console.log(transferStatus);
             (0, _commonJs.toast).success(transferStatus);
             // clear form
-            console.log(this.clearForm([
-                accountNumber,
-                transferAmount
-            ]));
-            (0, _commonJs.toast).hide();
+            this.clearForm([
+                accountNumberInput,
+                transferAmountInput
+            ]);
+            // reset toal amount to default
+            const totalAmount = document.querySelector(".send-total-amount");
+            totalAmount.textContent = "";
             // reset spinner to default
             setTimeout(()=>{
                 (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
             }, 6000);
+            // hide toast
+            (0, _commonJs.toast).hide();
         });
     }
     _addHandlerShowAmount() {
@@ -1058,7 +1062,6 @@ class View {
         this._parentElement.innerHTML = "";
     }
     clearForm(formElements) {
-        console.log(formElements);
         formElements.forEach((formElement)=>formElement.value = "");
     }
 }

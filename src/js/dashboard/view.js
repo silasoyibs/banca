@@ -27,7 +27,6 @@ export default class View {
     this._parentElement.innerHTML = "";
   }
   clearForm(formElements) {
-    console.log(formElements);
     formElements.forEach((formElement) => (formElement.value = ""));
   }
 }
