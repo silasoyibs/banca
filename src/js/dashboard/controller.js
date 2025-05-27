@@ -9,10 +9,10 @@ async function controlDashboard() {
     // get userdata from database
     const currentUser = await model.getCurrentUserData();
     // render dashboard data
-    // model.state.transactionsAmount.push(100);
+    model.state.transactionsAmount.push(100);
     dashboardView.render(model.state);
     // Send Money to Another Banca User
-
+    // await model.sendMoney();
     // dashboardView.showSendMoneyAmount();
     // control funding
     // fundAccountView.setUser(currentUser);
@@ -22,7 +22,9 @@ async function controlDashboard() {
   }
 }
 
-controlDashboard();
+async function controlSendMoney(transfer) {
+  return (transferStatus = await model.sendMoney(transfer));
+}
 
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
@@ -53,6 +55,8 @@ controlDashboard();
 // };
 
 const init = function () {
+  controlDashboard();
+  dashboardView.addHandlerSendMoney(controlSendMoney);
   // dashboardView.addHandlerShowAmount();
   // transactionView.addHandlerUpdateView(controlTransaction);
   // fundAccountView.showFundingAmount();

@@ -687,6 +687,8 @@ parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
 // Get User Data From Firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
+// send money to another banca user (transfer)
+parcelHelpers.export(exports, "sendMoney", ()=>sendMoney);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -739,10 +741,12 @@ function waitForUserAuth() {
 async function getCurrentUserData() {
     const user = await waitForUserAuth();
     // Don't fetch again if we already have data
-    if (state.dataFetched && state.user.id === user?.uid) return {
-        data: state.user,
-        transactions: state.transactions
-    };
+    // if (state.dataFetched && state.user.id === user?.uid) {
+    //   return {
+    //     data: state.user,
+    //     transactions: state.transactions,
+    //   };
+    // }
     // No signed-in user
     if (!user) throw new Error("No user signed in");
     try {
@@ -771,6 +775,47 @@ async function getCurrentUserData() {
         }
     } catch (error) {
         console.error(error.message);
+    }
+}
+async function sendMoney(transfer) {
+    try {
+        const { recipientAccountNumber, amount } = transfer;
+        const usersRef = (0, _firestore.collection)((0, _firebase.db), "users");
+        const getRecipientDetails = (0, _firestore.query)(usersRef, (0, _firestore.where)("accountNumber", "==", recipientAccountNumber));
+        const querySnapshot = await (0, _firestore.getDocs)(getRecipientDetails);
+        if (querySnapshot.empty) {
+            console.log("No user found with this account number.");
+            return null;
+        }
+        // Get the matched reciepientUser
+        const userDoc = querySnapshot.docs[0];
+        const userId = userDoc.id;
+        const recipientDetails = {
+            id: userId,
+            ...userDoc.data()
+        };
+        // Now get transactions from subcollection
+        const transactionsRef = (0, _firestore.collection)((0, _firebase.db), `users/${userId}/transaction`);
+        const transactionsSnapshot = await (0, _firestore.getDocs)(transactionsRef);
+        const transactions = transactionsSnapshot.docs.map((doc)=>({
+                id: doc.id,
+                ...doc.data()
+            }));
+        // calculate recipient new balance
+        const newBalance = recipientDetails.balance + amount;
+        console.log(newBalance);
+        console.log(amount);
+        console.log(recipientDetails, transactions);
+        // update banca reciever balance
+        const recienpientRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
+        await (0, _firestore.updateDoc)(recienpientRef, {
+            balance: newBalance
+        });
+        console.log("update sucessful");
+        return "transfer sucessful!";
+    } catch (error) {
+        console.error("Error updating document", error);
+        return "transfer failed";
     }
 }
 
