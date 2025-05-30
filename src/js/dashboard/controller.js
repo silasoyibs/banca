@@ -23,7 +23,7 @@ async function controlDashboard() {
 }
 
 async function controlSendMoney(transfer) {
-  return (transferStatus = await model.sendMoney(transfer));
+  return (transferStatus = await model.transfer(transfer));
 }
 
 // function controlDashboardView() {
