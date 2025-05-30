@@ -609,7 +609,7 @@ async function controlDashboard() {
     }
 }
 async function controlSendMoney(transfer) {
-    return transferStatus = await _modelJs.sendMoney(transfer);
+    return transferStatus = await _modelJs.transfer(transfer);
 }
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
@@ -656,7 +656,7 @@ parcelHelpers.export(exports, "createUserData", ()=>createUserData);
 // Get User Data From Firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
-parcelHelpers.export(exports, "sendMoney", ()=>sendMoney);
+parcelHelpers.export(exports, "transfer", ()=>transfer);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -664,7 +664,8 @@ const state = {
     user: {},
     transactions: [],
     transactionsAmount: [],
-    dataFetched: false
+    userRef: null,
+    userTransactionsRef: null
 };
 async function createUserData(user, fullName, email) {
     // banca account number for new user
@@ -708,14 +709,6 @@ function waitForUserAuth() {
 }
 async function getCurrentUserData() {
     const user = await waitForUserAuth();
-    // Don't fetch again if we already have data
-    // if (state.dataFetched && state.user.id === user?.uid) {
-    //   return {
-    //     data: state.user,
-    //     transactions: state.transactions,
-    //   };
-    // }
-    // No signed-in user
     if (!user) throw new Error("No user signed in");
     try {
         const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
@@ -738,53 +731,95 @@ async function getCurrentUserData() {
                 ...transactions
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+            state.userTransactionsRef = transactionsRef;
         // state.dataFetched = true;
         // return currentUser;
         }
+        state.userRef = userRef;
     } catch (error) {
         console.error(error.message);
     }
 }
-async function sendMoney(transfer) {
-    try {
-        const { recipientAccountNumber, amount } = transfer;
-        const usersRef = (0, _firestore.collection)((0, _firebase.db), "users");
-        const getRecipientDetails = (0, _firestore.query)(usersRef, (0, _firestore.where)("accountNumber", "==", recipientAccountNumber));
-        const querySnapshot = await (0, _firestore.getDocs)(getRecipientDetails);
-        if (querySnapshot.empty) {
-            console.log("No user found with this account number.");
-            return null;
-        }
+// get reciepient details from firebase
+async function getRecipientData(recipientAccountNumber) {
+    // get all banca users
+    const usersRef = (0, _firestore.collection)((0, _firebase.db), "users");
+    // query banca user based on account number
+    const recipientDataQuery = (0, _firestore.query)(usersRef, (0, _firestore.where)("accountNumber", "==", recipientAccountNumber));
+    // get query docs
+    const docSnapshot = await (0, _firestore.getDocs)(recipientDataQuery);
+    if (!docSnapshot.empty) {
         // Get the matched reciepientUser
-        const userDoc = querySnapshot.docs[0];
-        const userId = userDoc.id;
-        const recipientDetails = {
-            id: userId,
-            ...userDoc.data()
+        const recipientId = docSnapshot.docs[0].id;
+        const recipientData = {
+            id: recipientId,
+            ...docSnapshot.docs[0].data()
         };
+        const recipientRef = (0, _firestore.doc)((0, _firebase.db), "users", recipientId);
         // Now get transactions from subcollection
-        const transactionsRef = (0, _firestore.collection)((0, _firebase.db), `users/${userId}/transaction`);
-        const transactionsSnapshot = await (0, _firestore.getDocs)(transactionsRef);
-        const transactions = transactionsSnapshot.docs.map((doc)=>({
+        const recipientTransactionsRef = (0, _firestore.collection)((0, _firebase.db), `users/${recipientId}/transaction`);
+        // get transaction query
+        const transactionSnapShot = await (0, _firestore.getDocs)(recipientTransactionsRef);
+        const recipientTransactionsData = transactionSnapShot.docs.map((doc)=>({
                 id: doc.id,
                 ...doc.data()
             }));
-        // calculate recipient new balance
-        const newBalance = recipientDetails.balance + amount;
-        console.log(newBalance);
-        console.log(amount);
-        console.log(recipientDetails, transactions);
-        // update banca reciever balance
-        const recienpientRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
-        await (0, _firestore.updateDoc)(recienpientRef, {
-            balance: newBalance
-        });
-        console.log("update sucessful");
-        return "transfer sucessful!";
+        return {
+            recipientId,
+            recipientData,
+            recipientRef,
+            recipientTransactionsRef,
+            recipientTransactionsData
+        };
+    } else throw new Error("recipient not found");
+}
+async function transfer(transfer) {
+    try {
+        const { recipientAccountNumber, amount } = transfer;
+        await sendMoney(amount, recipientAccountNumber);
+        return "transfer successful!";
     } catch (error) {
-        console.error("Error updating document", error);
+        console.log(error, error.message);
         return "transfer failed";
     }
+}
+// send/recive money in banca
+async function sendMoney(amount, recipientAccountNumber) {
+    const senderName = state.user.fullName;
+    const { user, userRef } = state;
+    const { userTransactionsRef } = state;
+    const { recipientData, recipientRef, recipientTransactionsRef } = await getRecipientData(recipientAccountNumber);
+    // update sender database
+    if (user.balance >= amount) {
+        // debit banca user
+        const balance = user.balance - amount;
+        await (0, _firestore.updateDoc)(userRef, {
+            balance: balance
+        });
+        // update sender transaction ref
+        const recieverName = recipientData.fullName;
+        (0, _firestore.addDoc)(userTransactionsRef, {
+            recieverName,
+            amount: -amount,
+            date: new Date().toISOString(),
+            type: "withdrawal"
+        });
+    } else console.log("something went wrong");
+    // update recipient database
+    if (recipientData) {
+        // credit banca user
+        const balance = user.balance + amount;
+        await (0, _firestore.updateDoc)(recipientRef, {
+            balance: balance
+        });
+        // update recipient transactions list
+        await (0, _firestore.addDoc)(recipientTransactionsRef, {
+            senderName,
+            amount,
+            date: new Date().toISOString(),
+            type: "deposit"
+        });
+    } else console.log("recipient could not be found");
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
@@ -852,7 +887,6 @@ class DashboardView extends (0, _viewJsDefault.default) {
         const sendAmountField = document.querySelector(".send-amount-input");
         sendAmountField.addEventListener("input", (e)=>{
             e.preventDefault();
-            console.log(e.target.value);
             totalAmount.textContent = Number(e.target.value);
         });
     }

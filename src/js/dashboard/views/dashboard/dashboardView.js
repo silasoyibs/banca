@@ -53,7 +53,6 @@ class DashboardView extends View {
     const sendAmountField = document.querySelector(".send-amount-input");
     sendAmountField.addEventListener("input", (e) => {
       e.preventDefault();
-      console.log(e.target.value);
       totalAmount.textContent = Number(e.target.value);
     });
   }
