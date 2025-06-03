@@ -82,7 +82,9 @@ class DashboardView extends View {
             <div class="header-icons">
               <div class="u-flex u-flex-v-center u-gap-small">
                 <ion-icon name="wallet"></ion-icon>
-                <p>₦<span>${this._data.user.balance}</span></p>
+                <p>₦<span class="banca-user-balance">${
+                  this._data.user.balance
+                }</span></p>
               </div>
               <ion-icon name="sunny"></ion-icon>
 
@@ -239,6 +241,9 @@ class DashboardView extends View {
     
      
      `;
+  }
+  updateBalance(newBalance) {
+    document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
   }
 }
 

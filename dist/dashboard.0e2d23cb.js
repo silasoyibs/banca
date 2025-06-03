@@ -594,11 +594,10 @@ async function controlDashboard() {
         // render spinner
         (0, _dashboardViewJsDefault.default).renderSpinner();
         // get userdata from database
-        const currentUser = await _modelJs.getCurrentUserData();
+        await _modelJs.getCurrentUserData();
         // render dashboard data
-        _modelJs.state.transactionsAmount.push(100);
+        // model.state.transactionsAmount.push(100);
         (0, _dashboardViewJsDefault.default).render(_modelJs.state);
-    // Send Money to Another Banca User
     // await model.sendMoney();
     // dashboardView.showSendMoneyAmount();
     // control funding
@@ -609,7 +608,12 @@ async function controlDashboard() {
     }
 }
 async function controlSendMoney(transfer) {
-    return transferStatus = await _modelJs.transfer(transfer);
+    transferStatus = await _modelJs.transfer(transfer);
+    _modelJs.listenToBalance(_modelJs.state.user.id, controlUpdateBalance);
+    return transferStatus;
+}
+function controlUpdateBalance(newBalance) {
+    (0, _dashboardViewJsDefault.default).updateBalance(newBalance);
 }
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
@@ -639,6 +643,7 @@ async function controlSendMoney(transfer) {
 // };
 const init = function() {
     controlDashboard();
+    // Send Money to Another Banca User
     (0, _dashboardViewJsDefault.default).addHandlerSendMoney(controlSendMoney);
 // dashboardView.addHandlerShowAmount();
 // transactionView.addHandlerUpdateView(controlTransaction);
@@ -653,10 +658,11 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 // Creating New Banca user Data
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
-// Get User Data From Firebase
+// get user data from firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
 parcelHelpers.export(exports, "transfer", ()=>transfer);
+parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -691,7 +697,7 @@ function generateAccountNum() {
     const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
     return randomNumber;
 }
-// Generate UserName
+// generate username
 function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
@@ -710,15 +716,16 @@ function waitForUserAuth() {
 async function getCurrentUserData() {
     const user = await waitForUserAuth();
     if (!user) throw new Error("No user signed in");
+    const userId = user.uid;
     try {
-        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
         const userSnap = await (0, _firestore.getDoc)(userRef);
         if (userSnap.exists()) {
             const data = {
                 id: userSnap.id,
                 ...userSnap.data()
             };
-            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
             const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
             const transactions = transactionsSnap.docs.map((doc)=>doc.data());
             const currentUser = {
@@ -732,8 +739,6 @@ async function getCurrentUserData() {
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
             state.userTransactionsRef = transactionsRef;
-        // state.dataFetched = true;
-        // return currentUser;
         }
         state.userRef = userRef;
     } catch (error) {
@@ -820,6 +825,17 @@ async function sendMoney(amount, recipientAccountNumber) {
             type: "deposit"
         });
     } else console.log("recipient could not be found");
+}
+// listen to balance changes
+let unsubscribeBalance = null;
+function listenToBalance(userId, handleBalanceChange) {
+    const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
+    // unsubscribeBalance?.();
+    unsubscribeBalance = (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
+        const newBalance = docSnap.data().balance;
+        state.user.balance = newBalance;
+        handleBalanceChange(newBalance);
+    });
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
@@ -912,7 +928,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
             <div class="header-icons">
               <div class="u-flex u-flex-v-center u-gap-small">
                 <ion-icon name="wallet"></ion-icon>
-                <p>\u{20A6}<span>${this._data.user.balance}</span></p>
+                <p>\u{20A6}<span class="banca-user-balance">${this._data.user.balance}</span></p>
               </div>
               <ion-icon name="sunny"></ion-icon>
 
@@ -1061,6 +1077,9 @@ class DashboardView extends (0, _viewJsDefault.default) {
     
      
      `;
+    }
+    updateBalance(newBalance) {
+        document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
     }
 }
 exports.default = new DashboardView();

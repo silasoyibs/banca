@@ -50,7 +50,7 @@ function generateAccountNum() {
   return randomNumber;
 }
 
-// Generate UserName
+// generate username
 function generateUserName(fullName) {
   const firstName = fullName.split(" ");
   return firstName[0];
@@ -68,19 +68,20 @@ function waitForUserAuth() {
   });
 }
 
-// Get User Data From Firebase
+// get user data from firebase
 export async function getCurrentUserData() {
   const user = await waitForUserAuth();
   if (!user) throw new Error("No user signed in");
+  const userId = user.uid;
   try {
-    const userRef = doc(db, "users", user.uid);
+    const userRef = doc(db, "users", userId);
     const userSnap = await getDoc(userRef);
     if (userSnap.exists()) {
       const data = {
         id: userSnap.id,
         ...userSnap.data(),
       };
-      const transactionsRef = collection(db, "users", user.uid, "transaction");
+      const transactionsRef = collection(db, "users", userId, "transaction");
       const transactionsSnap = await getDocs(transactionsRef);
       const transactions = transactionsSnap.docs.map((doc) => doc.data());
       const currentUser = {
@@ -94,8 +95,6 @@ export async function getCurrentUserData() {
         (transaction) => transaction.amount
       );
       state.userTransactionsRef = transactionsRef;
-      // state.dataFetched = true;
-      // return currentUser;
     }
     state.userRef = userRef;
   } catch (error) {
@@ -198,4 +197,15 @@ async function sendMoney(amount, recipientAccountNumber) {
   } else {
     console.log("recipient could not be found");
   }
+}
+// listen to balance changes
+let unsubscribeBalance = null;
+export function listenToBalance(userId, handleBalanceChange) {
+  const userRef = doc(db, "users", userId);
+  // unsubscribeBalance?.();
+  unsubscribeBalance = onSnapshot(userRef, (docSnap) => {
+    const newBalance = docSnap.data().balance;
+    state.user.balance = newBalance;
+    handleBalanceChange(newBalance);
+  });
 }
