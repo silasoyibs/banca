@@ -7,11 +7,11 @@ async function controlDashboard() {
     // render spinner
     dashboardView.renderSpinner();
     // get userdata from database
-    const currentUser = await model.getCurrentUserData();
+    await model.getCurrentUserData();
     // render dashboard data
-    model.state.transactionsAmount.push(100);
+    // model.state.transactionsAmount.push(100);
     dashboardView.render(model.state);
-    // Send Money to Another Banca User
+
     // await model.sendMoney();
     // dashboardView.showSendMoneyAmount();
     // control funding
@@ -23,7 +23,13 @@ async function controlDashboard() {
 }
 
 async function controlSendMoney(transfer) {
-  return (transferStatus = await model.transfer(transfer));
+  transferStatus = await model.transfer(transfer);
+  model.listenToBalance(model.state.user.id, controlUpdateBalance);
+  return transferStatus;
+}
+
+function controlUpdateBalance(newBalance) {
+  dashboardView.updateBalance(newBalance);
 }
 
 // function controlDashboardView() {
@@ -56,6 +62,7 @@ async function controlSendMoney(transfer) {
 
 const init = function () {
   controlDashboard();
+  // Send Money to Another Banca User
   dashboardView.addHandlerSendMoney(controlSendMoney);
   // dashboardView.addHandlerShowAmount();
   // transactionView.addHandlerUpdateView(controlTransaction);

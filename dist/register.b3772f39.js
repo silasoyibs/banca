@@ -685,10 +685,11 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 // Creating New Banca user Data
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
-// Get User Data From Firebase
+// get user data from firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
 parcelHelpers.export(exports, "transfer", ()=>transfer);
+parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -723,7 +724,7 @@ function generateAccountNum() {
     const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
     return randomNumber;
 }
-// Generate UserName
+// generate username
 function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
@@ -742,15 +743,16 @@ function waitForUserAuth() {
 async function getCurrentUserData() {
     const user = await waitForUserAuth();
     if (!user) throw new Error("No user signed in");
+    const userId = user.uid;
     try {
-        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
         const userSnap = await (0, _firestore.getDoc)(userRef);
         if (userSnap.exists()) {
             const data = {
                 id: userSnap.id,
                 ...userSnap.data()
             };
-            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
             const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
             const transactions = transactionsSnap.docs.map((doc)=>doc.data());
             const currentUser = {
@@ -764,8 +766,6 @@ async function getCurrentUserData() {
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
             state.userTransactionsRef = transactionsRef;
-        // state.dataFetched = true;
-        // return currentUser;
         }
         state.userRef = userRef;
     } catch (error) {
@@ -852,6 +852,17 @@ async function sendMoney(amount, recipientAccountNumber) {
             type: "deposit"
         });
     } else console.log("recipient could not be found");
+}
+// listen to balance changes
+let unsubscribeBalance = null;
+function listenToBalance(userId, handleBalanceChange) {
+    const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
+    // unsubscribeBalance?.();
+    unsubscribeBalance = (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
+        const newBalance = docSnap.data().balance;
+        state.user.balance = newBalance;
+        handleBalanceChange(newBalance);
+    });
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
