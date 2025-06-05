@@ -21,7 +21,7 @@ export const state = {
   userTransactionsRef: null,
 };
 
-// Creating New Banca user Data
+// creating New Banca user Data
 export async function createUserData(user, fullName, email) {
   // banca account number for new user
   const accountNumber = generateAccountNum();
@@ -44,7 +44,7 @@ export async function createUserData(user, fullName, email) {
   });
 }
 
-// Generating 10 Digit Banca Account Number
+// generating 10 Digit Banca Account Number
 function generateAccountNum() {
   const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
   return randomNumber;
@@ -83,7 +83,9 @@ export async function getCurrentUserData() {
       };
       const transactionsRef = collection(db, "users", userId, "transaction");
       const transactionsSnap = await getDocs(transactionsRef);
-      const transactions = transactionsSnap.docs.map((doc) => doc.data());
+      const transactions = transactionsSnap.docs
+        .map((doc) => doc.data())
+        .sort((a, b) => new Date(b.date) - new Date(a.date));
       const currentUser = {
         data,
         transactions,
@@ -162,12 +164,16 @@ async function sendMoney(amount, recipientAccountNumber) {
   const { recipientData, recipientRef, recipientTransactionsRef } =
     await getRecipientData(recipientAccountNumber);
   // update sender database
-  if (user.balance >= amount) {
+  if (
+    user.balance >= amount &&
+    Number(recipientAccountNumber) !== Number(user.accountNumber)
+  ) {
     // debit banca user
     const balance = user.balance - amount;
     await updateDoc(userRef, {
       balance: balance,
     });
+
     // update sender transaction ref
     const recieverName = recipientData.fullName;
     addDoc(userTransactionsRef, {
@@ -177,13 +183,13 @@ async function sendMoney(amount, recipientAccountNumber) {
       type: "withdrawal",
     });
   } else {
-    console.log("something went wrong");
+    throw new Error("something went wrong");
   }
 
   // update recipient database
   if (recipientData) {
     // credit banca user
-    const balance = user.balance + amount;
+    const balance = recipientData.balance + amount;
     await updateDoc(recipientRef, {
       balance: balance,
     });
@@ -195,17 +201,28 @@ async function sendMoney(amount, recipientAccountNumber) {
       type: "deposit",
     });
   } else {
-    console.log("recipient could not be found");
+    throw new Error("recipient could not be found");
   }
 }
 // listen to balance changes
-let unsubscribeBalance = null;
 export function listenToBalance(userId, handleBalanceChange) {
   const userRef = doc(db, "users", userId);
-  // unsubscribeBalance?.();
-  unsubscribeBalance = onSnapshot(userRef, (docSnap) => {
+  onSnapshot(userRef, (docSnap) => {
     const newBalance = docSnap.data().balance;
     state.user.balance = newBalance;
     handleBalanceChange(newBalance);
+  });
+}
+// listen to transaction changes
+export function listenToTransaction(userId, handleTransactionChange) {
+  const transactionRef = collection(db, "users", userId, "transaction");
+  onSnapshot(transactionRef, (querySnapshot) => {
+    const newTransaction = querySnapshot.docs
+      .map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+    handleTransactionChange(newTransaction);
   });
 }

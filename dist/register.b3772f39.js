@@ -677,19 +677,49 @@ form.addEventListener("submit", async (e)=>{
             (0, _common.toast).hide();
         });
     });
-});
+}); // <div class="transaction__history__item">
+ // <div class="u-flex u-gap-small u-flex-v-center">
+ //   <figure class="user-picture">
+ //     <img src=${userAvatar} alt="user-picture" />
+ //   </figure>
+ //   <div class="transaction-details">
+ //     <p>Idris Saidu</p>
+ //     <p class="transaction-details__date">Aug 8,2024-02:26</p>
+ //   </div>
+ // </div>
+ // <div>
+ //   <p class="debit">₦<span>700</span></p>
+ // </div>
+ // </div>
+ // <div class="transaction__history__item">
+ // <div class="u-flex u-gap-small u-flex-v-center">
+ //   <figure class="user-picture">
+ //     <img src=${userAvatar}  alt="user-picture" />
+ //   </figure>
+ //   <div class="transaction-details">
+ //     <p>Idris Saidu</p>
+ //     <p class="transaction-details__date">Aug 8,2024-02:26</p>
+ //   </div>
+ // </div>
+ // <div>
+ //   <p class="credit">₦<span>700</span></p>
+ // </div>
+ // </div>
 
 },{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
-// Creating New Banca user Data
+// creating New Banca user Data
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
 // get user data from firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
 parcelHelpers.export(exports, "transfer", ()=>transfer);
+// listen to balance changes
 parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
+// listen to transaction changes
+parcelHelpers.export(exports, "listenToTransaction", ()=>listenToTransaction);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -719,7 +749,7 @@ async function createUserData(user, fullName, email) {
         timestamp: (0, _firestore.serverTimestamp)()
     });
 }
-// Generating 10 Digit Banca Account Number
+// generating 10 Digit Banca Account Number
 function generateAccountNum() {
     const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
     return randomNumber;
@@ -754,7 +784,7 @@ async function getCurrentUserData() {
             };
             const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
             const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
-            const transactions = transactionsSnap.docs.map((doc)=>doc.data());
+            const transactions = transactionsSnap.docs.map((doc)=>doc.data()).sort((a, b)=>new Date(b.date) - new Date(a.date));
             const currentUser = {
                 data,
                 transactions
@@ -822,7 +852,7 @@ async function sendMoney(amount, recipientAccountNumber) {
     const { userTransactionsRef } = state;
     const { recipientData, recipientRef, recipientTransactionsRef } = await getRecipientData(recipientAccountNumber);
     // update sender database
-    if (user.balance >= amount) {
+    if (user.balance >= amount && Number(recipientAccountNumber) !== Number(user.accountNumber)) {
         // debit banca user
         const balance = user.balance - amount;
         await (0, _firestore.updateDoc)(userRef, {
@@ -836,11 +866,11 @@ async function sendMoney(amount, recipientAccountNumber) {
             date: new Date().toISOString(),
             type: "withdrawal"
         });
-    } else console.log("something went wrong");
+    } else throw new Error("something went wrong");
     // update recipient database
     if (recipientData) {
         // credit banca user
-        const balance = user.balance + amount;
+        const balance = recipientData.balance + amount;
         await (0, _firestore.updateDoc)(recipientRef, {
             balance: balance
         });
@@ -851,17 +881,24 @@ async function sendMoney(amount, recipientAccountNumber) {
             date: new Date().toISOString(),
             type: "deposit"
         });
-    } else console.log("recipient could not be found");
+    } else throw new Error("recipient could not be found");
 }
-// listen to balance changes
-let unsubscribeBalance = null;
 function listenToBalance(userId, handleBalanceChange) {
     const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
-    // unsubscribeBalance?.();
-    unsubscribeBalance = (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
+    (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
         const newBalance = docSnap.data().balance;
         state.user.balance = newBalance;
         handleBalanceChange(newBalance);
+    });
+}
+function listenToTransaction(userId, handleTransactionChange) {
+    const transactionRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
+    (0, _firestore.onSnapshot)(transactionRef, (querySnapshot)=>{
+        const newTransaction = querySnapshot.docs.map((doc)=>({
+                id: doc.id,
+                ...doc.data()
+            })).sort((a, b)=>new Date(b.date) - new Date(a.date));
+        handleTransactionChange(newTransaction);
     });
 }
 

@@ -9,9 +9,10 @@ async function controlDashboard() {
     // get userdata from database
     await model.getCurrentUserData();
     // render dashboard data
-    // model.state.transactionsAmount.push(100);
     dashboardView.render(model.state);
-
+    // Listen to RealTime Changes
+    model.listenToBalance(model.state.user.id, controlUpdateBalance);
+    model.listenToTransaction(model.state.user.id, controlUpdateTransaction);
     // await model.sendMoney();
     // dashboardView.showSendMoneyAmount();
     // control funding
@@ -24,7 +25,6 @@ async function controlDashboard() {
 
 async function controlSendMoney(transfer) {
   transferStatus = await model.transfer(transfer);
-  model.listenToBalance(model.state.user.id, controlUpdateBalance);
   return transferStatus;
 }
 
@@ -32,6 +32,9 @@ function controlUpdateBalance(newBalance) {
   dashboardView.updateBalance(newBalance);
 }
 
+function controlUpdateTransaction(newTransaction) {
+  dashboardView.updateTransaction(newTransaction);
+}
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
 //   let viewTarget;
