@@ -616,8 +616,8 @@ async function controlSendMoney(transfer) {
 function controlUpdateBalance(newBalance) {
     (0, _dashboardViewJsDefault.default).updateBalance(newBalance);
 }
-function controlUpdateTransaction(newTransaction) {
-    (0, _dashboardViewJsDefault.default).updateTransaction(newTransaction);
+function controlUpdateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
+    (0, _dashboardViewJsDefault.default).updateTransaction(newTransaction, newTotalIncome, newTotalExpense);
 }
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
@@ -677,6 +677,8 @@ const state = {
     user: {},
     transactions: [],
     transactionsAmount: [],
+    totalIncome: null,
+    totalExpense: null,
     userRef: null,
     userTransactionsRef: null
 };
@@ -745,6 +747,8 @@ async function getCurrentUserData() {
                 ...transactions
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+            state.totalIncome = calculateTotalIncome(state.transactionsAmount);
+            state.totalExpense = calculateTotalExpense(state.transactionsAmount);
             state.userTransactionsRef = transactionsRef;
         }
         state.userRef = userRef;
@@ -833,6 +837,13 @@ async function sendMoney(amount, recipientAccountNumber) {
         });
     } else throw new Error("recipient could not be found");
 }
+// calculate total transaction income and expenses
+function calculateTotalIncome(transactionList) {
+    return transactionList.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+}
+function calculateTotalExpense(transactionList) {
+    return transactionList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
+}
 function listenToBalance(userId, handleBalanceChange) {
     const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
     (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
@@ -848,7 +859,10 @@ function listenToTransaction(userId, handleTransactionChange) {
                 id: doc.id,
                 ...doc.data()
             })).sort((a, b)=>new Date(b.date) - new Date(a.date));
-        handleTransactionChange(newTransaction);
+        const newTransactionAmount = newTransaction.map((transaction)=>transaction.amount);
+        const newTotalIncome = calculateTotalIncome(newTransactionAmount);
+        const newTotalExpense = calculateTotalExpense(newTransactionAmount);
+        handleTransactionChange(newTransaction, newTotalIncome, newTotalExpense);
     });
 }
 
@@ -924,9 +938,6 @@ class DashboardView extends (0, _viewJsDefault.default) {
         });
     }
     _generateMarkup() {
-        const transactionsAmountList = this.data.transactionsAmount;
-        const totalIncome = transactionsAmountList.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
-        const totalExpense = transactionsAmountList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
         return `
         <div class="header-nav">
           <div class="header-nav__left">
@@ -983,12 +994,12 @@ class DashboardView extends (0, _viewJsDefault.default) {
               <div class="account-stats">
                 <div>
                   <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span>${totalIncome}</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this.data.totalIncome}</span></p>
                 </div>
                 <div>
                   <p>Expense</p>
                   <p>
-                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span>${Math.abs(totalExpense)}
+                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${Math.abs(this.data.totalExpense)}</span>
                   </p>
                 </div>
               </div>
@@ -999,7 +1010,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
           </div>
          <div class="transaction">
         
-          ${transactionsAmountList.length === 0 ? `
+          ${this.data.transactions.length === 0 ? `
               <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
          >
@@ -1095,7 +1106,11 @@ class DashboardView extends (0, _viewJsDefault.default) {
     updateBalance(newBalance) {
         document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
     }
-    updateTransaction(newTransaction) {
+    updateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
+        // update dashbaord transaction statistics
+        document.querySelector(".total-income").textContent = newTotalIncome;
+        document.querySelector(".total-expense").textContent = Math.abs(newTotalExpense);
+        //  update transaction list
         const transactionContainer = document.querySelector(".transaction__history");
         // clear transaction container
         transactionContainer.innerHTML = `
