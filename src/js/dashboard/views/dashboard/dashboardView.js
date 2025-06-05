@@ -5,15 +5,10 @@ import emptyTransaction from "../../../../img/SVG/empty-transaction.svg";
 import { toast, loadingSpinner, clearLoadingSpinner } from "../../../common.js";
 
 class DashboardView extends View {
-  _transactions;
-  _totalIncome;
-  _totalExpense;
   _parentElement = document.querySelector(".dashboard-main");
-
   _addEventHandler() {
     this._addHandlerShowAmount();
   }
-
   addHandlerSendMoney(handler) {
     this._parentElement.addEventListener("click", async (e) => {
       const sendMoneyBtn = e.target.closest(".send-money-button");
@@ -34,13 +29,20 @@ class DashboardView extends View {
       }
       // get transfer status from model
       const transferStatus = await handler({ recipientAccountNumber, amount });
-      toast.success(transferStatus);
+      if (transferStatus === "transfer successful!")
+        toast.success(transferStatus);
       // clear form
       this.clearForm([accountNumberInput, transferAmountInput]);
-      // reset toal amount to default
+      // reset total amount to default
       const totalAmount = document.querySelector(".send-total-amount");
       totalAmount.textContent = "";
       // reset spinner to default
+      setTimeout(() => {
+        clearLoadingSpinner(sendMoneyBtn, "Send Money");
+      }, 6000);
+      // hide toast
+      toast.hide();
+      if (transferStatus === "transfer failed") toast.error(transferStatus);
       setTimeout(() => {
         clearLoadingSpinner(sendMoneyBtn, "Send Money");
       }, 6000);
@@ -53,16 +55,15 @@ class DashboardView extends View {
     const sendAmountField = document.querySelector(".send-amount-input");
     sendAmountField.addEventListener("input", (e) => {
       e.preventDefault();
-      console.log(e.target.value);
       totalAmount.textContent = Number(e.target.value);
     });
   }
   _generateMarkup() {
-    const transactions = this._data.transactionsAmount;
-    const totalIncome = transactions
+    const transactionsAmountList = this.data.transactionsAmount;
+    const totalIncome = transactionsAmountList
       .filter((amount) => amount > 0)
       .reduce((acc, amount) => acc + amount, 0);
-    const totalExpense = transactions
+    const totalExpense = transactionsAmountList
       .filter((amount) => amount < 0)
       .reduce((acc, amount) => acc + amount, 0);
     return `
@@ -71,7 +72,7 @@ class DashboardView extends View {
             <div class="customer-welcome">
               <p>
                 Welcome Back<span class="customer-welcome__name"
-                  >${this._data.user.userName}</span
+                  >${this.data.user.userName}</span
                 >
               </p>
               <figure class="user-picture--welcome">
@@ -83,7 +84,9 @@ class DashboardView extends View {
             <div class="header-icons">
               <div class="u-flex u-flex-v-center u-gap-small">
                 <ion-icon name="wallet"></ion-icon>
-                <p>₦<span>${this._data.user.balance}</span></p>
+                <p>₦<span class="banca-user-balance">${
+                  this.data.user.balance
+                }</span></p>
               </div>
               <ion-icon name="sunny"></ion-icon>
 
@@ -110,12 +113,12 @@ class DashboardView extends View {
               <div class="account-info">
                 <div>
                   <p>Account Name</p>
-                  <p class="account-info__name">${this._data.user.fullName}</p>
+                  <p class="account-info__name">${this.data.user.fullName}</p>
                 </div>
                 <div>
                   <p>Account Number</p>
                   <p class="account-info__number">${
-                    this._data.user.accountNumber
+                    this.data.user.accountNumber
                   }</p>
                 </div>
               </div>
@@ -142,7 +145,7 @@ class DashboardView extends View {
          <div class="transaction">
         
           ${
-            transactions.length <= 1
+            transactionsAmountList.length === 0
               ? `
               <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
@@ -170,51 +173,61 @@ class DashboardView extends View {
                 <span>Transactions</span>
                 <a href="">View all</a>
               </div>
-
-              <div class="transaction__history__item">
-                <div class="u-flex u-gap-small u-flex-v-center">
-                  <figure class="user-picture">
-                    <img src=${userAvatar}  alt="user-picture" />
-                  </figure>
-                  <div class="transaction-details">
-                    <p>Idris Saidu</p>
-                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
-                  </div>
-                </div>
-                <div>
-                  <p class="credit">₦<span class="credit">700</span></p>
-                </div>
-              </div>
-
-              <div class="transaction__history__item">
+             ${this.transactionList
+               .slice(0, 3)
+               .map((transaction) => {
+                 if (transaction.type === "deposit") {
+                   return `
+                <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
                     <img src=${userAvatar} alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
-                    <p>Idris Saidu</p>
-                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                    <p>${transaction.senderName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(
+                      transaction.date
+                    ).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}</p>
                   </div>
                 </div>
                 <div>
-                  <p class="debit">₦<span>700</span></p>
+                  <p class="credit">₦<span>${transaction.amount}</span></p>
                 </div>
               </div>
-
-              <div class="transaction__history__item">
+              `;
+                 }
+                 if (transaction.type === "withdrawal") {
+                   return `
+                 <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src=${userAvatar}  alt="user-picture" />
+                    <img src=${userAvatar} alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
-                    <p>Idris Saidu</p>
-                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                    <p>${transaction.recieverName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(
+                      transaction.date
+                    ).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}</p>
                   </div>
                 </div>
                 <div>
-                  <p class="credit">₦<span>700</span></p>
+                  <p class="debit">₦<span>${Math.abs(
+                    Number(transaction.amount)
+                  )}</span></p>
                 </div>
               </div>
+              `;
+                 }
+               })
+               .join("")}
             </div>`
           }
             <div
@@ -240,6 +253,79 @@ class DashboardView extends View {
     
      
      `;
+  }
+  updateBalance(newBalance) {
+    document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
+  }
+  updateTransaction(newTransaction) {
+    const transactionContainer = document.querySelector(
+      ".transaction__history"
+    );
+    // clear transaction container
+    transactionContainer.innerHTML = `
+    <div class="transaction__history__heading">
+                <span>Transactions</span>
+                <a href="">View all</a>
+       </div>
+    `;
+    // Generate Transaction Markup
+    const newTransactionHtml = newTransaction
+      .slice(0, 3)
+      .map((transaction) => {
+        if (transaction.type === "deposit") {
+          return `
+                <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src=${userAvatar} alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>${transaction.senderName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(
+                      transaction.date
+                    ).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="credit">₦<span>${transaction.amount}</span></p>
+                </div>
+              </div>
+              `;
+        }
+        if (transaction.type === "withdrawal") {
+          return `
+                 <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src=${userAvatar} alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>${transaction.recieverName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(
+                      transaction.date
+                    ).toLocaleString("en-US", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })}</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="debit">₦<span>${Math.abs(
+                    Number(transaction.amount)
+                  )}</span></p>
+                </div>
+              </div>
+              `;
+        }
+      })
+      .join("");
+
+    transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
   }
 }
 

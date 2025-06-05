@@ -594,11 +594,12 @@ async function controlDashboard() {
         // render spinner
         (0, _dashboardViewJsDefault.default).renderSpinner();
         // get userdata from database
-        const currentUser = await _modelJs.getCurrentUserData();
+        await _modelJs.getCurrentUserData();
         // render dashboard data
-        _modelJs.state.transactionsAmount.push(100);
         (0, _dashboardViewJsDefault.default).render(_modelJs.state);
-    // Send Money to Another Banca User
+        // Listen to RealTime Changes
+        _modelJs.listenToBalance(_modelJs.state.user.id, controlUpdateBalance);
+        _modelJs.listenToTransaction(_modelJs.state.user.id, controlUpdateTransaction);
     // await model.sendMoney();
     // dashboardView.showSendMoneyAmount();
     // control funding
@@ -609,7 +610,14 @@ async function controlDashboard() {
     }
 }
 async function controlSendMoney(transfer) {
-    return transferStatus = await _modelJs.sendMoney(transfer);
+    transferStatus = await _modelJs.transfer(transfer);
+    return transferStatus;
+}
+function controlUpdateBalance(newBalance) {
+    (0, _dashboardViewJsDefault.default).updateBalance(newBalance);
+}
+function controlUpdateTransaction(newTransaction) {
+    (0, _dashboardViewJsDefault.default).updateTransaction(newTransaction);
 }
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
@@ -639,6 +647,7 @@ async function controlSendMoney(transfer) {
 // };
 const init = function() {
     controlDashboard();
+    // Send Money to Another Banca User
     (0, _dashboardViewJsDefault.default).addHandlerSendMoney(controlSendMoney);
 // dashboardView.addHandlerShowAmount();
 // transactionView.addHandlerUpdateView(controlTransaction);
@@ -651,12 +660,16 @@ init();
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
-// Creating New Banca user Data
+// creating New Banca user Data
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
-// Get User Data From Firebase
+// get user data from firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
-parcelHelpers.export(exports, "sendMoney", ()=>sendMoney);
+parcelHelpers.export(exports, "transfer", ()=>transfer);
+// listen to balance changes
+parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
+// listen to transaction changes
+parcelHelpers.export(exports, "listenToTransaction", ()=>listenToTransaction);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -664,7 +677,8 @@ const state = {
     user: {},
     transactions: [],
     transactionsAmount: [],
-    dataFetched: false
+    userRef: null,
+    userTransactionsRef: null
 };
 async function createUserData(user, fullName, email) {
     // banca account number for new user
@@ -685,12 +699,12 @@ async function createUserData(user, fullName, email) {
         timestamp: (0, _firestore.serverTimestamp)()
     });
 }
-// Generating 10 Digit Banca Account Number
+// generating 10 Digit Banca Account Number
 function generateAccountNum() {
     const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
     return randomNumber;
 }
-// Generate UserName
+// generate username
 function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
@@ -708,26 +722,19 @@ function waitForUserAuth() {
 }
 async function getCurrentUserData() {
     const user = await waitForUserAuth();
-    // Don't fetch again if we already have data
-    // if (state.dataFetched && state.user.id === user?.uid) {
-    //   return {
-    //     data: state.user,
-    //     transactions: state.transactions,
-    //   };
-    // }
-    // No signed-in user
     if (!user) throw new Error("No user signed in");
+    const userId = user.uid;
     try {
-        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", user.uid);
+        const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
         const userSnap = await (0, _firestore.getDoc)(userRef);
         if (userSnap.exists()) {
             const data = {
                 id: userSnap.id,
                 ...userSnap.data()
             };
-            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction");
+            const transactionsRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
             const transactionsSnap = await (0, _firestore.getDocs)(transactionsRef);
-            const transactions = transactionsSnap.docs.map((doc)=>doc.data());
+            const transactions = transactionsSnap.docs.map((doc)=>doc.data()).sort((a, b)=>new Date(b.date) - new Date(a.date));
             const currentUser = {
                 data,
                 transactions
@@ -738,53 +745,111 @@ async function getCurrentUserData() {
                 ...transactions
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
-        // state.dataFetched = true;
-        // return currentUser;
+            state.userTransactionsRef = transactionsRef;
         }
+        state.userRef = userRef;
     } catch (error) {
         console.error(error.message);
     }
 }
-async function sendMoney(transfer) {
-    try {
-        const { recipientAccountNumber, amount } = transfer;
-        const usersRef = (0, _firestore.collection)((0, _firebase.db), "users");
-        const getRecipientDetails = (0, _firestore.query)(usersRef, (0, _firestore.where)("accountNumber", "==", recipientAccountNumber));
-        const querySnapshot = await (0, _firestore.getDocs)(getRecipientDetails);
-        if (querySnapshot.empty) {
-            console.log("No user found with this account number.");
-            return null;
-        }
+// get reciepient details from firebase
+async function getRecipientData(recipientAccountNumber) {
+    // get all banca users
+    const usersRef = (0, _firestore.collection)((0, _firebase.db), "users");
+    // query banca user based on account number
+    const recipientDataQuery = (0, _firestore.query)(usersRef, (0, _firestore.where)("accountNumber", "==", recipientAccountNumber));
+    // get query docs
+    const docSnapshot = await (0, _firestore.getDocs)(recipientDataQuery);
+    if (!docSnapshot.empty) {
         // Get the matched reciepientUser
-        const userDoc = querySnapshot.docs[0];
-        const userId = userDoc.id;
-        const recipientDetails = {
-            id: userId,
-            ...userDoc.data()
+        const recipientId = docSnapshot.docs[0].id;
+        const recipientData = {
+            id: recipientId,
+            ...docSnapshot.docs[0].data()
         };
+        const recipientRef = (0, _firestore.doc)((0, _firebase.db), "users", recipientId);
         // Now get transactions from subcollection
-        const transactionsRef = (0, _firestore.collection)((0, _firebase.db), `users/${userId}/transaction`);
-        const transactionsSnapshot = await (0, _firestore.getDocs)(transactionsRef);
-        const transactions = transactionsSnapshot.docs.map((doc)=>({
+        const recipientTransactionsRef = (0, _firestore.collection)((0, _firebase.db), `users/${recipientId}/transaction`);
+        // get transaction query
+        const transactionSnapShot = await (0, _firestore.getDocs)(recipientTransactionsRef);
+        const recipientTransactionsData = transactionSnapShot.docs.map((doc)=>({
                 id: doc.id,
                 ...doc.data()
             }));
-        // calculate recipient new balance
-        const newBalance = recipientDetails.balance + amount;
-        console.log(newBalance);
-        console.log(amount);
-        console.log(recipientDetails, transactions);
-        // update banca reciever balance
-        const recienpientRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
-        await (0, _firestore.updateDoc)(recienpientRef, {
-            balance: newBalance
-        });
-        console.log("update sucessful");
-        return "transfer sucessful!";
+        return {
+            recipientId,
+            recipientData,
+            recipientRef,
+            recipientTransactionsRef,
+            recipientTransactionsData
+        };
+    } else throw new Error("recipient not found");
+}
+async function transfer(transfer) {
+    try {
+        const { recipientAccountNumber, amount } = transfer;
+        await sendMoney(amount, recipientAccountNumber);
+        return "transfer successful!";
     } catch (error) {
-        console.error("Error updating document", error);
+        console.log(error, error.message);
         return "transfer failed";
     }
+}
+// send/recive money in banca
+async function sendMoney(amount, recipientAccountNumber) {
+    const senderName = state.user.fullName;
+    const { user, userRef } = state;
+    const { userTransactionsRef } = state;
+    const { recipientData, recipientRef, recipientTransactionsRef } = await getRecipientData(recipientAccountNumber);
+    // update sender database
+    if (user.balance >= amount && Number(recipientAccountNumber) !== Number(user.accountNumber)) {
+        // debit banca user
+        const balance = user.balance - amount;
+        await (0, _firestore.updateDoc)(userRef, {
+            balance: balance
+        });
+        // update sender transaction ref
+        const recieverName = recipientData.fullName;
+        (0, _firestore.addDoc)(userTransactionsRef, {
+            recieverName,
+            amount: -amount,
+            date: new Date().toISOString(),
+            type: "withdrawal"
+        });
+    } else throw new Error("something went wrong");
+    // update recipient database
+    if (recipientData) {
+        // credit banca user
+        const balance = recipientData.balance + amount;
+        await (0, _firestore.updateDoc)(recipientRef, {
+            balance: balance
+        });
+        // update recipient transactions list
+        await (0, _firestore.addDoc)(recipientTransactionsRef, {
+            senderName,
+            amount,
+            date: new Date().toISOString(),
+            type: "deposit"
+        });
+    } else throw new Error("recipient could not be found");
+}
+function listenToBalance(userId, handleBalanceChange) {
+    const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
+    (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
+        const newBalance = docSnap.data().balance;
+        state.user.balance = newBalance;
+        handleBalanceChange(newBalance);
+    });
+}
+function listenToTransaction(userId, handleTransactionChange) {
+    const transactionRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
+    (0, _firestore.onSnapshot)(transactionRef, (querySnapshot)=>{
+        const newTransaction = querySnapshot.docs.map((doc)=>({
+                id: doc.id,
+                ...doc.data()
+            })).sort((a, b)=>new Date(b.date) - new Date(a.date));
+        handleTransactionChange(newTransaction);
+    });
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
@@ -800,9 +865,6 @@ var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
 var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
 var _commonJs = require("../../../common.js");
 class DashboardView extends (0, _viewJsDefault.default) {
-    _transactions;
-    _totalIncome;
-    _totalExpense;
     _parentElement = document.querySelector(".dashboard-main");
     _addEventHandler() {
         this._addHandlerShowAmount();
@@ -830,16 +892,22 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 recipientAccountNumber,
                 amount
             });
-            (0, _commonJs.toast).success(transferStatus);
+            if (transferStatus === "transfer successful!") (0, _commonJs.toast).success(transferStatus);
             // clear form
             this.clearForm([
                 accountNumberInput,
                 transferAmountInput
             ]);
-            // reset toal amount to default
+            // reset total amount to default
             const totalAmount = document.querySelector(".send-total-amount");
             totalAmount.textContent = "";
             // reset spinner to default
+            setTimeout(()=>{
+                (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
+            }, 6000);
+            // hide toast
+            (0, _commonJs.toast).hide();
+            if (transferStatus === "transfer failed") (0, _commonJs.toast).error(transferStatus);
             setTimeout(()=>{
                 (0, _commonJs.clearLoadingSpinner)(sendMoneyBtn, "Send Money");
             }, 6000);
@@ -852,21 +920,20 @@ class DashboardView extends (0, _viewJsDefault.default) {
         const sendAmountField = document.querySelector(".send-amount-input");
         sendAmountField.addEventListener("input", (e)=>{
             e.preventDefault();
-            console.log(e.target.value);
             totalAmount.textContent = Number(e.target.value);
         });
     }
     _generateMarkup() {
-        const transactions = this._data.transactionsAmount;
-        const totalIncome = transactions.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
-        const totalExpense = transactions.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
+        const transactionsAmountList = this.data.transactionsAmount;
+        const totalIncome = transactionsAmountList.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+        const totalExpense = transactionsAmountList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
         return `
         <div class="header-nav">
           <div class="header-nav__left">
             <div class="customer-welcome">
               <p>
                 Welcome Back<span class="customer-welcome__name"
-                  >${this._data.user.userName}</span
+                  >${this.data.user.userName}</span
                 >
               </p>
               <figure class="user-picture--welcome">
@@ -878,7 +945,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
             <div class="header-icons">
               <div class="u-flex u-flex-v-center u-gap-small">
                 <ion-icon name="wallet"></ion-icon>
-                <p>\u{20A6}<span>${this._data.user.balance}</span></p>
+                <p>\u{20A6}<span class="banca-user-balance">${this.data.user.balance}</span></p>
               </div>
               <ion-icon name="sunny"></ion-icon>
 
@@ -905,11 +972,11 @@ class DashboardView extends (0, _viewJsDefault.default) {
               <div class="account-info">
                 <div>
                   <p>Account Name</p>
-                  <p class="account-info__name">${this._data.user.fullName}</p>
+                  <p class="account-info__name">${this.data.user.fullName}</p>
                 </div>
                 <div>
                   <p>Account Number</p>
-                  <p class="account-info__number">${this._data.user.accountNumber}</p>
+                  <p class="account-info__number">${this.data.user.accountNumber}</p>
                 </div>
               </div>
 
@@ -932,7 +999,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
           </div>
          <div class="transaction">
         
-          ${transactions.length <= 1 ? `
+          ${transactionsAmountList.length === 0 ? `
               <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
          >
@@ -958,51 +1025,48 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 <span>Transactions</span>
                 <a href="">View all</a>
               </div>
-
-              <div class="transaction__history__item">
-                <div class="u-flex u-gap-small u-flex-v-center">
-                  <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default}  alt="user-picture" />
-                  </figure>
-                  <div class="transaction-details">
-                    <p>Idris Saidu</p>
-                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
-                  </div>
-                </div>
-                <div>
-                  <p class="credit">\u{20A6}<span class="credit">700</span></p>
-                </div>
-              </div>
-
-              <div class="transaction__history__item">
+             ${this.transactionList.slice(0, 3).map((transaction)=>{
+            if (transaction.type === "deposit") return `
+                <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
                     <img src=${0, _userSvgDefault.default} alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
-                    <p>Idris Saidu</p>
-                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                    <p>${transaction.senderName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            })}</p>
                   </div>
                 </div>
                 <div>
-                  <p class="debit">\u{20A6}<span>700</span></p>
+                  <p class="credit">\u{20A6}<span>${transaction.amount}</span></p>
                 </div>
               </div>
-
-              <div class="transaction__history__item">
+              `;
+            if (transaction.type === "withdrawal") return `
+                 <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default}  alt="user-picture" />
+                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
-                    <p>Idris Saidu</p>
-                    <p class="transaction-details__date">Aug 8,2024-02:26</p>
+                    <p>${transaction.recieverName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            })}</p>
                   </div>
                 </div>
                 <div>
-                  <p class="credit">\u{20A6}<span>700</span></p>
+                  <p class="debit">\u{20A6}<span>${Math.abs(Number(transaction.amount))}</span></p>
                 </div>
               </div>
+              `;
+        }).join("")}
             </div>`}
             <div
               class="transaction__history__send-money container-dashboard container-dashboard--shadow"
@@ -1028,6 +1092,63 @@ class DashboardView extends (0, _viewJsDefault.default) {
      
      `;
     }
+    updateBalance(newBalance) {
+        document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
+    }
+    updateTransaction(newTransaction) {
+        const transactionContainer = document.querySelector(".transaction__history");
+        // clear transaction container
+        transactionContainer.innerHTML = `
+    <div class="transaction__history__heading">
+                <span>Transactions</span>
+                <a href="">View all</a>
+       </div>
+    `;
+        // Generate Transaction Markup
+        const newTransactionHtml = newTransaction.slice(0, 3).map((transaction)=>{
+            if (transaction.type === "deposit") return `
+                <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>${transaction.senderName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            })}</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="credit">\u{20A6}<span>${transaction.amount}</span></p>
+                </div>
+              </div>
+              `;
+            if (transaction.type === "withdrawal") return `
+                 <div class="transaction__history__item">
+                <div class="u-flex u-gap-small u-flex-v-center">
+                  <figure class="user-picture">
+                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
+                  </figure>
+                  <div class="transaction-details">
+                    <p>${transaction.recieverName}
+                    </p>
+                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            })}</p>
+                  </div>
+                </div>
+                <div>
+                  <p class="debit">\u{20A6}<span>${Math.abs(Number(transaction.amount))}</span></p>
+                </div>
+              </div>
+              `;
+        }).join("");
+        transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
+    }
 }
 exports.default = new DashboardView();
 
@@ -1035,9 +1156,11 @@ exports.default = new DashboardView();
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class View {
-    _data;
+    data;
+    transactionList;
     render(data) {
-        this._data = data;
+        this.data = data;
+        this.transactionList = this.data.transactions;
         const markup = this._generateMarkup();
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
@@ -1053,11 +1176,6 @@ class View {
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
     _addEventHandler() {}
-    // update() {
-    //   const markup = this._generateMarkup();
-    //   this._clear();
-    //   this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    // }
     _clear() {
         this._parentElement.innerHTML = "";
     }

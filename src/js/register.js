@@ -107,3 +107,33 @@ form.addEventListener("submit", async (e) => {
       });
   });
 });
+
+// <div class="transaction__history__item">
+// <div class="u-flex u-gap-small u-flex-v-center">
+//   <figure class="user-picture">
+//     <img src=${userAvatar} alt="user-picture" />
+//   </figure>
+//   <div class="transaction-details">
+//     <p>Idris Saidu</p>
+//     <p class="transaction-details__date">Aug 8,2024-02:26</p>
+//   </div>
+// </div>
+// <div>
+//   <p class="debit">₦<span>700</span></p>
+// </div>
+// </div>
+
+// <div class="transaction__history__item">
+// <div class="u-flex u-gap-small u-flex-v-center">
+//   <figure class="user-picture">
+//     <img src=${userAvatar}  alt="user-picture" />
+//   </figure>
+//   <div class="transaction-details">
+//     <p>Idris Saidu</p>
+//     <p class="transaction-details__date">Aug 8,2024-02:26</p>
+//   </div>
+// </div>
+// <div>
+//   <p class="credit">₦<span>700</span></p>
+// </div>
+// </div>
