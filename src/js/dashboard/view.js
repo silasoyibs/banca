@@ -1,7 +1,9 @@
 export default class View {
-  _data;
+  data;
+  transactionList;
   render(data) {
-    this._data = data;
+    this.data = data;
+    this.transactionList = this.data.transactions;
     const markup = this._generateMarkup();
     this._clear();
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
@@ -17,12 +19,6 @@ export default class View {
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
   _addEventHandler() {}
-
-  // update() {
-  //   const markup = this._generateMarkup();
-  //   this._clear();
-  //   this._parentElement.insertAdjacentHTML("afterbegin", markup);
-  // }
   _clear() {
     this._parentElement.innerHTML = "";
   }
