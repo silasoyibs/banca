@@ -727,6 +727,8 @@ const state = {
     user: {},
     transactions: [],
     transactionsAmount: [],
+    totalIncome: null,
+    totalExpense: null,
     userRef: null,
     userTransactionsRef: null
 };
@@ -795,6 +797,8 @@ async function getCurrentUserData() {
                 ...transactions
             ];
             state.transactionsAmount = state.transactions.map((transaction)=>transaction.amount);
+            state.totalIncome = calculateTotalIncome(state.transactionsAmount);
+            state.totalExpense = calculateTotalExpense(state.transactionsAmount);
             state.userTransactionsRef = transactionsRef;
         }
         state.userRef = userRef;
@@ -883,6 +887,13 @@ async function sendMoney(amount, recipientAccountNumber) {
         });
     } else throw new Error("recipient could not be found");
 }
+// calculate total transaction income and expenses
+function calculateTotalIncome(transactionList) {
+    return transactionList.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
+}
+function calculateTotalExpense(transactionList) {
+    return transactionList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
+}
 function listenToBalance(userId, handleBalanceChange) {
     const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
     (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
@@ -898,7 +909,10 @@ function listenToTransaction(userId, handleTransactionChange) {
                 id: doc.id,
                 ...doc.data()
             })).sort((a, b)=>new Date(b.date) - new Date(a.date));
-        handleTransactionChange(newTransaction);
+        const newTransactionAmount = newTransaction.map((transaction)=>transaction.amount);
+        const newTotalIncome = calculateTotalIncome(newTransactionAmount);
+        const newTotalExpense = calculateTotalExpense(newTransactionAmount);
+        handleTransactionChange(newTransaction, newTotalIncome, newTotalExpense);
     });
 }
 

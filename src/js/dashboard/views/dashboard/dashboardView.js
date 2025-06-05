@@ -59,13 +59,6 @@ class DashboardView extends View {
     });
   }
   _generateMarkup() {
-    const transactionsAmountList = this.data.transactionsAmount;
-    const totalIncome = transactionsAmountList
-      .filter((amount) => amount > 0)
-      .reduce((acc, amount) => acc + amount, 0);
-    const totalExpense = transactionsAmountList
-      .filter((amount) => amount < 0)
-      .reduce((acc, amount) => acc + amount, 0);
     return `
         <div class="header-nav">
           <div class="header-nav__left">
@@ -126,14 +119,16 @@ class DashboardView extends View {
               <div class="account-stats">
                 <div>
                   <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span>${totalIncome}</p>
+                  <p><ion-icon name="arrow-up"></ion-icon><span>₦</span><span class="total-income">${
+                    this.data.totalIncome
+                  }</span></p>
                 </div>
                 <div>
                   <p>Expense</p>
                   <p>
-                    <ion-icon name="arrow-down"></ion-icon><span>₦</span>${Math.abs(
-                      totalExpense
-                    )}
+                    <ion-icon name="arrow-down"></ion-icon><span>₦</span><span class="total-expense">${Math.abs(
+                      this.data.totalExpense
+                    )}</span>
                   </p>
                 </div>
               </div>
@@ -145,7 +140,7 @@ class DashboardView extends View {
          <div class="transaction">
         
           ${
-            transactionsAmountList.length === 0
+            this.data.transactions.length === 0
               ? `
               <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
@@ -257,7 +252,12 @@ class DashboardView extends View {
   updateBalance(newBalance) {
     document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
   }
-  updateTransaction(newTransaction) {
+  updateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
+    // update dashbaord transaction statistics
+    document.querySelector(".total-income").textContent = newTotalIncome;
+    document.querySelector(".total-expense").textContent =
+      Math.abs(newTotalExpense);
+    //  update transaction list
     const transactionContainer = document.querySelector(
       ".transaction__history"
     );
@@ -324,7 +324,6 @@ class DashboardView extends View {
         }
       })
       .join("");
-
     transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
   }
 }
