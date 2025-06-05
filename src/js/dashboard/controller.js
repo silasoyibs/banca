@@ -32,8 +32,16 @@ function controlUpdateBalance(newBalance) {
   dashboardView.updateBalance(newBalance);
 }
 
-function controlUpdateTransaction(newTransaction) {
-  dashboardView.updateTransaction(newTransaction);
+function controlUpdateTransaction(
+  newTransaction,
+  newTotalIncome,
+  newTotalExpense
+) {
+  dashboardView.updateTransaction(
+    newTransaction,
+    newTotalIncome,
+    newTotalExpense
+  );
 }
 // function controlDashboardView() {
 //   const navLinks = document.querySelectorAll(".nav__link");
