@@ -162,9 +162,7 @@ export async function transfer(transfer) {
 }
 // send/recive money in banca
 async function sendMoney(amount, recipientAccountNumber) {
-  const senderName = state.user.fullName;
-  const { user, userRef } = state;
-  const { userTransactionsRef } = state;
+  const { user, userRef, userTransactionsRef } = state;
   const { recipientData, recipientRef, recipientTransactionsRef } =
     await getRecipientData(recipientAccountNumber);
   // update sender database
@@ -179,9 +177,9 @@ async function sendMoney(amount, recipientAccountNumber) {
     });
 
     // update sender transaction ref
-    const recieverName = recipientData.fullName;
+    const name = recipientData.fullName;
     addDoc(userTransactionsRef, {
-      recieverName,
+      name,
       amount: -amount,
       date: new Date().toISOString(),
       type: "withdrawal",
@@ -192,18 +190,26 @@ async function sendMoney(amount, recipientAccountNumber) {
 
   // update recipient database
   if (recipientData) {
+    const name = state.user.fullName;
     // credit banca user
-    const balance = recipientData.balance + amount;
-    await updateDoc(recipientRef, {
-      balance: balance,
-    });
-    // update recipient transactions list
-    await addDoc(recipientTransactionsRef, {
-      senderName,
+    depositMoney(
+      recipientData,
+      recipientRef,
+      recipientTransactionsRef,
       amount,
-      date: new Date().toISOString(),
-      type: "deposit",
-    });
+      name
+    );
+    // const balance = recipientData.balance + amount;
+    // await updateDoc(recipientRef, {
+    //   balance: balance,
+    // });
+    // // update recipient transactions list
+    // await addDoc(recipientTransactionsRef, {
+    //   senderName,
+    //   amount,
+    //   date: new Date().toISOString(),
+    //   type: "deposit",
+    // });
   } else {
     throw new Error("recipient could not be found");
   }
@@ -220,7 +226,8 @@ function calculateTotalExpense(transactionList) {
     .reduce((acc, amount) => acc + amount, 0);
 }
 // listen to balance changes
-export function listenToBalance(userId, handleBalanceChange) {
+export function listenToBalance(handleBalanceChange) {
+  const userId = state.user.id;
   const userRef = doc(db, "users", userId);
   onSnapshot(userRef, (docSnap) => {
     const newBalance = docSnap.data().balance;
@@ -229,7 +236,8 @@ export function listenToBalance(userId, handleBalanceChange) {
   });
 }
 // listen to transaction changes
-export function listenToTransaction(userId, handleTransactionChange) {
+export function listenToTransaction(handleTransactionChange) {
+  const userId = state.user.id;
   const transactionRef = collection(db, "users", userId, "transaction");
   onSnapshot(transactionRef, (querySnapshot) => {
     const newTransaction = querySnapshot.docs
@@ -253,6 +261,8 @@ export function listenToTransaction(userId, handleTransactionChange) {
 
 // fund banca account
 export async function fundAccount(fundAmount) {
+  const { user, userRef, userTransactionsRef } = state;
+  const name = "Self Funding";
   try {
     const handler = PaystackPop.setup({
       key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f", // from Paystack dashboard
@@ -261,8 +271,11 @@ export async function fundAccount(fundAmount) {
       currency: "NGN",
       callback: function (response) {
         // verify the transaction here
-        console.log("Payment complete! Reference: " + response.reference);
+        "Payment complete! Reference: " + response.reference;
         // You can now call your backend to update wallet
+        console.log(user, userRef, userTransactionsRef, fundAmount, name);
+        depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
+        console.log("funding successful");
       },
       onClose: function () {
         alert("Transaction was not completed");
@@ -272,5 +285,24 @@ export async function fundAccount(fundAmount) {
     handler.openIframe();
   } catch (err) {
     console.log("funding went wrong", err);
+  }
+}
+
+async function depositMoney(user, userRef, transactionRef, amount, name) {
+  try {
+    // credit banca user
+    const balance = user.balance + amount;
+    await updateDoc(userRef, {
+      balance: balance,
+    });
+    // update transactions list
+    await addDoc(transactionRef, {
+      name,
+      amount,
+      date: new Date().toISOString(),
+      type: "deposit",
+    });
+  } catch (err) {
+    throw new Error("transaction not successful");
   }
 }

@@ -11,9 +11,8 @@ async function controlDashboard() {
     await model.getCurrentUserData();
     // render dashboard data
     dashboardView.render(model.state);
-    // Listen to RealTime Changes
-    model.listenToBalance(model.state.user.id, controlUpdateBalance);
-    model.listenToTransaction(model.state.user.id, controlUpdateTransaction);
+    // realtime listener
+    controlRealTimeListeners();
   } catch (err) {
     console.log(err);
   }
@@ -72,12 +71,19 @@ function controlDashboardView() {
   });
 }
 
+function controlRealTimeListeners() {
+  // Listen to RealTime Changes
+  model.listenToBalance(controlUpdateBalance);
+  model.listenToTransaction(controlUpdateTransaction);
+}
+
 const init = function () {
   controlDashboard();
   // Send Money to Another Banca User
   dashboardView.addHandlerSendMoney(controlSendMoney);
   // Fund Banca Account
   fundAccountView.addHandlerFundAccount(controlFundAccount);
+
   // control dashboard view
   document.addEventListener("DOMContentLoaded", function () {
     controlDashboardView();
