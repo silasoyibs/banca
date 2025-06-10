@@ -720,6 +720,8 @@ parcelHelpers.export(exports, "transfer", ()=>transfer);
 parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
 // listen to transaction changes
 parcelHelpers.export(exports, "listenToTransaction", ()=>listenToTransaction);
+// fund banca account
+parcelHelpers.export(exports, "fundAccount", ()=>fundAccount);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -912,8 +914,33 @@ function listenToTransaction(userId, handleTransactionChange) {
         const newTransactionAmount = newTransaction.map((transaction)=>transaction.amount);
         const newTotalIncome = calculateTotalIncome(newTransactionAmount);
         const newTotalExpense = calculateTotalExpense(newTransactionAmount);
+        // update state of application
+        state.transactions = newTransaction;
+        state.totalIncome = newTotalIncome;
+        state.totalExpense = newTotalExpense;
         handleTransactionChange(newTransaction, newTotalIncome, newTotalExpense);
     });
+}
+async function fundAccount(fundAmount) {
+    try {
+        const handler = PaystackPop.setup({
+            key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f",
+            email: state.user.email,
+            amount: fundAmount * 100,
+            currency: "NGN",
+            callback: function(response) {
+                // verify the transaction here
+                console.log("Payment complete! Reference: " + response.reference);
+            // You can now call your backend to update wallet
+            },
+            onClose: function() {
+                alert("Transaction was not completed");
+            }
+        });
+        handler.openIframe();
+    } catch (err) {
+        console.log("funding went wrong", err);
+    }
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")

@@ -265,6 +265,8 @@
     }
     .transaction.transaction--view {
       grid-template-columns: 1fr;
+      height: 100vh;
+      overflow-y: scroll;
       margin: 0;
       .transaction__history {
         .transaction__history__heading,
