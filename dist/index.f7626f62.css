@@ -1770,7 +1770,9 @@ body {
 
 .dashboard-main main .transaction.transaction--view {
   grid-template-columns: 1fr;
+  height: 100vh;
   margin: 0;
+  overflow-y: scroll;
 }
 
 .dashboard-main main .transaction.transaction--view .transaction__history .transaction__history__heading, .dashboard-main main .transaction.transaction--view .transaction__history .transaction__history__item {

@@ -1,9 +1,8 @@
 export default class View {
   data;
-  transactionList;
+
   render(data) {
     this.data = data;
-    this.transactionList = this.data.transactions;
     const markup = this._generateMarkup();
     this._clear();
     this._parentElement.insertAdjacentHTML("afterbegin", markup);

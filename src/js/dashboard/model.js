@@ -243,6 +243,34 @@ export function listenToTransaction(userId, handleTransactionChange) {
     );
     const newTotalIncome = calculateTotalIncome(newTransactionAmount);
     const newTotalExpense = calculateTotalExpense(newTransactionAmount);
+    // update state of application
+    state.transactions = newTransaction;
+    state.totalIncome = newTotalIncome;
+    state.totalExpense = newTotalExpense;
     handleTransactionChange(newTransaction, newTotalIncome, newTotalExpense);
   });
+}
+
+// fund banca account
+export async function fundAccount(fundAmount) {
+  try {
+    const handler = PaystackPop.setup({
+      key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f", // from Paystack dashboard
+      email: state.user.email, // use the actual logged-in user
+      amount: fundAmount * 100, // amount in kobo
+      currency: "NGN",
+      callback: function (response) {
+        // verify the transaction here
+        console.log("Payment complete! Reference: " + response.reference);
+        // You can now call your backend to update wallet
+      },
+      onClose: function () {
+        alert("Transaction was not completed");
+      },
+    });
+
+    handler.openIframe();
+  } catch (err) {
+    console.log("funding went wrong", err);
+  }
 }

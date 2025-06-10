@@ -168,7 +168,7 @@ class DashboardView extends View {
                 <span>Transactions</span>
                 <a href="">View all</a>
               </div>
-             ${this.transactionList
+             ${this.data.transactions
                .slice(0, 3)
                .map((transaction) => {
                  if (transaction.type === "deposit") {
