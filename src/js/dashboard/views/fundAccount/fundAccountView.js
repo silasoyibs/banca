@@ -16,7 +16,7 @@ class FundAccountView extends View {
     totalAmountText.textContent = "";
     amountInputField.addEventListener("input", (e) => {
       e.preventDefault();
-      totalAmountText.textContent = Number(e.target.value);
+      totalAmountText.textContent = this._formatAmount(Number(e.target.value));
     });
   }
 

@@ -986,7 +986,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
         const sendAmountField = document.querySelector(".send-amount-input");
         sendAmountField.addEventListener("input", (e)=>{
             e.preventDefault();
-            totalAmount.textContent = Number(e.target.value);
+            totalAmount.textContent = this._formatAmount(Number(e.target.value));
         });
     }
     _generateMarkup() {
@@ -1030,12 +1030,12 @@ class DashboardView extends (0, _viewJsDefault.default) {
      `;
     }
     updateBalance(newBalance) {
-        document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
+        document.querySelector(".banca-user-balance").textContent = `${this._formatAmount(newBalance)}`;
     }
     updateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
         // update dashbaord transaction statistics
-        document.querySelector(".total-income").textContent = newTotalIncome;
-        document.querySelector(".total-expense").textContent = Math.abs(newTotalExpense);
+        document.querySelector(".total-income").textContent = this._formatAmount(newTotalIncome);
+        document.querySelector(".total-expense").textContent = this._formatAmount(Math.abs(newTotalExpense));
         //  update transaction list
         const transactionContainer = document.querySelector(".transaction__history");
         // If no transactions, show empty markup
@@ -1125,7 +1125,7 @@ class View {
           <div class="header-icons">
             <div class="u-flex u-flex-v-center u-gap-small">
               <ion-icon name="wallet"></ion-icon>
-              <p>\u{20A6}<span class="banca-user-balance">${this.data.user.balance}</span></p>
+              <p>\u{20A6}<span class="banca-user-balance">${this._formatAmount(this.data.user.balance)}</span></p>
             </div>
             <a class="dark-mode-toggler">
               <ion-icon name="${isDark ? "moon" : "sunny"}"></ion-icon>
@@ -1162,11 +1162,11 @@ class View {
           <div class="account-stats">
             <div>
               <p>Income</p>
-              <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this.data.totalIncome}</span></p>
+              <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this._formatAmount(this.data.totalIncome)}</span></p>
             </div>
             <div>
               <p>Expense</p>
-              <p><ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${Math.abs(this.data.totalExpense)}</span></p>
+              <p><ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${this._formatAmount(Math.abs(this.data.totalExpense))}</span></p>
             </div>
           </div>
         </div>
@@ -1206,7 +1206,7 @@ class View {
           </div>
         </div>
         <div>
-          <p class="${transaction.type === "deposit" ? "credit" : "debit"}">\u{20A6}<span>${transaction.type === "deposit" ? transaction.amount : Math.abs(transaction.amount)}</span></p>
+          <p class="${transaction.type === "deposit" ? "credit" : "debit"}">\u{20A6}<span>${transaction.type === "deposit" ? this._formatAmount(transaction.amount) : this._formatAmount(Math.abs(transaction.amount))}</span></p>
         </div>
       </div>
     `;
@@ -1225,6 +1225,9 @@ class View {
                 icon.setAttribute("name", isDark ? "moon" : "sunny");
             });
         });
+    }
+    _formatAmount(amount) {
+        return Number(amount).toLocaleString(); // → 5,200
     }
 }
 exports.default = View;
@@ -1331,7 +1334,7 @@ class FundAccountView extends (0, _viewJsDefault.default) {
         totalAmountText.textContent = "";
         amountInputField.addEventListener("input", (e)=>{
             e.preventDefault();
-            totalAmountText.textContent = Number(e.target.value);
+            totalAmountText.textContent = this._formatAmount(Number(e.target.value));
         });
     }
     addHandlerFundAccount(handler) {

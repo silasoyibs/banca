@@ -71,9 +71,9 @@ export default class View {
           <div class="header-icons">
             <div class="u-flex u-flex-v-center u-gap-small">
               <ion-icon name="wallet"></ion-icon>
-              <p>₦<span class="banca-user-balance">${
+              <p>₦<span class="banca-user-balance">${this._formatAmount(
                 this.data.user.balance
-              }</span></p>
+              )}</span></p>
             </div>
             <a class="dark-mode-toggler">
               <ion-icon name="${isDark ? "moon" : "sunny"}"></ion-icon>
@@ -113,14 +113,14 @@ export default class View {
           <div class="account-stats">
             <div>
               <p>Income</p>
-              <p><ion-icon name="arrow-up"></ion-icon><span>₦</span><span class="total-income">${
+              <p><ion-icon name="arrow-up"></ion-icon><span>₦</span><span class="total-income">${this._formatAmount(
                 this.data.totalIncome
-              }</span></p>
+              )}</span></p>
             </div>
             <div>
               <p>Expense</p>
-              <p><ion-icon name="arrow-down"></ion-icon><span>₦</span><span class="total-expense">${Math.abs(
-                this.data.totalExpense
+              <p><ion-icon name="arrow-down"></ion-icon><span>₦</span><span class="total-expense">${this._formatAmount(
+                Math.abs(this.data.totalExpense)
               )}</span></p>
             </div>
           </div>
@@ -169,8 +169,8 @@ export default class View {
             transaction.type === "deposit" ? "credit" : "debit"
           }">₦<span>${
       transaction.type === "deposit"
-        ? transaction.amount
-        : Math.abs(transaction.amount)
+        ? this._formatAmount(transaction.amount)
+        : this._formatAmount(Math.abs(transaction.amount))
     }</span></p>
         </div>
       </div>
@@ -198,5 +198,8 @@ export default class View {
           icon.setAttribute("name", isDark ? "moon" : "sunny");
         });
     });
+  }
+  _formatAmount(amount) {
+    return Number(amount).toLocaleString(); // → 5,200
   }
 }

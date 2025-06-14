@@ -52,7 +52,7 @@ class DashboardView extends View {
     const sendAmountField = document.querySelector(".send-amount-input");
     sendAmountField.addEventListener("input", (e) => {
       e.preventDefault();
-      totalAmount.textContent = Number(e.target.value);
+      totalAmount.textContent = this._formatAmount(Number(e.target.value));
     });
   }
   _generateMarkup() {
@@ -103,13 +103,17 @@ class DashboardView extends View {
      `;
   }
   updateBalance(newBalance) {
-    document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
+    document.querySelector(
+      ".banca-user-balance"
+    ).textContent = `${this._formatAmount(newBalance)}`;
   }
   updateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
     // update dashbaord transaction statistics
-    document.querySelector(".total-income").textContent = newTotalIncome;
-    document.querySelector(".total-expense").textContent =
-      Math.abs(newTotalExpense);
+    document.querySelector(".total-income").textContent =
+      this._formatAmount(newTotalIncome);
+    document.querySelector(".total-expense").textContent = this._formatAmount(
+      Math.abs(newTotalExpense)
+    );
     //  update transaction list
     const transactionContainer = document.querySelector(
       ".transaction__history"
