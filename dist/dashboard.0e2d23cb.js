@@ -588,7 +588,10 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
 var _dashboardViewJs = require("./views/dashboard/dashboardView.js");
 var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
-// import dashboardHeaderView from "./views/dashboardHeaderView.js";
+var _transactionViewJs = require("./views/transactions/transactionView.js");
+var _transactionViewJsDefault = parcelHelpers.interopDefault(_transactionViewJs);
+var _fundAccountViewJs = require("./views/fundAccount/fundAccountView.js");
+var _fundAccountViewJsDefault = parcelHelpers.interopDefault(_fundAccountViewJs);
 async function controlDashboard() {
     try {
         // render spinner
@@ -597,14 +600,8 @@ async function controlDashboard() {
         await _modelJs.getCurrentUserData();
         // render dashboard data
         (0, _dashboardViewJsDefault.default).render(_modelJs.state);
-        // Listen to RealTime Changes
-        _modelJs.listenToBalance(_modelJs.state.user.id, controlUpdateBalance);
-        _modelJs.listenToTransaction(_modelJs.state.user.id, controlUpdateTransaction);
-    // await model.sendMoney();
-    // dashboardView.showSendMoneyAmount();
-    // control funding
-    // fundAccountView.setUser(currentUser);
-    // fundAccountView.fundAccount();
+        // realtime listener
+        controlRealTimeListeners();
     } catch (err) {
         console.log(err);
     }
@@ -613,50 +610,57 @@ async function controlSendMoney(transfer) {
     transferStatus = await _modelJs.transfer(transfer);
     return transferStatus;
 }
+// control banca funding account
+async function controlFundAccount(fundAmount) {
+    await _modelJs.fundAccount(fundAmount);
+}
 function controlUpdateBalance(newBalance) {
     (0, _dashboardViewJsDefault.default).updateBalance(newBalance);
 }
 function controlUpdateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
     (0, _dashboardViewJsDefault.default).updateTransaction(newTransaction, newTotalIncome, newTotalExpense);
 }
-// function controlDashboardView() {
-//   const navLinks = document.querySelectorAll(".nav__link");
-//   let viewTarget;
-//   navLinks.forEach((link) => {
-//     link.addEventListener("click", (e) => {
-//       // remove all active link on click
-//       navLinks.forEach((link) => {
-//         link.classList.remove("active");
-//       });
-//       // add active class to current clicked nav
-//       e.target.classList.add("active");
-//       // get view target
-//       viewTarget = e.target.dataset.view;
-//       // render dashboardview
-//       if (viewTarget === "dashboard-view") dashboardView.render();
-//       // render transaction view
-//       if (viewTarget === "transaction-view") transactionView.render();
-//       // render funding view
-//       if (viewTarget === "funding-view") fundAccountView.render();
-//     });
-//   });
-// }
-// controlDashboardView();
-// const controlTransaction = function () {
-//   controlTransaction.update();
-// };
+function controlDashboardView() {
+    const navLinks = document.querySelectorAll(".nav__link");
+    let viewTarget;
+    navLinks.forEach((link)=>{
+        link.addEventListener("click", (e)=>{
+            // remove all active link on click
+            navLinks.forEach((link)=>{
+                link.classList.remove("active");
+            });
+            // add active class to current clicked nav
+            e.currentTarget.classList.add("active");
+            // get view target
+            viewTarget = e.currentTarget.dataset.view;
+            // render dashboardview
+            if (viewTarget === "dashboard-view") (0, _dashboardViewJsDefault.default).render(_modelJs.state);
+            // render transaction view
+            if (viewTarget === "transaction-view") (0, _transactionViewJsDefault.default).render(_modelJs.state);
+            // render funding view
+            if (viewTarget === "funding-view") (0, _fundAccountViewJsDefault.default).render(_modelJs.state);
+        });
+    });
+}
+function controlRealTimeListeners() {
+    // Listen to RealTime Changes
+    _modelJs.listenToBalance(controlUpdateBalance);
+    _modelJs.listenToTransaction(controlUpdateTransaction);
+}
 const init = function() {
     controlDashboard();
     // Send Money to Another Banca User
     (0, _dashboardViewJsDefault.default).addHandlerSendMoney(controlSendMoney);
-// dashboardView.addHandlerShowAmount();
-// transactionView.addHandlerUpdateView(controlTransaction);
-// fundAccountView.showFundingAmount();
-// fundAccountView.fundAccount();
+    // Fund Banca Account
+    (0, _fundAccountViewJsDefault.default).addHandlerFundAccount(controlFundAccount);
+    // control dashboard view
+    document.addEventListener("DOMContentLoaded", function() {
+        controlDashboardView();
+    });
 };
 init();
 
-},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
+},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -670,6 +674,8 @@ parcelHelpers.export(exports, "transfer", ()=>transfer);
 parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
 // listen to transaction changes
 parcelHelpers.export(exports, "listenToTransaction", ()=>listenToTransaction);
+// fund banca account
+parcelHelpers.export(exports, "fundAccount", ()=>fundAccount);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -801,9 +807,7 @@ async function transfer(transfer) {
 }
 // send/recive money in banca
 async function sendMoney(amount, recipientAccountNumber) {
-    const senderName = state.user.fullName;
-    const { user, userRef } = state;
-    const { userTransactionsRef } = state;
+    const { user, userRef, userTransactionsRef } = state;
     const { recipientData, recipientRef, recipientTransactionsRef } = await getRecipientData(recipientAccountNumber);
     // update sender database
     if (user.balance >= amount && Number(recipientAccountNumber) !== Number(user.accountNumber)) {
@@ -813,9 +817,9 @@ async function sendMoney(amount, recipientAccountNumber) {
             balance: balance
         });
         // update sender transaction ref
-        const recieverName = recipientData.fullName;
+        const name = recipientData.fullName;
         (0, _firestore.addDoc)(userTransactionsRef, {
-            recieverName,
+            name,
             amount: -amount,
             date: new Date().toISOString(),
             type: "withdrawal"
@@ -823,18 +827,20 @@ async function sendMoney(amount, recipientAccountNumber) {
     } else throw new Error("something went wrong");
     // update recipient database
     if (recipientData) {
+        const name = state.user.fullName;
         // credit banca user
-        const balance = recipientData.balance + amount;
-        await (0, _firestore.updateDoc)(recipientRef, {
-            balance: balance
-        });
-        // update recipient transactions list
-        await (0, _firestore.addDoc)(recipientTransactionsRef, {
-            senderName,
-            amount,
-            date: new Date().toISOString(),
-            type: "deposit"
-        });
+        depositMoney(recipientData, recipientRef, recipientTransactionsRef, amount, name);
+    // const balance = recipientData.balance + amount;
+    // await updateDoc(recipientRef, {
+    //   balance: balance,
+    // });
+    // // update recipient transactions list
+    // await addDoc(recipientTransactionsRef, {
+    //   senderName,
+    //   amount,
+    //   date: new Date().toISOString(),
+    //   type: "deposit",
+    // });
     } else throw new Error("recipient could not be found");
 }
 // calculate total transaction income and expenses
@@ -844,7 +850,8 @@ function calculateTotalIncome(transactionList) {
 function calculateTotalExpense(transactionList) {
     return transactionList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
 }
-function listenToBalance(userId, handleBalanceChange) {
+function listenToBalance(handleBalanceChange) {
+    const userId = state.user.id;
     const userRef = (0, _firestore.doc)((0, _firebase.db), "users", userId);
     (0, _firestore.onSnapshot)(userRef, (docSnap)=>{
         const newBalance = docSnap.data().balance;
@@ -852,7 +859,8 @@ function listenToBalance(userId, handleBalanceChange) {
         handleBalanceChange(newBalance);
     });
 }
-function listenToTransaction(userId, handleTransactionChange) {
+function listenToTransaction(handleTransactionChange) {
+    const userId = state.user.id;
     const transactionRef = (0, _firestore.collection)((0, _firebase.db), "users", userId, "transaction");
     (0, _firestore.onSnapshot)(transactionRef, (querySnapshot)=>{
         const newTransaction = querySnapshot.docs.map((doc)=>({
@@ -862,8 +870,56 @@ function listenToTransaction(userId, handleTransactionChange) {
         const newTransactionAmount = newTransaction.map((transaction)=>transaction.amount);
         const newTotalIncome = calculateTotalIncome(newTransactionAmount);
         const newTotalExpense = calculateTotalExpense(newTransactionAmount);
+        // update state of application
+        state.transactions = newTransaction;
+        state.totalIncome = newTotalIncome;
+        state.totalExpense = newTotalExpense;
         handleTransactionChange(newTransaction, newTotalIncome, newTotalExpense);
     });
+}
+async function fundAccount(fundAmount) {
+    const { user, userRef, userTransactionsRef } = state;
+    const name = "Self Funding";
+    try {
+        const handler = PaystackPop.setup({
+            key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f",
+            email: state.user.email,
+            amount: fundAmount * 100,
+            currency: "NGN",
+            callback: function(response) {
+                // verify the transaction here
+                response.reference;
+                // You can now call your backend to update wallet
+                console.log(user, userRef, userTransactionsRef, fundAmount, name);
+                depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
+                console.log("funding successful");
+            },
+            onClose: function() {
+                alert("Transaction was not completed");
+            }
+        });
+        handler.openIframe();
+    } catch (err) {
+        console.log("funding went wrong", err);
+    }
+}
+async function depositMoney(user, userRef, transactionRef, amount, name) {
+    try {
+        // credit banca user
+        const balance = user.balance + amount;
+        await (0, _firestore.updateDoc)(userRef, {
+            balance: balance
+        });
+        // update transactions list
+        await (0, _firestore.addDoc)(transactionRef, {
+            name,
+            amount,
+            date: new Date().toISOString(),
+            type: "deposit"
+        });
+    } catch (err) {
+        throw new Error("transaction not successful");
+    }
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
@@ -871,12 +927,6 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _dashboardImgCardPng = require("../../../../img/dashboard-img-card.png");
-var _dashboardImgCardPngDefault = parcelHelpers.interopDefault(_dashboardImgCardPng);
-var _userSvg = require("../../../../img/SVG/user.svg");
-var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
-var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
-var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
 var _commonJs = require("../../../common.js");
 class DashboardView extends (0, _viewJsDefault.default) {
     _parentElement = document.querySelector(".dashboard-main");
@@ -939,7 +989,106 @@ class DashboardView extends (0, _viewJsDefault.default) {
     }
     _generateMarkup() {
         return `
-        <div class="header-nav">
+          ${this.headerMarkUp()}
+        <main class="main-view">
+          <!-- main dashboad -->
+         ${this.customerDashboardMarkUp()}
+         <div class="transaction">
+          ${this.data.transactions.length === 0 ? this.emptyTransactionMarkUp() : `
+            <div
+              class="transaction__history container-dashboard container-dashboard--shadow"
+            >
+              <div class="transaction__history__heading">
+                <span>Transactions</span>
+                <a href="">View all</a>
+              </div>
+             ${this.data.transactions.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
+            </div>`}
+            <div
+              class="transaction__history__send-money container-dashboard container-dashboard--shadow"
+            >
+              <span>Send Money</span>
+             
+              <div class="pay">
+                <label> Pay to </label>
+                <input class="send-account-input" type="number" placeholder="Enter Banca Account Number" />
+              </div>
+              <div class="amount">
+                <label> Amount(\u{20A6}) </label>
+                <input class="send-amount-input" type="number" placeholder="Amount" />
+              </div>
+              <div class="total u-flex u-flex-v-center u-flex-space-between">
+                <span>Total</span>
+                <p>\u{20A6}<span class="send-total-amount"></span></p>
+              </div>
+              <button class="send-money-button" id="submit">Send Money</button>
+            </div>
+    
+     
+     `;
+    }
+    updateBalance(newBalance) {
+        document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
+    }
+    updateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
+        // update dashbaord transaction statistics
+        document.querySelector(".total-income").textContent = newTotalIncome;
+        document.querySelector(".total-expense").textContent = Math.abs(newTotalExpense);
+        //  update transaction list
+        const transactionContainer = document.querySelector(".transaction__history");
+        // If no transactions, show empty markup
+        if (this.data.transactions.length === 0) return;
+        // clear transaction container
+        transactionContainer.innerHTML = `
+    <div class="transaction__history__heading">
+                <span>Transactions</span>
+                <a href="">View all</a>
+       </div>
+    `;
+        // Generate Transaction Markup
+        const newTransactionHtml = newTransaction.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("");
+        transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
+    }
+}
+exports.default = new DashboardView();
+
+},{"../../view.js":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../common.js":"2ASYY"}],"38NyO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _dashboardImgCardPng = require("../../img/dashboard-img-card.png");
+var _dashboardImgCardPngDefault = parcelHelpers.interopDefault(_dashboardImgCardPng);
+var _emptyTransactionSvg = require("../../img/SVG/empty-transaction.svg");
+var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
+var _userSvg = require("../../img/SVG/user.svg");
+var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
+class View {
+    data;
+    render(data) {
+        this.data = data;
+        const markup = this._generateMarkup();
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+        this._addEventHandler?.();
+    }
+    renderSpinner() {
+        const markup = `
+     <div class="spinner-container">
+        <div class="page-spinner"></div> 
+     </div>
+  `;
+        this._clear();
+        this._parentElement.insertAdjacentHTML("afterbegin", markup);
+    }
+    _addEventHandler() {}
+    _clear() {
+        this._parentElement.innerHTML = "";
+    }
+    clearForm(formElements) {
+        formElements.forEach((formElement)=>formElement.value = "");
+    }
+    headerMarkUp() {
+        return `
+          <div class="header-nav">
           <div class="header-nav__left">
             <div class="customer-welcome">
               <p>
@@ -976,8 +1125,10 @@ class DashboardView extends (0, _viewJsDefault.default) {
             </div>
           </div>
         </div>
-        <main class="main-view">
-          <!-- main dashboad -->
+    `;
+    }
+    customerDashboardMarkUp() {
+        return `
           <div class="customer-account">
             <div class="customer-account__left">
               <div class="account-info">
@@ -1008,10 +1159,12 @@ class DashboardView extends (0, _viewJsDefault.default) {
               <img src=${0, _dashboardImgCardPngDefault.default} />
             </div>
           </div>
-         <div class="transaction">
-        
-          ${this.data.transactions.length === 0 ? `
-              <div 
+    
+    `;
+    }
+    emptyTransactionMarkUp() {
+        return `
+           <div 
            class="transaction__history container-dashboard container-dashboard--shadow"
          >
            <div class="transaction__history__heading">
@@ -1026,184 +1179,38 @@ class DashboardView extends (0, _viewJsDefault.default) {
                appear here.
              </p>
            </div>
-          </div>  
-           
-           ` : `
-            <div
-              class="transaction__history container-dashboard container-dashboard--shadow"
-            >
-              <div class="transaction__history__heading">
-                <span>Transactions</span>
-                <a href="">View all</a>
-              </div>
-             ${this.transactionList.slice(0, 3).map((transaction)=>{
-            if (transaction.type === "deposit") return `
-                <div class="transaction__history__item">
+          </div> 
+       `;
+    }
+    transactionListMarkUp(transaction) {
+        return `
+            <div class="transaction__history__item">
                 <div class="u-flex u-gap-small u-flex-v-center">
                   <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
+                    <img src="${0, _userSvgDefault.default}" alt="user-picture" />
                   </figure>
                   <div class="transaction-details">
-                    <p>${transaction.senderName}
-                    </p>
+                    <p>${transaction.name}</p>
                     <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
-                dateStyle: "medium",
-                timeStyle: "short"
-            })}</p>
+            dateStyle: "medium",
+            timeStyle: "short"
+        })}</p>
                   </div>
                 </div>
                 <div>
-                  <p class="credit">\u{20A6}<span>${transaction.amount}</span></p>
+                  <p class="${transaction.type === "deposit" ? "credit" : "debit"}">\u{20A6}<span>${transaction.type === "deposit" ? transaction.amount : Math.abs(transaction.amount)}</span></p>
                 </div>
               </div>
-              `;
-            if (transaction.type === "withdrawal") return `
-                 <div class="transaction__history__item">
-                <div class="u-flex u-gap-small u-flex-v-center">
-                  <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
-                  </figure>
-                  <div class="transaction-details">
-                    <p>${transaction.recieverName}
-                    </p>
-                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
-                dateStyle: "medium",
-                timeStyle: "short"
-            })}</p>
-                  </div>
-                </div>
-                <div>
-                  <p class="debit">\u{20A6}<span>${Math.abs(Number(transaction.amount))}</span></p>
-                </div>
-              </div>
-              `;
-        }).join("")}
-            </div>`}
-            <div
-              class="transaction__history__send-money container-dashboard container-dashboard--shadow"
-            >
-              <span>Send Money</span>
-          
-             
-              <div class="pay">
-                <label> Pay to </label>
-                <input class="send-account-input" type="number" placeholder="Enter Banca Account Number" />
-              </div>
-              <div class="amount">
-                <label> Amount(\u{20A6}) </label>
-                <input class="send-amount-input" type="number" placeholder="Amount" />
-              </div>
-              <div class="total u-flex u-flex-v-center u-flex-space-between">
-                <span>Total</span>
-                <p>\u{20A6}<span class="send-total-amount"></span></p>
-              </div>
-              <button class="send-money-button" id="submit">Send Money</button>
-            </div>
     
-     
-     `;
-    }
-    updateBalance(newBalance) {
-        document.querySelector(".banca-user-balance").textContent = `${newBalance}`;
-    }
-    updateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
-        // update dashbaord transaction statistics
-        document.querySelector(".total-income").textContent = newTotalIncome;
-        document.querySelector(".total-expense").textContent = Math.abs(newTotalExpense);
-        //  update transaction list
-        const transactionContainer = document.querySelector(".transaction__history");
-        // clear transaction container
-        transactionContainer.innerHTML = `
-    <div class="transaction__history__heading">
-                <span>Transactions</span>
-                <a href="">View all</a>
-       </div>
     `;
-        // Generate Transaction Markup
-        const newTransactionHtml = newTransaction.slice(0, 3).map((transaction)=>{
-            if (transaction.type === "deposit") return `
-                <div class="transaction__history__item">
-                <div class="u-flex u-gap-small u-flex-v-center">
-                  <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
-                  </figure>
-                  <div class="transaction-details">
-                    <p>${transaction.senderName}
-                    </p>
-                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
-                dateStyle: "medium",
-                timeStyle: "short"
-            })}</p>
-                  </div>
-                </div>
-                <div>
-                  <p class="credit">\u{20A6}<span>${transaction.amount}</span></p>
-                </div>
-              </div>
-              `;
-            if (transaction.type === "withdrawal") return `
-                 <div class="transaction__history__item">
-                <div class="u-flex u-gap-small u-flex-v-center">
-                  <figure class="user-picture">
-                    <img src=${0, _userSvgDefault.default} alt="user-picture" />
-                  </figure>
-                  <div class="transaction-details">
-                    <p>${transaction.recieverName}
-                    </p>
-                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
-                dateStyle: "medium",
-                timeStyle: "short"
-            })}</p>
-                  </div>
-                </div>
-                <div>
-                  <p class="debit">\u{20A6}<span>${Math.abs(Number(transaction.amount))}</span></p>
-                </div>
-              </div>
-              `;
-        }).join("");
-        transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
-    }
-}
-exports.default = new DashboardView();
-
-},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/user.svg":"jGroa","../../../../img/SVG/empty-transaction.svg":"kqXGX","../../../common.js":"2ASYY"}],"38NyO":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-class View {
-    data;
-    transactionList;
-    render(data) {
-        this.data = data;
-        this.transactionList = this.data.transactions;
-        const markup = this._generateMarkup();
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-        this._addEventHandler?.();
-    }
-    renderSpinner() {
-        const markup = `
-     <div class="spinner-container">
-        <div class="page-spinner"></div> 
-     </div>
-  `;
-        this._clear();
-        this._parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    _addEventHandler() {}
-    _clear() {
-        this._parentElement.innerHTML = "";
-    }
-    clearForm(formElements) {
-        formElements.forEach((formElement)=>formElement.value = "");
     }
 }
 exports.default = View;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3hLZF":[function(require,module,exports) {
-module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/SVG/user.svg":"jGroa","../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX"}],"jGroa":[function(require,module,exports) {
+module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
 
-},{"ac29cf51cf3f1a90":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+},{"d4d8473d968d2e31":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
 var bundleURL = {};
 function getBundleURLCached(id) {
@@ -1238,12 +1245,185 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"jGroa":[function(require,module,exports) {
-module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
+},{}],"3hLZF":[function(require,module,exports) {
+module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
 
-},{"d4d8473d968d2e31":"lgJ39"}],"kqXGX":[function(require,module,exports) {
+},{"ac29cf51cf3f1a90":"lgJ39"}],"kqXGX":[function(require,module,exports) {
 module.exports = require("aaddd35fabe4596c").getBundleURL("ks2i7") + "empty-transaction.1385f39d.svg" + "?" + Date.now();
 
-},{"aaddd35fabe4596c":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
+},{"aaddd35fabe4596c":"lgJ39"}],"jPxSl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _view = require("../../view");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
+var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
+class TransactionView extends (0, _viewDefault.default) {
+    _parentElement = document.querySelector(".dashboard-main");
+    _generateMarkup() {
+        return `
+        ${this.headerMarkUp()}
+        <main class="main-view">
+              <!-- transactionview -->
+          <div class="transaction transaction--view">
+            <div class="transaction__history container-dashboard">
+              <div class="transaction__history__heading">
+                <span>Transactions</span>
+              </div>
+              ${this.data.transactions.length === 0 ? `<div class="transaction__history__item empty">
+                           <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
+                           <span>Aww! There is nothing here!</span>
+                           <p>
+                             No transactions yet. Start using Banca Wallet and they\u{2019}ll
+                             appear here.
+                           </p>
+                         </div>` : this.data.transactions.map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
+          </div>  
+         </main>
+       </div>
+          `;
+    }
+}
+exports.default = new TransactionView();
+
+},{"../../view":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"f9GCe":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../../view.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _dashboardImgCardPng = require("../../../../img/dashboard-img-card.png");
+var _dashboardImgCardPngDefault = parcelHelpers.interopDefault(_dashboardImgCardPng);
+var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
+var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
+var _logo2Png = require("../../../../img/Logo-2.png");
+var _logo2PngDefault = parcelHelpers.interopDefault(_logo2Png);
+var _commonJs = require("../../../common.js");
+class FundAccountView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".dashboard-main");
+    _addEventHandler() {
+        this.addHandlerShowFundingAmount();
+    }
+    addHandlerShowFundingAmount() {
+        const totalAmountText = document.querySelector(".total-amount");
+        const amountInputField = document.querySelector(".amount input");
+        totalAmountText.textContent = "";
+        amountInputField.addEventListener("input", (e)=>{
+            e.preventDefault();
+            totalAmountText.textContent = Number(e.target.value);
+        });
+    }
+    addHandlerFundAccount(handler) {
+        this._parentElement.addEventListener("click", async (e)=>{
+            const fundBtn = e.target.closest(".fund-btn");
+            if (!fundBtn) return;
+            e.preventDefault();
+            console.log("fundAccount btn clicked");
+            // disable button
+            (0, _commonJs.loadingSpinner)(fundBtn);
+            // get funding amount
+            const fundAmount = Number(document.querySelector(".amount input").value);
+            if (!fundAmount) {
+                (0, _commonJs.toast).error("please fill an amount");
+                (0, _commonJs.clearLoadingSpinner)(fundBtn, "Fund Now");
+            }
+            // get funding message from handler
+            await handler(fundAmount);
+        });
+    }
+    _generateMarkup() {
+        return `
+            ${this.headerMarkUp()}
+            <main class="main-view">
+              <!-- main dashboard -->
+     <!-- Fundind template -->
+          <div class="customer-account">
+                 <div class="customer-account__left">
+                   <div class="account-info">
+                     <div>
+                       <p>Account Name</p>
+                       <p class="account-info__name">${this.data.user.fullName}</p>
+                     </div>
+                     <div>
+                       <p>Account Number</p>
+                       <p class="account-info__number">${this.data.user.accountNumber}</p>
+                     </div>
+                   </div>
+     
+                   <div class="account-stats">
+                     <div>
+                       <p>Income</p>
+                       <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this.data.totalIncome}</span></p>
+                     </div>
+                     <div>
+                       <p>Expense</p>
+                       <p>
+                         <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${Math.abs(this.data.totalExpense)}</span>
+                       </p>
+                     </div>
+                   </div>
+                 </div>
+                 <div class="customer-account__right">
+                   <img src=${0, _dashboardImgCardPngDefault.default} />
+                 </div>
+               </div>
+           <div class="fund"> 
+            <div
+              class="fund-account container-dashboard container-dashboard--shadow"
+            >
+              <figure>
+                <img src="${0, _logo2PngDefault.default}" alt="user-picture" />
+              </figure>
+              <span>Fund Your Banca Account</span>
+              <div class="amount">
+                <input type="number" placeholder="(\u{20A6}) Amount" />
+              </div>
+              <div class="total u-flex u-flex-v-center u-flex-space-between">
+                <span>Total</span>
+                <p>\u{20A6}<span class="total-amount">3</p>
+              </div>
+              <button class="fund-btn" id="submit">Fund Now</button>
+            </div>
+                   ${this.data.transactions.length === 0 ? `
+                          <div 
+                       class="transaction__history container-dashboard container-dashboard--shadow"
+                     >
+                       <div class="transaction__history__heading">
+                         <span>Transactions</span>
+                       </div>
+            
+                       <div class="transaction__history__item empty">
+                         <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
+                         <span>Aww! There is nothing here!</span>
+                         <p>
+                           No transactions yet. Start using Banca Wallet and they\u{2019}ll
+                           appear here.
+                         </p>
+                       </div>
+                      </div>  
+                       
+                       ` : `
+                        <div
+                          class="transaction__history container-dashboard container-dashboard--shadow"
+                        >
+                          <div class="transaction__history__heading">
+                            <span>Transactions</span>
+                            <a href="">View all</a>
+                          </div>
+                         ${this.data.transactions.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
+                        </div>`}
+           </div>   
+           </div> 
+           </main>
+           </div>
+
+           `;
+    }
+}
+exports.default = new FundAccountView();
+
+},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","../../../../img/Logo-2.png":"92p5i","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../common.js":"2ASYY","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"92p5i":[function(require,module,exports) {
+module.exports = require("50c0dbe393cde5a8").getBundleURL("ks2i7") + "Logo-2.039d4a1d.png" + "?" + Date.now();
+
+},{"50c0dbe393cde5a8":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
 
 //# sourceMappingURL=dashboard.0e2d23cb.js.map

@@ -1,6 +1,7 @@
 import * as model from "./model.js";
 import dashboardView from "./views/dashboard/dashboardView.js";
-// import dashboardHeaderView from "./views/dashboardHeaderView.js";
+import transactionView from "./views/transactions/transactionView.js";
+import fundAccountView from "./views/fundAccount/fundAccountView.js";
 
 async function controlDashboard() {
   try {
@@ -10,14 +11,8 @@ async function controlDashboard() {
     await model.getCurrentUserData();
     // render dashboard data
     dashboardView.render(model.state);
-    // Listen to RealTime Changes
-    model.listenToBalance(model.state.user.id, controlUpdateBalance);
-    model.listenToTransaction(model.state.user.id, controlUpdateTransaction);
-    // await model.sendMoney();
-    // dashboardView.showSendMoneyAmount();
-    // control funding
-    // fundAccountView.setUser(currentUser);
-    // fundAccountView.fundAccount();
+    // realtime listener
+    controlRealTimeListeners();
   } catch (err) {
     console.log(err);
   }
@@ -26,6 +21,10 @@ async function controlDashboard() {
 async function controlSendMoney(transfer) {
   transferStatus = await model.transfer(transfer);
   return transferStatus;
+}
+// control banca funding account
+async function controlFundAccount(fundAmount) {
+  await model.fundAccount(fundAmount);
 }
 
 function controlUpdateBalance(newBalance) {
@@ -43,41 +42,51 @@ function controlUpdateTransaction(
     newTotalExpense
   );
 }
-// function controlDashboardView() {
-//   const navLinks = document.querySelectorAll(".nav__link");
-//   let viewTarget;
-//   navLinks.forEach((link) => {
-//     link.addEventListener("click", (e) => {
-//       // remove all active link on click
-//       navLinks.forEach((link) => {
-//         link.classList.remove("active");
-//       });
-//       // add active class to current clicked nav
-//       e.target.classList.add("active");
-//       // get view target
-//       viewTarget = e.target.dataset.view;
-//       // render dashboardview
-//       if (viewTarget === "dashboard-view") dashboardView.render();
-//       // render transaction view
-//       if (viewTarget === "transaction-view") transactionView.render();
-//       // render funding view
-//       if (viewTarget === "funding-view") fundAccountView.render();
-//     });
-//   });
-// }
+function controlDashboardView() {
+  const navLinks = document.querySelectorAll(".nav__link");
+  let viewTarget;
+  navLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
+      // remove all active link on click
+      navLinks.forEach((link) => {
+        link.classList.remove("active");
+      });
+      // add active class to current clicked nav
+      e.currentTarget.classList.add("active");
+      // get view target
+      viewTarget = e.currentTarget.dataset.view;
+      // render dashboardview
+      if (viewTarget === "dashboard-view") {
+        dashboardView.render(model.state);
+      }
+      // render transaction view
+      if (viewTarget === "transaction-view") {
+        transactionView.render(model.state);
+      }
+      // render funding view
+      if (viewTarget === "funding-view") {
+        fundAccountView.render(model.state);
+      }
+    });
+  });
+}
 
-// controlDashboardView();
-// const controlTransaction = function () {
-//   controlTransaction.update();
-// };
+function controlRealTimeListeners() {
+  // Listen to RealTime Changes
+  model.listenToBalance(controlUpdateBalance);
+  model.listenToTransaction(controlUpdateTransaction);
+}
 
 const init = function () {
   controlDashboard();
   // Send Money to Another Banca User
   dashboardView.addHandlerSendMoney(controlSendMoney);
-  // dashboardView.addHandlerShowAmount();
-  // transactionView.addHandlerUpdateView(controlTransaction);
-  // fundAccountView.showFundingAmount();
-  // fundAccountView.fundAccount();
+  // Fund Banca Account
+  fundAccountView.addHandlerFundAccount(controlFundAccount);
+
+  // control dashboard view
+  document.addEventListener("DOMContentLoaded", function () {
+    controlDashboardView();
+  });
 };
 init();
