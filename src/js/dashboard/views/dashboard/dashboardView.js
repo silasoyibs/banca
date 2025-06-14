@@ -71,7 +71,7 @@ class DashboardView extends View {
             >
               <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a href="">View all</a>
+                <a class="transaction-view" >View all</a>
               </div>
              ${this.data.transactions
                .slice(0, 3)
@@ -120,7 +120,7 @@ class DashboardView extends View {
     transactionContainer.innerHTML = `
     <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a href="">View all</a>
+                <a class="transaction-view" href="">View all</a>
        </div>
     `;
     // Generate Transaction Markup
@@ -129,6 +129,14 @@ class DashboardView extends View {
       .map((transaction) => this.transactionListMarkUp(transaction))
       .join("");
     transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
+  }
+  addHandlerViewAllTransaction(handler) {
+    document.addEventListener("click", (e) => {
+      const viewAllTransactionLink = e.target.closest(".transaction-view");
+      if (!viewAllTransactionLink) return; // Not the link you care about
+      e.preventDefault();
+      handler();
+    });
   }
 }
 

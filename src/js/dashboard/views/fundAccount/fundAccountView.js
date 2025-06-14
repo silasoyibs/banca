@@ -9,6 +9,7 @@ class FundAccountView extends View {
   _addEventHandler() {
     this.addHandlerShowFundingAmount();
   }
+
   addHandlerShowFundingAmount() {
     const totalAmountText = document.querySelector(".total-amount");
     const amountInputField = document.querySelector(".amount input");
@@ -18,22 +19,40 @@ class FundAccountView extends View {
       totalAmountText.textContent = Number(e.target.value);
     });
   }
+
   addHandlerFundAccount(handler) {
     this._parentElement.addEventListener("click", async (e) => {
       const fundBtn = e.target.closest(".fund-btn");
       if (!fundBtn) return;
       e.preventDefault();
-      console.log("fundAccount btn clicked");
       // disable button
       loadingSpinner(fundBtn);
       // get funding amount
-      const fundAmount = Number(document.querySelector(".amount input").value);
-      if (!fundAmount) {
-        toast.error("please fill an amount");
+      const fundAmountInput = document.querySelector(".amount input");
+      const fundAmount = Number(fundAmountInput.value);
+      if (!fundAmount || fundAmount <= 0) {
+        toast.error("please enter valid");
         clearLoadingSpinner(fundBtn, "Fund Now");
+        return;
       }
       // get funding message from handler
-      await handler(fundAmount);
+      try {
+        const fundingStatus = await handler(fundAmount);
+        if (fundingStatus.toLowerCase().includes("successful")) {
+          toast.success(fundingStatus);
+        }
+      } catch (error) {
+        toast.error(error?.message || "funding failed");
+      } finally {
+        this.clearForm([fundAmountInput]);
+        const totalAmount = document.querySelector(".total-amount");
+        totalAmount.textContent = "";
+        // Always reset spinner after 6 seconds
+        setTimeout(() => {
+          clearLoadingSpinner(fundBtn, "Fund Now");
+          toast.hide(); // optionally hide toast, but maybe better to leave it visible longer
+        }, 6000);
+      }
     });
   }
 
@@ -125,7 +144,7 @@ class FundAccountView extends View {
                         >
                           <div class="transaction__history__heading">
                             <span>Transactions</span>
-                            <a href="">View all</a>
+                            <a class="transaction-view">View all</a>
                           </div>
                          ${this.data.transactions
                            .slice(0, 3)

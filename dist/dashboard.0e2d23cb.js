@@ -592,6 +592,8 @@ var _transactionViewJs = require("./views/transactions/transactionView.js");
 var _transactionViewJsDefault = parcelHelpers.interopDefault(_transactionViewJs);
 var _fundAccountViewJs = require("./views/fundAccount/fundAccountView.js");
 var _fundAccountViewJsDefault = parcelHelpers.interopDefault(_fundAccountViewJs);
+var _loanViewJs = require("./views/loan/loanView.js");
+var _loanViewJsDefault = parcelHelpers.interopDefault(_loanViewJs);
 async function controlDashboard() {
     try {
         // render spinner
@@ -602,8 +604,9 @@ async function controlDashboard() {
         (0, _dashboardViewJsDefault.default).render(_modelJs.state);
         // realtime listener
         controlRealTimeListeners();
-    } catch (err) {
-        console.log(err);
+    // throw new Error("something went wrong");
+    } catch (error) {
+        console.log(error);
     }
 }
 async function controlSendMoney(transfer) {
@@ -612,7 +615,8 @@ async function controlSendMoney(transfer) {
 }
 // control banca funding account
 async function controlFundAccount(fundAmount) {
-    await _modelJs.fundAccount(fundAmount);
+    const fundingStatus = await _modelJs.fundAccount(fundAmount);
+    return fundingStatus;
 }
 function controlUpdateBalance(newBalance) {
     (0, _dashboardViewJsDefault.default).updateBalance(newBalance);
@@ -639,6 +643,8 @@ function controlDashboardView() {
             if (viewTarget === "transaction-view") (0, _transactionViewJsDefault.default).render(_modelJs.state);
             // render funding view
             if (viewTarget === "funding-view") (0, _fundAccountViewJsDefault.default).render(_modelJs.state);
+            // render loan view
+            if (viewTarget === "loan-view") (0, _loanViewJsDefault.default).render(_modelJs.state);
         });
     });
 }
@@ -647,12 +653,17 @@ function controlRealTimeListeners() {
     _modelJs.listenToBalance(controlUpdateBalance);
     _modelJs.listenToTransaction(controlUpdateTransaction);
 }
+function controlViewAllTransaction() {
+    (0, _transactionViewJsDefault.default).render(_modelJs.state);
+}
 const init = function() {
     controlDashboard();
     // Send Money to Another Banca User
     (0, _dashboardViewJsDefault.default).addHandlerSendMoney(controlSendMoney);
     // Fund Banca Account
     (0, _fundAccountViewJsDefault.default).addHandlerFundAccount(controlFundAccount);
+    // control view all transaction
+    (0, _dashboardViewJsDefault.default).addHandlerViewAllTransaction(controlViewAllTransaction);
     // control dashboard view
     document.addEventListener("DOMContentLoaded", function() {
         controlDashboardView();
@@ -660,7 +671,7 @@ const init = function() {
 };
 init();
 
-},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe"}],"k67WZ":[function(require,module,exports) {
+},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe","./views/loan/loanView.js":"gOtW5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -679,6 +690,7 @@ parcelHelpers.export(exports, "fundAccount", ()=>fundAccount);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
+var _common = require("../common");
 const state = {
     user: {},
     transactions: [],
@@ -830,23 +842,13 @@ async function sendMoney(amount, recipientAccountNumber) {
         const name = state.user.fullName;
         // credit banca user
         depositMoney(recipientData, recipientRef, recipientTransactionsRef, amount, name);
-    // const balance = recipientData.balance + amount;
-    // await updateDoc(recipientRef, {
-    //   balance: balance,
-    // });
-    // // update recipient transactions list
-    // await addDoc(recipientTransactionsRef, {
-    //   senderName,
-    //   amount,
-    //   date: new Date().toISOString(),
-    //   type: "deposit",
-    // });
     } else throw new Error("recipient could not be found");
 }
-// calculate total transaction income and expenses
+// calculate total transaction income
 function calculateTotalIncome(transactionList) {
     return transactionList.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
 }
+// calculate total transaction expenses
 function calculateTotalExpense(transactionList) {
     return transactionList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
 }
@@ -880,29 +882,29 @@ function listenToTransaction(handleTransactionChange) {
 async function fundAccount(fundAmount) {
     const { user, userRef, userTransactionsRef } = state;
     const name = "Self Funding";
-    try {
-        const handler = PaystackPop.setup({
-            key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f",
-            email: state.user.email,
-            amount: fundAmount * 100,
-            currency: "NGN",
-            callback: function(response) {
-                // verify the transaction here
-                response.reference;
-                // You can now call your backend to update wallet
-                console.log(user, userRef, userTransactionsRef, fundAmount, name);
-                depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
-                console.log("funding successful");
-            },
-            onClose: function() {
-                alert("Transaction was not completed");
-            }
-        });
-        handler.openIframe();
-    } catch (err) {
-        console.log("funding went wrong", err);
-    }
+    return new Promise((resolve, reject)=>{
+        try {
+            const handler = PaystackPop.setup({
+                key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f",
+                email: state.user.email,
+                amount: fundAmount * 100,
+                currency: "NGN",
+                callback: function() {
+                    // You can now call your backend to update wallet
+                    depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
+                    resolve("funding successful");
+                },
+                onClose: function() {
+                    reject(new Error("transaction not successful"));
+                }
+            });
+            handler.openIframe();
+        } catch (error) {
+            (0, _common.toast).error(error?.message || "transaction not successful");
+        }
+    });
 }
+// deposit money to banca account
 async function depositMoney(user, userRef, transactionRef, amount, name) {
     try {
         // credit banca user
@@ -922,7 +924,7 @@ async function depositMoney(user, userRef, transactionRef, amount, name) {
     }
 }
 
-},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
+},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","../common":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");
@@ -1000,7 +1002,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
             >
               <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a href="">View all</a>
+                <a class="transaction-view" >View all</a>
               </div>
              ${this.data.transactions.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
             </div>`}
@@ -1042,17 +1044,25 @@ class DashboardView extends (0, _viewJsDefault.default) {
         transactionContainer.innerHTML = `
     <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a href="">View all</a>
+                <a class="transaction-view" href="">View all</a>
        </div>
     `;
         // Generate Transaction Markup
         const newTransactionHtml = newTransaction.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("");
         transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
     }
+    addHandlerViewAllTransaction(handler) {
+        document.addEventListener("click", (e)=>{
+            const viewAllTransactionLink = e.target.closest(".transaction-view");
+            if (!viewAllTransactionLink) return; // Not the link you care about
+            e.preventDefault();
+            handler();
+        });
+    }
 }
 exports.default = new DashboardView();
 
-},{"../../view.js":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../common.js":"2ASYY"}],"38NyO":[function(require,module,exports) {
+},{"../../view.js":"38NyO","../../../common.js":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"38NyO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _dashboardImgCardPng = require("../../img/dashboard-img-card.png");
@@ -1061,10 +1071,19 @@ var _emptyTransactionSvg = require("../../img/SVG/empty-transaction.svg");
 var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
 var _userSvg = require("../../img/SVG/user.svg");
 var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
+let darkModeBound = false;
 class View {
     data;
+    constructor(){
+        if (!darkModeBound) {
+            this._setUpStoredDarkMode();
+            this._addHandlerDarkModeToggle();
+            darkModeBound = true;
+        }
+    }
     render(data) {
         this.data = data;
+        if (!this.data || !this.data.user || Object.keys(this.data.user).length === 0) return;
         const markup = this._generateMarkup();
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
@@ -1075,142 +1094,145 @@ class View {
      <div class="spinner-container">
         <div class="page-spinner"></div> 
      </div>
-  `;
+    `;
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
-    _addEventHandler() {}
+    _addEventHandler() {
+        this.addHandlerSetDarkMode?.();
+    }
     _clear() {
         this._parentElement.innerHTML = "";
     }
     clearForm(formElements) {
-        formElements.forEach((formElement)=>formElement.value = "");
+        formElements.forEach((el)=>el.value = "");
     }
     headerMarkUp() {
+        const isDark = document.documentElement.classList.contains("dark-mode");
         return `
-          <div class="header-nav">
-          <div class="header-nav__left">
-            <div class="customer-welcome">
-              <p>
-                Welcome Back<span class="customer-welcome__name"
-                  >${this.data.user.userName}</span
-                >
-              </p>
-              <figure class="user-picture--welcome">
-                <img src=${0, _userSvgDefault.default} />
-              </figure>
-            </div>
-          </div>
-          <div class="header-nav__right">
-            <div class="header-icons">
-              <div class="u-flex u-flex-v-center u-gap-small">
-                <ion-icon name="wallet"></ion-icon>
-                <p>\u{20A6}<span class="banca-user-balance">${this.data.user.balance}</span></p>
-              </div>
-              <ion-icon name="sunny"></ion-icon>
-
-              <div class="notification-container">
-                <div class="notification">
-                  <span class="notification__count">1</span>
-                </div>
-                <ion-icon name="notifications-outline"></ion-icon>
-              </div>
-              <a
-                href="/login.html"
-                class="logout u-flex u-flex-v-center u-gap-small"
-              >
-                <ion-icon name="log-out"></ion-icon>
-                <span>Log out</span>
-              </a>
-            </div>
+      <div class="header-nav">
+        <div class="header-nav__left">
+          <div class="customer-welcome">
+            <p>
+              Welcome Back<span class="customer-welcome__name">${this.data.user.userName}</span>
+            </p>
+            <figure class="user-picture--welcome">
+              <img src=${0, _userSvgDefault.default} />
+            </figure>
           </div>
         </div>
+        <div class="header-nav__right">
+          <div class="header-icons">
+            <div class="u-flex u-flex-v-center u-gap-small">
+              <ion-icon name="wallet"></ion-icon>
+              <p>\u{20A6}<span class="banca-user-balance">${this.data.user.balance}</span></p>
+            </div>
+            <a class="dark-mode-toggler">
+              <ion-icon name="${isDark ? "moon" : "sunny"}"></ion-icon>
+            </a>
+            <div class="notification-container">
+              <div class="notification">
+                <span class="notification__count">1</span>
+              </div>
+              <ion-icon name="notifications-outline"></ion-icon>
+            </div>
+            <a href="/login.html" class="logout u-flex u-flex-v-center u-gap-small">
+              <ion-icon name="log-out"></ion-icon>
+              <span>Log out</span>
+            </a>
+          </div>
+        </div>
+      </div>
     `;
     }
     customerDashboardMarkUp() {
         return `
-          <div class="customer-account">
-            <div class="customer-account__left">
-              <div class="account-info">
-                <div>
-                  <p>Account Name</p>
-                  <p class="account-info__name">${this.data.user.fullName}</p>
-                </div>
-                <div>
-                  <p>Account Number</p>
-                  <p class="account-info__number">${this.data.user.accountNumber}</p>
-                </div>
-              </div>
-
-              <div class="account-stats">
-                <div>
-                  <p>Income</p>
-                  <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this.data.totalIncome}</span></p>
-                </div>
-                <div>
-                  <p>Expense</p>
-                  <p>
-                    <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${Math.abs(this.data.totalExpense)}</span>
-                  </p>
-                </div>
-              </div>
+      <div class="customer-account">
+        <div class="customer-account__left">
+          <div class="account-info">
+            <div>
+              <p>Account Name</p>
+              <p class="account-info__name">${this.data.user.fullName}</p>
             </div>
-            <div class="customer-account__right">
-              <img src=${0, _dashboardImgCardPngDefault.default} />
+            <div>
+              <p>Account Number</p>
+              <p class="account-info__number">${this.data.user.accountNumber}</p>
             </div>
           </div>
-    
+          <div class="account-stats">
+            <div>
+              <p>Income</p>
+              <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this.data.totalIncome}</span></p>
+            </div>
+            <div>
+              <p>Expense</p>
+              <p><ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${Math.abs(this.data.totalExpense)}</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="customer-account__right">
+          <img src=${0, _dashboardImgCardPngDefault.default} />
+        </div>
+      </div>
     `;
     }
     emptyTransactionMarkUp() {
         return `
-           <div 
-           class="transaction__history container-dashboard container-dashboard--shadow"
-         >
-           <div class="transaction__history__heading">
-             <span>Transactions</span>
-           </div>
-
-           <div class="transaction__history__item empty">
-             <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
-             <span>Aww! There is nothing here!</span>
-             <p>
-               No transactions yet. Start using Banca Wallet and they\u{2019}ll
-               appear here.
-             </p>
-           </div>
-          </div> 
-       `;
+      <div class="transaction__history container-dashboard container-dashboard--shadow">
+        <div class="transaction__history__heading">
+          <span>Transactions</span>
+        </div>
+        <div class="transaction__history__item empty">
+          <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
+          <span>Aww! There is nothing here!</span>
+          <p>No transactions yet. Start using Banca Wallet and they\u{2019}ll appear here.</p>
+        </div>
+      </div>
+    `;
     }
     transactionListMarkUp(transaction) {
         return `
-            <div class="transaction__history__item">
-                <div class="u-flex u-gap-small u-flex-v-center">
-                  <figure class="user-picture">
-                    <img src="${0, _userSvgDefault.default}" alt="user-picture" />
-                  </figure>
-                  <div class="transaction-details">
-                    <p>${transaction.name}</p>
-                    <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
+      <div class="transaction__history__item">
+        <div class="u-flex u-gap-small u-flex-v-center">
+          <figure class="user-picture">
+            <img src="${0, _userSvgDefault.default}" alt="user-picture" />
+          </figure>
+          <div class="transaction-details">
+            <p>${transaction.name}</p>
+            <p class="transaction-details__date">${new Date(transaction.date).toLocaleString("en-US", {
             dateStyle: "medium",
             timeStyle: "short"
         })}</p>
-                  </div>
-                </div>
-                <div>
-                  <p class="${transaction.type === "deposit" ? "credit" : "debit"}">\u{20A6}<span>${transaction.type === "deposit" ? transaction.amount : Math.abs(transaction.amount)}</span></p>
-                </div>
-              </div>
-    
+          </div>
+        </div>
+        <div>
+          <p class="${transaction.type === "deposit" ? "credit" : "debit"}">\u{20A6}<span>${transaction.type === "deposit" ? transaction.amount : Math.abs(transaction.amount)}</span></p>
+        </div>
+      </div>
     `;
+    }
+    _setUpStoredDarkMode() {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "dark") document.documentElement.classList.add("dark-mode");
+    }
+    _addHandlerDarkModeToggle() {
+        document.addEventListener("click", (e)=>{
+            const toggleBtn = e.target.closest(".dark-mode-toggler");
+            if (!toggleBtn) return;
+            const isDark = document.documentElement.classList.toggle("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+            document.querySelectorAll(".dark-mode-toggler ion-icon").forEach((icon)=>{
+                icon.setAttribute("name", isDark ? "moon" : "sunny");
+            });
+        });
     }
 }
 exports.default = View;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/SVG/user.svg":"jGroa","../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX"}],"jGroa":[function(require,module,exports) {
-module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
+},{"../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX","../../img/SVG/user.svg":"jGroa","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3hLZF":[function(require,module,exports) {
+module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
 
-},{"d4d8473d968d2e31":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+},{"ac29cf51cf3f1a90":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
 var bundleURL = {};
 function getBundleURLCached(id) {
@@ -1245,13 +1267,13 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"3hLZF":[function(require,module,exports) {
-module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
-
-},{"ac29cf51cf3f1a90":"lgJ39"}],"kqXGX":[function(require,module,exports) {
+},{}],"kqXGX":[function(require,module,exports) {
 module.exports = require("aaddd35fabe4596c").getBundleURL("ks2i7") + "empty-transaction.1385f39d.svg" + "?" + Date.now();
 
-},{"aaddd35fabe4596c":"lgJ39"}],"jPxSl":[function(require,module,exports) {
+},{"aaddd35fabe4596c":"lgJ39"}],"jGroa":[function(require,module,exports) {
+module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
+
+},{"d4d8473d968d2e31":"lgJ39"}],"jPxSl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _view = require("../../view");
@@ -1286,7 +1308,7 @@ class TransactionView extends (0, _viewDefault.default) {
 }
 exports.default = new TransactionView();
 
-},{"../../view":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"f9GCe":[function(require,module,exports) {
+},{"../../view":"38NyO","../../../../img/SVG/empty-transaction.svg":"kqXGX","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f9GCe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");
@@ -1317,17 +1339,34 @@ class FundAccountView extends (0, _viewJsDefault.default) {
             const fundBtn = e.target.closest(".fund-btn");
             if (!fundBtn) return;
             e.preventDefault();
-            console.log("fundAccount btn clicked");
             // disable button
             (0, _commonJs.loadingSpinner)(fundBtn);
             // get funding amount
-            const fundAmount = Number(document.querySelector(".amount input").value);
-            if (!fundAmount) {
-                (0, _commonJs.toast).error("please fill an amount");
+            const fundAmountInput = document.querySelector(".amount input");
+            const fundAmount = Number(fundAmountInput.value);
+            if (!fundAmount || fundAmount <= 0) {
+                (0, _commonJs.toast).error("please enter valid");
                 (0, _commonJs.clearLoadingSpinner)(fundBtn, "Fund Now");
+                return;
             }
             // get funding message from handler
-            await handler(fundAmount);
+            try {
+                const fundingStatus = await handler(fundAmount);
+                if (fundingStatus.toLowerCase().includes("successful")) (0, _commonJs.toast).success(fundingStatus);
+            } catch (error) {
+                (0, _commonJs.toast).error(error?.message || "funding failed");
+            } finally{
+                this.clearForm([
+                    fundAmountInput
+                ]);
+                const totalAmount = document.querySelector(".total-amount");
+                totalAmount.textContent = "";
+                // Always reset spinner after 6 seconds
+                setTimeout(()=>{
+                    (0, _commonJs.clearLoadingSpinner)(fundBtn, "Fund Now");
+                    (0, _commonJs.toast).hide(); // optionally hide toast, but maybe better to leave it visible longer
+                }, 6000);
+            }
         });
     }
     _generateMarkup() {
@@ -1407,7 +1446,7 @@ class FundAccountView extends (0, _viewJsDefault.default) {
                         >
                           <div class="transaction__history__heading">
                             <span>Transactions</span>
-                            <a href="">View all</a>
+                            <a class="transaction-view">View all</a>
                           </div>
                          ${this.data.transactions.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
                         </div>`}
@@ -1421,9 +1460,40 @@ class FundAccountView extends (0, _viewJsDefault.default) {
 }
 exports.default = new FundAccountView();
 
-},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","../../../../img/Logo-2.png":"92p5i","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../common.js":"2ASYY","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"92p5i":[function(require,module,exports) {
+},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","../../../../img/SVG/empty-transaction.svg":"kqXGX","../../../../img/Logo-2.png":"92p5i","../../../common.js":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"92p5i":[function(require,module,exports) {
 module.exports = require("50c0dbe393cde5a8").getBundleURL("ks2i7") + "Logo-2.039d4a1d.png" + "?" + Date.now();
 
-},{"50c0dbe393cde5a8":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
+},{"50c0dbe393cde5a8":"lgJ39"}],"gOtW5":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _viewJs = require("../../view.js");
+var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _sadEmojiSvg = require("../../../../img/SVG/sad-emoji.svg");
+var _sadEmojiSvgDefault = parcelHelpers.interopDefault(_sadEmojiSvg);
+class LoanView extends (0, _viewJsDefault.default) {
+    _parentElement = document.querySelector(".dashboard-main");
+    _generateMarkup() {
+        return `
+        ${this.headerMarkUp()}
+        <main>
+            <div class="loan-view">
+              <div class="loan-view__content">
+                <img src=${0, _sadEmojiSvgDefault.default} alt="sad-emoji-face"/>
+                <p>
+                Loan applications will soon be available on your dashboard. For now,
+                please apply via the <a href="/index.html">Home page</a>.
+                </p>
+              </div>
+            </div>
+        </main>
+    `;
+    }
+}
+exports.default = new LoanView();
+
+},{"../../view.js":"38NyO","../../../../img/SVG/sad-emoji.svg":"8QZnM","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8QZnM":[function(require,module,exports) {
+module.exports = require("af266af2ddd7cab").getBundleURL("ks2i7") + "sad-emoji.bf65e7a7.svg" + "?" + Date.now();
+
+},{"af266af2ddd7cab":"lgJ39"}]},["a2UUf","56wmq"], "56wmq", "parcelRequiree06a")
 
 //# sourceMappingURL=dashboard.0e2d23cb.js.map
