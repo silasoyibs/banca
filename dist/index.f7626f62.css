@@ -429,6 +429,12 @@ body {
   display: grid;
 }
 
+@media (width <= 59em) {
+  .container--dashboard {
+    grid-template-columns: 1fr 112fr;
+  }
+}
+
 .u-flex {
   display: flex;
 }
@@ -1489,6 +1495,20 @@ body {
   margin-bottom: 3rem;
 }
 
+.dashboard-sidebar .nav__logo img:first-child {
+  width: 5rem;
+}
+
+.dashboard-sidebar .nav__logo img:last-child {
+  width: 8rem;
+}
+
+@media (width <= 59em) {
+  .dashboard-sidebar .nav__logo img:last-child {
+    display: none;
+  }
+}
+
 .dashboard-sidebar .nav__link {
   color: #fff;
   border-radius: 10px;
@@ -1500,10 +1520,23 @@ body {
   display: flex;
 }
 
+@media (width <= 59em) {
+  .dashboard-sidebar .nav__link span {
+    display: none;
+  }
+}
+
 .dashboard-sidebar .nav__link .nav__icon {
   fill: #fff;
   width: 2rem;
   height: 2rem;
+}
+
+@media (width <= 59em) {
+  .dashboard-sidebar .nav__link .nav__icon {
+    width: 3rem;
+    height: 3rem;
+  }
 }
 
 .dashboard-sidebar .nav__link.active, .dashboard-sidebar .nav__link:hover {
@@ -1597,6 +1630,12 @@ body {
 .dashboard-main main {
   margin-top: 10px;
   padding: 0 3rem;
+}
+
+@media (width <= 59em) {
+  .dashboard-main main {
+    padding: 0 2rem;
+  }
 }
 
 .dashboard-main main .customer-account {

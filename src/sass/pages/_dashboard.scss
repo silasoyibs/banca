@@ -7,6 +7,15 @@
     padding: 5rem 2rem 0 3rem;
     &__logo {
       margin-bottom: 3rem;
+      img:first-child {
+        width: 5rem;
+      }
+      img:last-child {
+        width: 8rem;
+        @media (max-width: 59em) {
+          display: none;
+        }
+      }
     }
     &__link {
       display: flex;
@@ -17,10 +26,19 @@
       margin-bottom: 2rem;
       padding: 1.2rem 1rem;
       border-radius: 10px;
+      & span {
+        @media (max-width: 59em) {
+          display: none;
+        }
+      }
       .nav__icon {
         height: 2rem;
         width: 2rem;
         fill: #ffff;
+        @media (max-width: 59em) {
+          width: 3rem;
+          height: 3rem;
+        }
       }
       &.active,
       &:hover {
@@ -36,6 +54,7 @@
     align-items: center;
     padding: 2rem 3rem;
     border-bottom: 1px solid #e6e8e7;
+
     &__left {
       .customer-welcome {
         display: flex;
@@ -115,6 +134,9 @@
   main {
     margin-top: 10px;
     padding: 0 3rem;
+    @media (max-width: 59em) {
+      padding: 0 2rem;
+    }
     .customer-account {
       padding: 1rem 2rem;
       display: flex;
@@ -344,7 +366,6 @@
     }
   }
 }
-// border-bottom: 1px solid #0000001a;
 
 // dark mode
 
@@ -439,3 +460,15 @@ html.dark-mode {
     }
   }
 }
+
+// .dashboard-sidebar {
+//     width: 70px !important;
+// }
+
+// .container--dashboard {
+//     grid-template-columns: 1fr 112fr;
+// }
+
+// .dashboard-sidebar .nav {
+//     /* padding: 5rem 2rem 0 3rem; */
+// }
