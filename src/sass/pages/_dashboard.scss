@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
   .nav {
     padding: 5rem 2rem 0 3rem;
     &__logo {
@@ -75,12 +74,16 @@
         display: flex;
         align-items: center;
         gap: 20px;
+        .dark-mode-toggler {
+          cursor: pointer;
+        }
         & ion-icon {
           font-size: 30px;
         }
-        & ion-icon[name="sunny"] {
+        & .dark-mode-toggler ion-icon {
           color: #fbbf24;
         }
+
         .notification-container {
           position: relative;
           .notification {
@@ -312,6 +315,127 @@
           color: #fff;
         }
       }
+    }
+    .loan-view {
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        justify-content: center;
+        img {
+          align-self: center;
+          width: 7rem;
+          margin-bottom: 20px;
+        }
+        p {
+          text-align: center;
+          a {
+            color: $color-blue;
+            font-weight: 700;
+          }
+        }
+      }
+    }
+  }
+}
+// border-bottom: 1px solid #0000001a;
+
+// dark mode
+
+html.dark-mode {
+  .page-spinner {
+    border: 3px solid $color-white;
+    border-bottom-color: transparent;
+  }
+  .dashboard-main {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+    .header-nav {
+      p,
+      span {
+        color: $color-white;
+      }
+    }
+  }
+  .dashboard-sidebar {
+    background-color: $color-black !important;
+  }
+  .customer-account {
+    background-color: $color-black !important;
+    & ion-icon[name="arrow-up"],
+    & ion-icon[name="arrow-down"] {
+      background-color: rgb(255, 255, 255, 0.1) !important;
+    }
+  }
+  .transaction__history.container-dashboard.container-dashboard--shadow,
+  .transaction__history__send-money,
+  .fund-account.container-dashboard {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  .fund-account.container-dashboard {
+    p,
+    span {
+      color: $color-white !important;
+    }
+  }
+  .transaction__history__heading {
+    span {
+      color: $color-white !important;
+    }
+  }
+  .transaction__history {
+    .transaction__history__heading,
+    .transaction__history__item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
+      padding: 0.5rem 0;
+    }
+  }
+  .transaction__history__send-money {
+    span,
+    p {
+      color: $color-white !important;
+    }
+  }
+  .transaction-details > p:first-child {
+    color: $color-white !important;
+  }
+
+  .loan-view {
+    p {
+      color: $color-white;
+    }
+  }
+
+  button {
+    background-color: $color-black !important;
+  }
+  .toast {
+    background-color: $color-black;
+    border-left: solid 6px $color-white;
+    color: $color-white !important;
+    & .toast-message--text {
+      color: #c4c4c4 !important;
+    }
+    & .toast-close-icon {
+      color: $color-white;
+    }
+    & .toast-icon.toast-icon--success {
+      color: $color-white;
+    }
+    & .toast-icon.toast-icon--error {
+      color: #ff0000;
+    }
+
+    &::before {
+      background-color: $color-white;
+    }
+    &::after {
+      background-color: $color-white;
     }
   }
 }

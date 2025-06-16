@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head><script src="/login.0f324447.js"></script>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/login.0f324447.js"></script><script>(()=>{
+    const theme = localStorage.getItem("theme");
+    if (theme === "dark") document.documentElement.classList.add("dark-mode");
+})();
+
+</script>
     <link rel="stylesheet" href="/index.f7626f62.css">
     <title>Dashbord</title>
   </head>
@@ -32,7 +38,7 @@
             </svg>
             <span>Fund Account</span></a>
 
-          <a href="#" class="nav__link">
+          <a href="#" class="nav__link" data-view="loan-view">
             <svg class="nav__icon">
               <use xlink:href="/sprite.e70822e0.svg#icon-money"></use>
             </svg>

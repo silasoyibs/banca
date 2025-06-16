@@ -1557,11 +1557,15 @@ body {
   display: flex;
 }
 
+.dashboard-main .header-nav__right .header-icons .dark-mode-toggler {
+  cursor: pointer;
+}
+
 .dashboard-main .header-nav__right .header-icons ion-icon {
   font-size: 30px;
 }
 
-.dashboard-main .header-nav__right .header-icons ion-icon[name="sunny"] {
+.dashboard-main .header-nav__right .header-icons .dark-mode-toggler ion-icon {
   color: #fbbf24;
 }
 
@@ -1824,5 +1828,103 @@ body {
   border: none;
   border-radius: 5px;
   padding: 1rem 0;
+}
+
+.dashboard-main main .loan-view {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  display: flex;
+}
+
+.dashboard-main main .loan-view__content {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.dashboard-main main .loan-view__content img {
+  align-self: center;
+  width: 7rem;
+  margin-bottom: 20px;
+}
+
+.dashboard-main main .loan-view__content p {
+  text-align: center;
+}
+
+.dashboard-main main .loan-view__content p a {
+  color: #0050b2;
+  font-weight: 700;
+}
+
+html.dark-mode .page-spinner {
+  border: 3px solid #fff;
+  border-bottom-color: #0000;
+}
+
+html.dark-mode .dashboard-main {
+  background-color: #000000e6 !important;
+}
+
+html.dark-mode .dashboard-main .header-nav p, html.dark-mode .dashboard-main .header-nav span {
+  color: #fff;
+}
+
+html.dark-mode .dashboard-sidebar, html.dark-mode .customer-account {
+  background-color: #000 !important;
+}
+
+html.dark-mode .customer-account ion-icon[name="arrow-up"], html.dark-mode .customer-account ion-icon[name="arrow-down"] {
+  background-color: #ffffff1a !important;
+}
+
+html.dark-mode .transaction__history.container-dashboard.container-dashboard--shadow, html.dark-mode .transaction__history__send-money, html.dark-mode .fund-account.container-dashboard {
+  background-color: #0006;
+}
+
+html.dark-mode .fund-account.container-dashboard p, html.dark-mode .fund-account.container-dashboard span, html.dark-mode .transaction__history__heading span {
+  color: #fff !important;
+}
+
+html.dark-mode .transaction__history .transaction__history__heading, html.dark-mode .transaction__history .transaction__history__item {
+  padding: .5rem 0;
+  border-bottom: 1px solid #ffffff4d !important;
+}
+
+html.dark-mode .transaction__history__send-money span, html.dark-mode .transaction__history__send-money p, html.dark-mode .transaction-details > p:first-child {
+  color: #fff !important;
+}
+
+html.dark-mode .loan-view p {
+  color: #fff;
+}
+
+html.dark-mode button {
+  background-color: #000 !important;
+}
+
+html.dark-mode .toast {
+  background-color: #000;
+  border-left: 6px solid #fff;
+  color: #fff !important;
+}
+
+html.dark-mode .toast .toast-message--text {
+  color: #c4c4c4 !important;
+}
+
+html.dark-mode .toast .toast-close-icon, html.dark-mode .toast .toast-icon.toast-icon--success {
+  color: #fff;
+}
+
+html.dark-mode .toast .toast-icon.toast-icon--error {
+  color: red;
+}
+
+html.dark-mode .toast:before, html.dark-mode .toast:after {
+  background-color: #fff;
 }
 /*# sourceMappingURL=index.f7626f62.css.map */

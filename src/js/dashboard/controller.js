@@ -2,6 +2,7 @@ import * as model from "./model.js";
 import dashboardView from "./views/dashboard/dashboardView.js";
 import transactionView from "./views/transactions/transactionView.js";
 import fundAccountView from "./views/fundAccount/fundAccountView.js";
+import loanView from "./views/loan/loanView.js";
 
 async function controlDashboard() {
   try {
@@ -13,8 +14,9 @@ async function controlDashboard() {
     dashboardView.render(model.state);
     // realtime listener
     controlRealTimeListeners();
-  } catch (err) {
-    console.log(err);
+    // throw new Error("something went wrong");
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -24,7 +26,8 @@ async function controlSendMoney(transfer) {
 }
 // control banca funding account
 async function controlFundAccount(fundAmount) {
-  await model.fundAccount(fundAmount);
+  const fundingStatus = await model.fundAccount(fundAmount);
+  return fundingStatus;
 }
 
 function controlUpdateBalance(newBalance) {
@@ -44,6 +47,7 @@ function controlUpdateTransaction(
 }
 function controlDashboardView() {
   const navLinks = document.querySelectorAll(".nav__link");
+
   let viewTarget;
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
@@ -67,6 +71,10 @@ function controlDashboardView() {
       if (viewTarget === "funding-view") {
         fundAccountView.render(model.state);
       }
+      // render loan view
+      if (viewTarget === "loan-view") {
+        loanView.render(model.state);
+      }
     });
   });
 }
@@ -77,12 +85,18 @@ function controlRealTimeListeners() {
   model.listenToTransaction(controlUpdateTransaction);
 }
 
+function controlViewAllTransaction() {
+  transactionView.render(model.state);
+}
+
 const init = function () {
   controlDashboard();
   // Send Money to Another Banca User
   dashboardView.addHandlerSendMoney(controlSendMoney);
   // Fund Banca Account
   fundAccountView.addHandlerFundAccount(controlFundAccount);
+  // control view all transaction
+  dashboardView.addHandlerViewAllTransaction(controlViewAllTransaction);
 
   // control dashboard view
   document.addEventListener("DOMContentLoaded", function () {

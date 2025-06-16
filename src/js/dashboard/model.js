@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { toast } from "../common";
 export const state = {
   user: {},
   transactions: [],
@@ -148,7 +149,6 @@ async function getRecipientData(recipientAccountNumber) {
     throw new Error("recipient not found");
   }
 }
-
 // send money to another banca user (transfer)
 export async function transfer(transfer) {
   try {
@@ -199,27 +199,17 @@ async function sendMoney(amount, recipientAccountNumber) {
       amount,
       name
     );
-    // const balance = recipientData.balance + amount;
-    // await updateDoc(recipientRef, {
-    //   balance: balance,
-    // });
-    // // update recipient transactions list
-    // await addDoc(recipientTransactionsRef, {
-    //   senderName,
-    //   amount,
-    //   date: new Date().toISOString(),
-    //   type: "deposit",
-    // });
   } else {
     throw new Error("recipient could not be found");
   }
 }
-// calculate total transaction income and expenses
+// calculate total transaction income
 function calculateTotalIncome(transactionList) {
   return transactionList
     .filter((amount) => amount > 0)
     .reduce((acc, amount) => acc + amount, 0);
 }
+// calculate total transaction expenses
 function calculateTotalExpense(transactionList) {
   return transactionList
     .filter((amount) => amount < 0)
@@ -258,36 +248,34 @@ export function listenToTransaction(handleTransactionChange) {
     handleTransactionChange(newTransaction, newTotalIncome, newTotalExpense);
   });
 }
-
 // fund banca account
 export async function fundAccount(fundAmount) {
   const { user, userRef, userTransactionsRef } = state;
   const name = "Self Funding";
-  try {
-    const handler = PaystackPop.setup({
-      key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f", // from Paystack dashboard
-      email: state.user.email, // use the actual logged-in user
-      amount: fundAmount * 100, // amount in kobo
-      currency: "NGN",
-      callback: function (response) {
-        // verify the transaction here
-        "Payment complete! Reference: " + response.reference;
-        // You can now call your backend to update wallet
-        console.log(user, userRef, userTransactionsRef, fundAmount, name);
-        depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
-        console.log("funding successful");
-      },
-      onClose: function () {
-        alert("Transaction was not completed");
-      },
-    });
+  return new Promise((resolve, reject) => {
+    try {
+      const handler = PaystackPop.setup({
+        key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f", // from Paystack dashboard
+        email: state.user.email, // use the actual logged-in user
+        amount: fundAmount * 100, // amount in kobo
+        currency: "NGN",
+        callback: function () {
+          // You can now call your backend to update wallet
+          depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
+          resolve("funding successful");
+        },
+        onClose: function () {
+          reject(new Error("transaction not successful"));
+        },
+      });
 
-    handler.openIframe();
-  } catch (err) {
-    console.log("funding went wrong", err);
-  }
+      handler.openIframe();
+    } catch (error) {
+      toast.error(error?.message || "transaction not successful");
+    }
+  });
 }
-
+// deposit money to banca account
 async function depositMoney(user, userRef, transactionRef, amount, name) {
   try {
     // credit banca user

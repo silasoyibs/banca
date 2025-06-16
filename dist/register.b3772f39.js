@@ -725,6 +725,7 @@ parcelHelpers.export(exports, "fundAccount", ()=>fundAccount);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
+var _common = require("../common");
 const state = {
     user: {},
     transactions: [],
@@ -876,23 +877,13 @@ async function sendMoney(amount, recipientAccountNumber) {
         const name = state.user.fullName;
         // credit banca user
         depositMoney(recipientData, recipientRef, recipientTransactionsRef, amount, name);
-    // const balance = recipientData.balance + amount;
-    // await updateDoc(recipientRef, {
-    //   balance: balance,
-    // });
-    // // update recipient transactions list
-    // await addDoc(recipientTransactionsRef, {
-    //   senderName,
-    //   amount,
-    //   date: new Date().toISOString(),
-    //   type: "deposit",
-    // });
     } else throw new Error("recipient could not be found");
 }
-// calculate total transaction income and expenses
+// calculate total transaction income
 function calculateTotalIncome(transactionList) {
     return transactionList.filter((amount)=>amount > 0).reduce((acc, amount)=>acc + amount, 0);
 }
+// calculate total transaction expenses
 function calculateTotalExpense(transactionList) {
     return transactionList.filter((amount)=>amount < 0).reduce((acc, amount)=>acc + amount, 0);
 }
@@ -926,29 +917,29 @@ function listenToTransaction(handleTransactionChange) {
 async function fundAccount(fundAmount) {
     const { user, userRef, userTransactionsRef } = state;
     const name = "Self Funding";
-    try {
-        const handler = PaystackPop.setup({
-            key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f",
-            email: state.user.email,
-            amount: fundAmount * 100,
-            currency: "NGN",
-            callback: function(response) {
-                // verify the transaction here
-                response.reference;
-                // You can now call your backend to update wallet
-                console.log(user, userRef, userTransactionsRef, fundAmount, name);
-                depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
-                console.log("funding successful");
-            },
-            onClose: function() {
-                alert("Transaction was not completed");
-            }
-        });
-        handler.openIframe();
-    } catch (err) {
-        console.log("funding went wrong", err);
-    }
+    return new Promise((resolve, reject)=>{
+        try {
+            const handler = PaystackPop.setup({
+                key: "pk_test_86d236442aa4f6fd2b610b3d8838d7737184036f",
+                email: state.user.email,
+                amount: fundAmount * 100,
+                currency: "NGN",
+                callback: function() {
+                    // You can now call your backend to update wallet
+                    depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
+                    resolve("funding successful");
+                },
+                onClose: function() {
+                    reject(new Error("transaction not successful"));
+                }
+            });
+            handler.openIframe();
+        } catch (error) {
+            (0, _common.toast).error(error?.message || "transaction not successful");
+        }
+    });
 }
+// deposit money to banca account
 async function depositMoney(user, userRef, transactionRef, amount, name) {
     try {
         // credit banca user
@@ -968,6 +959,6 @@ async function depositMoney(user, userRef, transactionRef, amount, name) {
     }
 }
 
-},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
+},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","../common":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")
 
 //# sourceMappingURL=register.b3772f39.js.map
