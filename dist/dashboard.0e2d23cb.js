@@ -671,7 +671,7 @@ const init = function() {
 };
 init();
 
-},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe","./views/loan/loanView.js":"gOtW5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
+},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe","./views/loan/loanView.js":"gOtW5"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
@@ -924,7 +924,7 @@ async function depositMoney(user, userRef, transactionRef, amount, name) {
     }
 }
 
-},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","../common":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
+},{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../common":"2ASYY"}],"iIV3a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");
@@ -1062,7 +1062,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
 }
 exports.default = new DashboardView();
 
-},{"../../view.js":"38NyO","../../../common.js":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"38NyO":[function(require,module,exports) {
+},{"../../view.js":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../common.js":"2ASYY"}],"38NyO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _dashboardImgCardPng = require("../../img/dashboard-img-card.png");
@@ -1232,10 +1232,10 @@ class View {
 }
 exports.default = View;
 
-},{"../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX","../../img/SVG/user.svg":"jGroa","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3hLZF":[function(require,module,exports) {
-module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/SVG/user.svg":"jGroa","../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX"}],"jGroa":[function(require,module,exports) {
+module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
 
-},{"ac29cf51cf3f1a90":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+},{"d4d8473d968d2e31":"lgJ39"}],"lgJ39":[function(require,module,exports) {
 "use strict";
 var bundleURL = {};
 function getBundleURLCached(id) {
@@ -1270,13 +1270,13 @@ exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
 exports.getOrigin = getOrigin;
 
-},{}],"kqXGX":[function(require,module,exports) {
+},{}],"3hLZF":[function(require,module,exports) {
+module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
+
+},{"ac29cf51cf3f1a90":"lgJ39"}],"kqXGX":[function(require,module,exports) {
 module.exports = require("aaddd35fabe4596c").getBundleURL("ks2i7") + "empty-transaction.1385f39d.svg" + "?" + Date.now();
 
-},{"aaddd35fabe4596c":"lgJ39"}],"jGroa":[function(require,module,exports) {
-module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
-
-},{"d4d8473d968d2e31":"lgJ39"}],"jPxSl":[function(require,module,exports) {
+},{"aaddd35fabe4596c":"lgJ39"}],"jPxSl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _view = require("../../view");
@@ -1311,7 +1311,7 @@ class TransactionView extends (0, _viewDefault.default) {
 }
 exports.default = new TransactionView();
 
-},{"../../view":"38NyO","../../../../img/SVG/empty-transaction.svg":"kqXGX","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f9GCe":[function(require,module,exports) {
+},{"../../view":"38NyO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"f9GCe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");
@@ -1463,7 +1463,7 @@ class FundAccountView extends (0, _viewJsDefault.default) {
 }
 exports.default = new FundAccountView();
 
-},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","../../../../img/SVG/empty-transaction.svg":"kqXGX","../../../../img/Logo-2.png":"92p5i","../../../common.js":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"92p5i":[function(require,module,exports) {
+},{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","../../../../img/Logo-2.png":"92p5i","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../../common.js":"2ASYY","../../../../img/SVG/empty-transaction.svg":"kqXGX"}],"92p5i":[function(require,module,exports) {
 module.exports = require("50c0dbe393cde5a8").getBundleURL("ks2i7") + "Logo-2.039d4a1d.png" + "?" + Date.now();
 
 },{"50c0dbe393cde5a8":"lgJ39"}],"gOtW5":[function(require,module,exports) {
