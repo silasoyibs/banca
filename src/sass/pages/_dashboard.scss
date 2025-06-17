@@ -15,7 +15,7 @@
   .nav {
     padding: 5rem 2rem 0 3rem;
     @media (max-width: 38em) {
-      padding: 3rem 1rem 0rem 1rem;
+      padding: 1rem 1rem 0rem 1rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -78,6 +78,7 @@
 .dashboard-main {
   @media (max-width: 38em) {
     order: 1;
+    padding-bottom: 10rem;
   }
   .header-nav {
     display: flex;
