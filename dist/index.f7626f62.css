@@ -429,6 +429,12 @@ body {
   display: grid;
 }
 
+@media (width <= 59em) {
+  .container--dashboard {
+    grid-template-columns: 1fr 112fr;
+  }
+}
+
 .u-flex {
   display: flex;
 }
@@ -1489,6 +1495,20 @@ body {
   margin-bottom: 3rem;
 }
 
+.dashboard-sidebar .nav__logo img:first-child {
+  width: 5rem;
+}
+
+.dashboard-sidebar .nav__logo img:last-child {
+  width: 8rem;
+}
+
+@media (width <= 59em) {
+  .dashboard-sidebar .nav__logo img:last-child {
+    display: none;
+  }
+}
+
 .dashboard-sidebar .nav__link {
   color: #fff;
   border-radius: 10px;
@@ -1500,14 +1520,37 @@ body {
   display: flex;
 }
 
+@media (width <= 59em) {
+  .dashboard-sidebar .nav__link span {
+    display: none;
+  }
+}
+
 .dashboard-sidebar .nav__link .nav__icon {
   fill: #fff;
   width: 2rem;
   height: 2rem;
 }
 
+@media (width <= 59em) {
+  .dashboard-sidebar .nav__link .nav__icon {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
 .dashboard-sidebar .nav__link.active, .dashboard-sidebar .nav__link:hover {
   background-color: #00bfff;
+}
+
+.dashboard-sidebar .nav__link.mobile-nav {
+  display: none;
+}
+
+@media (width <= 38em) {
+  .dashboard-sidebar .nav__link.mobile-nav {
+    display: block;
+  }
 }
 
 .dashboard-main .header-nav {
@@ -1518,10 +1561,22 @@ body {
   display: flex;
 }
 
+@media (width <= 38em) {
+  .dashboard-main .header-nav {
+    padding: 1rem 2rem;
+  }
+}
+
 .dashboard-main .header-nav__left .customer-welcome {
   align-items: center;
   gap: 10px;
   display: flex;
+}
+
+@media (width <= 38em) {
+  .dashboard-main .header-nav__left .customer-welcome {
+    flex-direction: column-reverse;
+  }
 }
 
 .dashboard-main .header-nav__left .customer-welcome p span {
@@ -1536,6 +1591,12 @@ body {
   border-radius: 50%;
   width: 50px;
   height: 50px;
+}
+
+@media (width <= 38em) {
+  .dashboard-main .header-nav__left .customer-welcome__img img {
+    width: 50%;
+  }
 }
 
 .dashboard-main .header-nav__left .customer-welcome__img:after {
@@ -1569,28 +1630,17 @@ body {
   color: #fbbf24;
 }
 
-.dashboard-main .header-nav__right .header-icons .notification-container {
-  position: relative;
+.dashboard-main .header-nav__right .header-icons .logout {
+  color: #000;
 }
 
-.dashboard-main .header-nav__right .header-icons .notification-container .notification {
-  z-index: 2;
-  color: #fff;
-  background-color: red;
-  border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 19px;
-  height: 19px;
-  font-size: 10px;
-  font-weight: 600;
-  display: flex;
-  position: absolute;
-  top: -12%;
-  right: -4%;
+@media (width <= 38em) {
+  .dashboard-main .header-nav__right .header-icons .logout {
+    display: none;
+  }
 }
 
-.dashboard-main .header-nav__right .header-icons .logout, .dashboard-main .header-nav__right .header-icons .logout ion-icon[name="log-out"] {
+.dashboard-main .header-nav__right .header-icons .logout ion-icon[name="log-out"] {
   color: #000;
 }
 
@@ -1599,13 +1649,19 @@ body {
   padding: 0 3rem;
 }
 
+@media (width <= 59em) {
+  .dashboard-main main {
+    padding: 0 2rem;
+  }
+}
+
 .dashboard-main main .customer-account {
   color: #fff;
   background-color: #0050b2;
   border-radius: 5px;
-  flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
+  height: 22rem;
   padding: 1rem 2rem;
   display: flex;
 }
@@ -1648,8 +1704,33 @@ body {
   font-weight: 500;
 }
 
+.dashboard-main main .customer-account__right {
+  align-items: end;
+}
+
 .dashboard-main main .customer-account__right img {
-  width: 30rem;
+  object-fit: contain;
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+}
+
+@media (width <= 59em) {
+  .dashboard-main main .customer-account__right img {
+    width: 80%;
+  }
+}
+
+@media (width <= 44em) {
+  .dashboard-main main .customer-account__right img {
+    width: 70%;
+  }
+}
+
+@media (width <= 38em) {
+  .dashboard-main main .customer-account__right img {
+    display: none;
+  }
 }
 
 .dashboard-main main .transaction {
@@ -1657,6 +1738,14 @@ body {
   column-gap: 30px;
   margin: 3rem 0;
   display: grid;
+}
+
+@media (width <= 44em) {
+  .dashboard-main main .transaction {
+    grid-template-rows: auto auto;
+    grid-template-columns: none;
+    row-gap: 30px;
+  }
 }
 
 .dashboard-main main .transaction__history__heading {
@@ -1791,6 +1880,24 @@ body {
   display: grid;
 }
 
+@media (width <= 44em) {
+  .dashboard-main main .fund {
+    grid-template-rows: auto auto;
+    grid-template-columns: none;
+    row-gap: 30px;
+  }
+}
+
+.dashboard-main main .fund .fund-account {
+  align-self: start;
+}
+
+@media (width <= 44em) {
+  .dashboard-main main .fund .fund-account {
+    order: 2;
+  }
+}
+
 .dashboard-main main .fund .fund-account figure {
   width: 2rem;
 }
@@ -1858,6 +1965,42 @@ body {
 .dashboard-main main .loan-view__content p a {
   color: #0050b2;
   font-weight: 700;
+}
+
+.notification-container {
+  position: relative;
+}
+
+@media (width <= 38em) {
+  .notification-container {
+    display: none;
+  }
+
+  .notification-container.mobile-nav {
+    display: block;
+  }
+}
+
+.notification-container .notification {
+  z-index: 2;
+  color: #fff;
+  background-color: red;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 19px;
+  height: 19px;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  position: absolute;
+  top: -12%;
+  right: -4%;
+}
+
+.notification-container .notification.mobile-nav {
+  top: -30%;
+  right: -23%;
 }
 
 html.dark-mode .page-spinner {

@@ -7,11 +7,14 @@
 //   margin: 0 auto;
 //   max-width: 125rem;
 // }
-.container--dashboard{
+.container--dashboard {
   max-width: 192rem;
   margin: 0 auto;
   padding: 0;
-  height:100vh;
+  height: 100vh;
   display: grid;
-  grid-template-columns:1.4fr 4fr;
+  grid-template-columns: 1.4fr 4fr;
+  @media (max-width: 59em) {
+    grid-template-columns: 1fr 112fr;
+  }
 }

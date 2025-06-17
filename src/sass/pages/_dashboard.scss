@@ -7,6 +7,15 @@
     padding: 5rem 2rem 0 3rem;
     &__logo {
       margin-bottom: 3rem;
+      img:first-child {
+        width: 5rem;
+      }
+      img:last-child {
+        width: 8rem;
+        @media (max-width: 59em) {
+          display: none;
+        }
+      }
     }
     &__link {
       display: flex;
@@ -17,14 +26,31 @@
       margin-bottom: 2rem;
       padding: 1.2rem 1rem;
       border-radius: 10px;
+      & span {
+        @media (max-width: 59em) {
+          display: none;
+        }
+      }
+
       .nav__icon {
         height: 2rem;
         width: 2rem;
         fill: #ffff;
+        @media (max-width: 59em) {
+          width: 3rem;
+          height: 3rem;
+        }
       }
+
       &.active,
       &:hover {
         background-color: #00bfff;
+      }
+    }
+    &__link.mobile-nav {
+      display: none;
+      @media (max-width: 38em) {
+        display: block;
       }
     }
   }
@@ -36,11 +62,18 @@
     align-items: center;
     padding: 2rem 3rem;
     border-bottom: 1px solid #e6e8e7;
+    @media (max-width: 38em) {
+      padding: 1rem 2rem;
+    }
+
     &__left {
       .customer-welcome {
         display: flex;
         align-items: center;
         gap: 10px;
+        @media (max-width: 38em) {
+          flex-direction: column-reverse;
+        }
         & p {
           & span {
             margin-left: 5px;
@@ -53,6 +86,9 @@
             height: 50px;
             width: 50px;
             border-radius: 50%;
+            @media (max-width: 38em) {
+              width: 50%;
+            }
           }
           &::after {
             display: block;
@@ -84,26 +120,10 @@
           color: #fbbf24;
         }
 
-        .notification-container {
-          position: relative;
-          .notification {
-            position: absolute;
-            top: -12%;
-            right: -4%;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 19px;
-            width: 19px;
-            background-color: red;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 10px;
-            font-weight: 600;
-          }
-        }
         .logout {
+          @media (max-width: 38em) {
+            display: none;
+          }
           color: #000;
           & ion-icon[name="log-out"] {
             color: #000;
@@ -115,15 +135,19 @@
   main {
     margin-top: 10px;
     padding: 0 3rem;
+    @media (max-width: 59em) {
+      padding: 0 2rem;
+    }
     .customer-account {
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: nowrap;
       background-color: $color-blue;
       border-radius: 5px;
       color: #fff;
+      height: 22rem;
+
       &__left {
         .account-info {
           display: flex;
@@ -161,8 +185,21 @@
         }
       }
       &__right {
+        align-items: end;
         & img {
-          width: 30rem;
+          width: 100%;
+          max-width: 250px;
+          height: auto;
+          object-fit: contain;
+          @media (max-width: 59em) {
+            width: 80%;
+          }
+          @media (max-width: 44em) {
+            width: 70%;
+          }
+          @media (max-width: 38em) {
+            display: none;
+          }
         }
       }
     }
@@ -171,6 +208,11 @@
       display: grid;
       grid-template-columns: 3fr 2fr;
       column-gap: 30px;
+      @media (max-width: 44em) {
+        grid-template-columns: none;
+        grid-template-rows: auto auto;
+        row-gap: 30px;
+      }
       &__history {
         &__heading {
           display: flex;
@@ -284,7 +326,16 @@
       display: grid;
       grid-template-columns: 2fr 3fr;
       column-gap: 30px;
+      @media (max-width: 44em) {
+        grid-template-columns: none;
+        grid-template-rows: auto auto;
+        row-gap: 30px;
+      }
       .fund-account {
+        align-self: start;
+        @media (max-width: 44em) {
+          order: 2;
+        }
         & figure {
           width: 2rem;
         }
@@ -292,6 +343,7 @@
           display: block;
           margin-bottom: 1rem;
         }
+
         & input {
           width: 100%;
           padding: 1rem 1rem;
@@ -344,7 +396,39 @@
     }
   }
 }
-// border-bottom: 1px solid #0000001a;
+
+// notfication
+.notification-container {
+  @media (max-width: 38em) {
+    display: none;
+  }
+  &.mobile-nav {
+    @media (max-width: 38em) {
+      display: block;
+    }
+  }
+  position: relative;
+  .notification {
+    position: absolute;
+    top: -12%;
+    right: -4%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 19px;
+    width: 19px;
+    background-color: red;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .notification.mobile-nav {
+    top: -30%;
+    right: -23%;
+  }
+}
 
 // dark mode
 

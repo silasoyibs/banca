@@ -22,13 +22,12 @@ html {
   overflow-x: hidden;
   scroll-behavior: smooth;
 
-
   // 1200px larger desktop
-  @media (max-width:75em){
+  @media (max-width: 75em) {
     font-size: 56.25%;
   }
   // 940px tablet and smaller desktop
-  @media (max-width:59em){
+  @media (max-width: 59em) {
     font-size: 50%;
   }
 }
@@ -42,5 +41,3 @@ body {
   position: relative;
   overflow-x: hidden;
 }
-
-

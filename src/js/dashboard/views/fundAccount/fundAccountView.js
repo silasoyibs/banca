@@ -61,7 +61,7 @@ class FundAccountView extends View {
             ${this.headerMarkUp()}
             <main class="main-view">
               <!-- main dashboard -->
-     <!-- Fundind template -->
+     <!-- Funding template -->
           <div class="customer-account">
                  <div class="customer-account__left">
                    <div class="account-info">
