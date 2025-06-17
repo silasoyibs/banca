@@ -1170,8 +1170,10 @@ class View {
             </div>
           </div>
         </div>
-        <div class="customer-account__right">
+        <div class="customer-account__right u-flex u-flex-d-col">
+      
           <img src=${0, _dashboardImgCardPngDefault.default} />
+     
         </div>
       </div>
     `;
@@ -1377,7 +1379,7 @@ class FundAccountView extends (0, _viewJsDefault.default) {
             ${this.headerMarkUp()}
             <main class="main-view">
               <!-- main dashboard -->
-     <!-- Fundind template -->
+     <!-- Funding template -->
           <div class="customer-account">
                  <div class="customer-account__left">
                    <div class="account-info">

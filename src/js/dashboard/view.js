@@ -125,8 +125,10 @@ export default class View {
             </div>
           </div>
         </div>
-        <div class="customer-account__right">
+        <div class="customer-account__right u-flex u-flex-d-col">
+      
           <img src=${dasboardAtmCard} />
+     
         </div>
       </div>
     `;
