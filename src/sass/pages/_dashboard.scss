@@ -1,11 +1,31 @@
 .dashboard-sidebar {
+  @media (max-width: 38em) {
+    order: 2;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
   background-color: $color-blue;
   display: flex;
   flex-direction: column;
   align-items: center;
   .nav {
     padding: 5rem 2rem 0 3rem;
+    @media (max-width: 38em) {
+      padding: 3rem 1rem 0rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
     &__logo {
+      @media (max-width: 38em) {
+        margin-top: 7px;
+
+        border-right: 2.5px solid rgba(255, 255, 255, 0.8);
+      }
       margin-bottom: 3rem;
       img:first-child {
         width: 5rem;
@@ -56,6 +76,9 @@
   }
 }
 .dashboard-main {
+  @media (max-width: 38em) {
+    order: 1;
+  }
   .header-nav {
     display: flex;
     justify-content: space-between;

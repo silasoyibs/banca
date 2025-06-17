@@ -17,4 +17,11 @@
   @media (max-width: 59em) {
     grid-template-columns: 1fr 112fr;
   }
+  @media (max-width: 38em) {
+    max-width: 100%;
+    height: 100vh;
+    margin: 0;
+    grid-template-columns: none;
+    grid-template-rows: auto auto;
+  }
 }
