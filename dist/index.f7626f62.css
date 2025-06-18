@@ -1659,12 +1659,16 @@ body {
 
 .dashboard-main .header-nav__right .header-icons {
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   display: flex;
 }
 
 .dashboard-main .header-nav__right .header-icons .dark-mode-toggler {
   cursor: pointer;
+}
+
+.dashboard-main .header-nav__right .header-icons img {
+  height: 2.5rem;
 }
 
 .dashboard-main .header-nav__right .header-icons ion-icon {

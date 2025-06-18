@@ -1,6 +1,11 @@
 import dasboardAtmCard from "../../img/dashboard-img-card.png";
 import emptyTransaction from "../../img/SVG/empty-transaction.svg";
 import userAvatar from "../../img/SVG/user.svg";
+import iconWallet from "../../img/SVG/wallet.svg";
+import iconNotification from "../../img/SVG/notfication-icon.svg";
+import iconLogout from "../../img/SVG/logout-icon.svg";
+import iconSun from "../../img/SVG/sun-icon.svg";
+import iconMoon from "../../img/SVG/moon-icon.svg";
 
 let darkModeBound = false;
 
@@ -39,9 +44,7 @@ export default class View {
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
 
-  _addEventHandler() {
-    this.addHandlerSetDarkMode?.();
-  }
+  _addEventHandler() {}
 
   _clear() {
     this._parentElement.innerHTML = "";
@@ -70,22 +73,22 @@ export default class View {
         <div class="header-nav__right">
           <div class="header-icons">
             <div class="u-flex u-flex-v-center u-gap-small">
-              <ion-icon name="wallet"></ion-icon>
+              <img src=${iconWallet}/>
               <p>₦<span class="banca-user-balance">${this._formatAmount(
                 this.data.user.balance
               )}</span></p>
             </div>
             <a class="dark-mode-toggler">
-              <ion-icon name="${isDark ? "moon" : "sunny"}"></ion-icon>
+              <img src=${isDark ? iconMoon : iconSun} />
             </a>
             <div class="notification-container">
               <div class="notification">
                 <span class="notification__count">1</span>
               </div>
-              <ion-icon name="notifications-outline"></ion-icon>
+              <img src=${iconNotification}/>
             </div>
             <a href="/login.html" class="logout u-flex u-flex-v-center u-gap-small">
-              <ion-icon name="log-out"></ion-icon>
+               <img src=${iconLogout} />
               <span>Log out</span>
             </a>
           </div>
@@ -194,11 +197,9 @@ export default class View {
       const isDark = document.documentElement.classList.toggle("dark-mode");
       localStorage.setItem("theme", isDark ? "dark" : "light");
 
-      document
-        .querySelectorAll(".dark-mode-toggler ion-icon")
-        .forEach((icon) => {
-          icon.setAttribute("name", isDark ? "moon" : "sunny");
-        });
+      document.querySelectorAll(".dark-mode-toggler img").forEach((icon) => {
+        icon.setAttribute("src", isDark ? iconMoon : iconSun);
+      });
     });
   }
   _formatAmount(amount) {

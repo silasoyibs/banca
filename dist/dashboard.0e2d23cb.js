@@ -1071,6 +1071,16 @@ var _emptyTransactionSvg = require("../../img/SVG/empty-transaction.svg");
 var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
 var _userSvg = require("../../img/SVG/user.svg");
 var _userSvgDefault = parcelHelpers.interopDefault(_userSvg);
+var _walletSvg = require("../../img/SVG/wallet.svg");
+var _walletSvgDefault = parcelHelpers.interopDefault(_walletSvg);
+var _notficationIconSvg = require("../../img/SVG/notfication-icon.svg");
+var _notficationIconSvgDefault = parcelHelpers.interopDefault(_notficationIconSvg);
+var _logoutIconSvg = require("../../img/SVG/logout-icon.svg");
+var _logoutIconSvgDefault = parcelHelpers.interopDefault(_logoutIconSvg);
+var _sunIconSvg = require("../../img/SVG/sun-icon.svg");
+var _sunIconSvgDefault = parcelHelpers.interopDefault(_sunIconSvg);
+var _moonIconSvg = require("../../img/SVG/moon-icon.svg");
+var _moonIconSvgDefault = parcelHelpers.interopDefault(_moonIconSvg);
 let darkModeBound = false;
 class View {
     data;
@@ -1098,9 +1108,7 @@ class View {
         this._clear();
         this._parentElement.insertAdjacentHTML("afterbegin", markup);
     }
-    _addEventHandler() {
-        this.addHandlerSetDarkMode?.();
-    }
+    _addEventHandler() {}
     _clear() {
         this._parentElement.innerHTML = "";
     }
@@ -1124,20 +1132,20 @@ class View {
         <div class="header-nav__right">
           <div class="header-icons">
             <div class="u-flex u-flex-v-center u-gap-small">
-              <ion-icon name="wallet"></ion-icon>
+              <img src=${0, _walletSvgDefault.default}/>
               <p>\u{20A6}<span class="banca-user-balance">${this._formatAmount(this.data.user.balance)}</span></p>
             </div>
             <a class="dark-mode-toggler">
-              <ion-icon name="${isDark ? "moon" : "sunny"}"></ion-icon>
+              <img src=${isDark ? (0, _moonIconSvgDefault.default) : (0, _sunIconSvgDefault.default)} />
             </a>
             <div class="notification-container">
               <div class="notification">
                 <span class="notification__count">1</span>
               </div>
-              <ion-icon name="notifications-outline"></ion-icon>
+              <img src=${0, _notficationIconSvgDefault.default}/>
             </div>
             <a href="/login.html" class="logout u-flex u-flex-v-center u-gap-small">
-              <ion-icon name="log-out"></ion-icon>
+               <img src=${0, _logoutIconSvgDefault.default} />
               <span>Log out</span>
             </a>
           </div>
@@ -1223,8 +1231,8 @@ class View {
             if (!toggleBtn) return;
             const isDark = document.documentElement.classList.toggle("dark-mode");
             localStorage.setItem("theme", isDark ? "dark" : "light");
-            document.querySelectorAll(".dark-mode-toggler ion-icon").forEach((icon)=>{
-                icon.setAttribute("name", isDark ? "moon" : "sunny");
+            document.querySelectorAll(".dark-mode-toggler img").forEach((icon)=>{
+                icon.setAttribute("src", isDark ? (0, _moonIconSvgDefault.default) : (0, _sunIconSvgDefault.default));
             });
         });
     }
@@ -1234,7 +1242,7 @@ class View {
 }
 exports.default = View;
 
-},{"../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX","../../img/SVG/user.svg":"jGroa","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3hLZF":[function(require,module,exports) {
+},{"../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX","../../img/SVG/user.svg":"jGroa","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/SVG/wallet.svg":"lhq7W","../../img/SVG/notfication-icon.svg":"488Yh","../../img/SVG/logout-icon.svg":"5LIHH","../../img/SVG/sun-icon.svg":"3GLI3","../../img/SVG/moon-icon.svg":"gL4zD"}],"3hLZF":[function(require,module,exports) {
 module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
 
 },{"ac29cf51cf3f1a90":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -1278,7 +1286,22 @@ module.exports = require("aaddd35fabe4596c").getBundleURL("ks2i7") + "empty-tran
 },{"aaddd35fabe4596c":"lgJ39"}],"jGroa":[function(require,module,exports) {
 module.exports = require("d4d8473d968d2e31").getBundleURL("ks2i7") + "user.fb821901.svg" + "?" + Date.now();
 
-},{"d4d8473d968d2e31":"lgJ39"}],"jPxSl":[function(require,module,exports) {
+},{"d4d8473d968d2e31":"lgJ39"}],"lhq7W":[function(require,module,exports) {
+module.exports = require("10e4eab4833c04c5").getBundleURL("ks2i7") + "wallet.886b417c.svg" + "?" + Date.now();
+
+},{"10e4eab4833c04c5":"lgJ39"}],"488Yh":[function(require,module,exports) {
+module.exports = require("63ad3fa8893ed6e9").getBundleURL("ks2i7") + "notfication-icon.c914f5d5.svg" + "?" + Date.now();
+
+},{"63ad3fa8893ed6e9":"lgJ39"}],"5LIHH":[function(require,module,exports) {
+module.exports = require("e379b3553c0987b").getBundleURL("ks2i7") + "logout-icon.2436c68d.svg" + "?" + Date.now();
+
+},{"e379b3553c0987b":"lgJ39"}],"3GLI3":[function(require,module,exports) {
+module.exports = require("15f9c5a6b19e7fe8").getBundleURL("ks2i7") + "sun-icon.622fcc05.svg" + "?" + Date.now();
+
+},{"15f9c5a6b19e7fe8":"lgJ39"}],"gL4zD":[function(require,module,exports) {
+module.exports = require("ee210a8f45b0dc6c").getBundleURL("ks2i7") + "moon-icon.02d3df18.svg" + "?" + Date.now();
+
+},{"ee210a8f45b0dc6c":"lgJ39"}],"jPxSl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _view = require("../../view");

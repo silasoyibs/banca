@@ -47,7 +47,6 @@ function controlUpdateTransaction(
 }
 function controlDashboardView() {
   const navLinks = document.querySelectorAll(".nav__link");
-
   let viewTarget;
   navLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
