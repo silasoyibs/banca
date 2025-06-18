@@ -843,41 +843,35 @@ async function getRecipientData(recipientAccountNumber) {
     } else throw new Error("recipient not found");
 }
 async function transfer(transfer) {
-    try {
-        const { recipientAccountNumber, amount } = transfer;
-        await sendMoney(amount, recipientAccountNumber);
-        return "transfer successful!";
-    } catch (error) {
-        console.log(error, error.message);
-        return "transfer failed";
-    }
+    const { recipientAccountNumber, amount } = transfer;
+    await sendMoney(amount, recipientAccountNumber);
 }
-// send/recive money in banca
+// send/recieve money in banca
 async function sendMoney(amount, recipientAccountNumber) {
     const { user, userRef, userTransactionsRef } = state;
     const { recipientData, recipientRef, recipientTransactionsRef } = await getRecipientData(recipientAccountNumber);
-    // update sender database
-    if (user.balance >= amount && Number(recipientAccountNumber) !== Number(user.accountNumber)) {
-        // debit banca user
-        const balance = user.balance - amount;
-        await (0, _firestore.updateDoc)(userRef, {
-            balance: balance
-        });
-        // update sender transaction ref
-        const name = recipientData.fullName;
-        (0, _firestore.addDoc)(userTransactionsRef, {
-            name,
-            amount: -amount,
-            date: new Date().toISOString(),
-            type: "withdrawal"
-        });
-    } else throw new Error("something went wrong");
+    // validate transfer
+    if (user.balance <= 0 || user.balance < amount) throw new Error("Insufficient Funds");
+    if (Number(recipientAccountNumber) === Number(user.accountNumber)) throw new Error("You Can't Transfer Money To Yourself");
+    if (!recipientData) throw new Error("Recipient Could Not Be Found");
+    // debit banca user
+    const balance = user.balance - amount;
+    await (0, _firestore.updateDoc)(userRef, {
+        balance: balance
+    });
+    // update sender transaction ref
+    const recipientName = recipientData.fullName;
+    await (0, _firestore.addDoc)(userTransactionsRef, {
+        name: recipientName,
+        amount: -amount,
+        date: new Date().toISOString(),
+        type: "withdrawal"
+    });
     // update recipient database
-    if (recipientData) {
-        const name = state.user.fullName;
-        // credit banca user
-        depositMoney(recipientData, recipientRef, recipientTransactionsRef, amount, name);
-    } else throw new Error("recipient could not be found");
+    const senderName = state.user.fullName;
+    // credit banca user
+    await depositMoney(recipientData, recipientRef, recipientTransactionsRef, amount, senderName);
+    return "Transfer Successful!";
 }
 // calculate total transaction income
 function calculateTotalIncome(transactionList) {
@@ -940,7 +934,7 @@ async function fundAccount(fundAmount) {
     });
 }
 // deposit money to banca account
-async function depositMoney(user, userRef, transactionRef, amount, name) {
+async function depositMoney(user, userRef, transactionRef, amount, senderName) {
     try {
         // credit banca user
         const balance = user.balance + amount;
@@ -949,7 +943,7 @@ async function depositMoney(user, userRef, transactionRef, amount, name) {
         });
         // update transactions list
         await (0, _firestore.addDoc)(transactionRef, {
-            name,
+            name: senderName,
             amount,
             date: new Date().toISOString(),
             type: "deposit"
