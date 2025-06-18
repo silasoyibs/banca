@@ -8,6 +8,8 @@ async function controlDashboard() {
   try {
     // render spinner
     dashboardView.renderSpinner();
+    //Let the browser paint the spinner before heavy async tasks
+    await new Promise((resolve) => requestAnimationFrame(resolve));
     // get userdata from database
     await model.getCurrentUserData();
     // render dashboard data

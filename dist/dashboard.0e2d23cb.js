@@ -598,6 +598,8 @@ async function controlDashboard() {
     try {
         // render spinner
         (0, _dashboardViewJsDefault.default).renderSpinner();
+        //Let the browser paint the spinner before heavy async tasks
+        await new Promise((resolve)=>requestAnimationFrame(resolve));
         // get userdata from database
         await _modelJs.getCurrentUserData();
         // render dashboard data
@@ -1419,12 +1421,12 @@ class FundAccountView extends (0, _viewJsDefault.default) {
                    <div class="account-stats">
                      <div>
                        <p>Income</p>
-                       <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this.data.totalIncome}</span></p>
+                       <p><ion-icon name="arrow-up"></ion-icon><span>\u{20A6}</span><span class="total-income">${this._formatAmount(this.data.totalIncome)}</span></p>
                      </div>
                      <div>
                        <p>Expense</p>
                        <p>
-                         <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${Math.abs(this.data.totalExpense)}</span>
+                         <ion-icon name="arrow-down"></ion-icon><span>\u{20A6}</span><span class="total-expense">${this._formatAmount(Math.abs(this.data.totalExpense))}</span>
                        </p>
                      </div>
                    </div>

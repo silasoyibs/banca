@@ -82,15 +82,15 @@ class FundAccountView extends View {
                    <div class="account-stats">
                      <div>
                        <p>Income</p>
-                       <p><ion-icon name="arrow-up"></ion-icon><span>₦</span><span class="total-income">${
+                       <p><ion-icon name="arrow-up"></ion-icon><span>₦</span><span class="total-income">${this._formatAmount(
                          this.data.totalIncome
-                       }</span></p>
+                       )}</span></p>
                      </div>
                      <div>
                        <p>Expense</p>
                        <p>
-                         <ion-icon name="arrow-down"></ion-icon><span>₦</span><span class="total-expense">${Math.abs(
-                           this.data.totalExpense
+                         <ion-icon name="arrow-down"></ion-icon><span>₦</span><span class="total-expense">${this._formatAmount(
+                           Math.abs(this.data.totalExpense)
                          )}</span>
                        </p>
                      </div>

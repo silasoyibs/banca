@@ -1531,7 +1531,7 @@ body {
 @media (width <= 38em) {
   .dashboard-sidebar .nav__logo {
     border-right: 2.5px solid #fffc;
-    margin-top: 7px;
+    margin-bottom: 0;
   }
 }
 
@@ -1563,6 +1563,12 @@ body {
 @media (width <= 59em) {
   .dashboard-sidebar .nav__link span {
     display: none;
+  }
+}
+
+@media (width <= 38em) {
+  .dashboard-sidebar .nav__link {
+    margin-bottom: 0;
   }
 }
 

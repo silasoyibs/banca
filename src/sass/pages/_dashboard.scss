@@ -21,12 +21,11 @@
       justify-content: space-between;
     }
     &__logo {
-      @media (max-width: 38em) {
-        margin-top: 7px;
-
-        border-right: 2.5px solid rgba(255, 255, 255, 0.8);
-      }
       margin-bottom: 3rem;
+      @media (max-width: 38em) {
+        border-right: 2.5px solid rgba(255, 255, 255, 0.8);
+        margin-bottom: 0;
+      }
       img:first-child {
         width: 5rem;
       }
@@ -50,6 +49,9 @@
         @media (max-width: 59em) {
           display: none;
         }
+      }
+      @media (max-width: 38em) {
+        margin-bottom: 0;
       }
 
       .nav__icon {
