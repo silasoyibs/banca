@@ -291,6 +291,11 @@ body {
   animation: .5s unfillButton;
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: .8;
+}
+
 .button-spinner {
   vertical-align: middle;
   border: 3px solid #fff;

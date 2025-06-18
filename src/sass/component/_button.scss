@@ -29,3 +29,8 @@
     animation: unfillButton 0.5s;
   }
 }
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}

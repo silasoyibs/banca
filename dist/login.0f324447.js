@@ -719,11 +719,13 @@ function changeSubmitText(elementclass, text) {
 function loadingSpinner(button) {
     const markup = `<span class="button-spinner"></span>`;
     const buttonEl = button;
+    buttonEl.disabled = true;
     buttonEl.innerHTML = "";
     buttonEl.insertAdjacentHTML("afterbegin", markup);
 }
 function clearLoadingSpinner(button, text) {
     const buttonEl = button;
+    button.disabled = false;
     buttonEl.innerHTML = "";
     buttonEl.insertAdjacentHTML("afterbegin", text);
 }

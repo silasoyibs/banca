@@ -9,42 +9,51 @@ class DashboardView extends View {
   addHandlerSendMoney(handler) {
     this._parentElement.addEventListener("click", async (e) => {
       const sendMoneyBtn = e.target.closest(".send-money-button");
-      if (!sendMoneyBtn) return;
-      e.preventDefault();
-      // disable button
-      sendMoneyBtn.disable = true;
-      loadingSpinner(sendMoneyBtn);
-      // get values of input field
-      const accountNumberInput = document.querySelector(".send-account-input");
-      const transferAmountInput = document.querySelector(".send-amount-input");
-      const recipientAccountNumber = Number(accountNumberInput.value);
-      // set total amount to user amount input
-      const amount = Number(transferAmountInput.value);
-      if (!recipientAccountNumber || !amount) {
-        toast.error("please fill all fields");
-        clearLoadingSpinner(sendMoneyBtn, "Send Money");
+      try {
+        if (!sendMoneyBtn) return;
+        e.preventDefault();
+        // disable button
+        loadingSpinner(sendMoneyBtn);
+
+        // get values of input field
+        const accountNumberInput = document.querySelector(
+          ".send-account-input"
+        );
+        const transferAmountInput =
+          document.querySelector(".send-amount-input");
+        const recipientAccountNumber = Number(accountNumberInput.value);
+        // set total amount to user amount input
+        const amount = Number(transferAmountInput.value);
+        if (!recipientAccountNumber || !amount) {
+          toast.error("please fill all fields");
+          // clearLoadingSpinner(sendMoneyBtn, "Send Money");
+        }
+        // get transfer status from model
+        const transferStatus = await handler({
+          recipientAccountNumber,
+          amount,
+        });
+        if (transferStatus === "transfer successful!")
+          toast.success(transferStatus);
+        // clear form
+        this.clearForm([accountNumberInput, transferAmountInput]);
+        // reset total amount to default
+        const totalAmount = document.querySelector(".send-total-amount");
+        totalAmount.textContent = "";
+        // reset spinner to default
+        if (transferStatus === "transfer failed")
+          throw new Error("transfer failed");
+        // hide toast
+        toast.hide();
+      } catch (error) {
+        toast.error(error.messager || "transaction could not be completed");
+      } finally {
+        setTimeout(() => {
+          clearLoadingSpinner(sendMoneyBtn, "Send Money");
+        }, 6000);
+        // hide toast
+        toast.hide();
       }
-      // get transfer status from model
-      const transferStatus = await handler({ recipientAccountNumber, amount });
-      if (transferStatus === "transfer successful!")
-        toast.success(transferStatus);
-      // clear form
-      this.clearForm([accountNumberInput, transferAmountInput]);
-      // reset total amount to default
-      const totalAmount = document.querySelector(".send-total-amount");
-      totalAmount.textContent = "";
-      // reset spinner to default
-      setTimeout(() => {
-        clearLoadingSpinner(sendMoneyBtn, "Send Money");
-      }, 6000);
-      // hide toast
-      toast.hide();
-      if (transferStatus === "transfer failed") toast.error(transferStatus);
-      setTimeout(() => {
-        clearLoadingSpinner(sendMoneyBtn, "Send Money");
-      }, 6000);
-      // hide toast
-      toast.hide();
     });
   }
   _addHandlerShowAmount() {

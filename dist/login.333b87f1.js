@@ -593,26 +593,25 @@ form.addEventListener("submit", (e)=>{
     e.preventDefault();
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
+    (0, _common.loadingSpinner)(loginBtn);
     (0, _auth.signInWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
-        (0, _common.loadingSpinner)(loginBtn);
         // Signed in
         const user = userCredential.user;
         window.location.href = "/dashboard.html";
     }).catch((error)=>{
         const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-    // const errorCode = error.code;
-    // let errorMessage;
-    // switch (errorCode) {
-    //   case "auth/invalid-login-credentials":
-    //     errorMessage = "invalid login details";
-    //     break;
-    //   default:
-    //     errorMessage = error.message;
-    // }
-    // toast.error(errorMessage);
-    // toast.hide();
+        let errorMessage;
+        switch(errorCode){
+            case "auth/invalid-login-credentials":
+                errorMessage = "invalid login details";
+                break;
+            default:
+                errorMessage = error.message;
+        }
+        (0, _common.toast).error(errorMessage);
+    }).finally(()=>{
+        (0, _common.clearLoadingSpinner)(loginBtn, "Login");
+        (0, _common.toast).hide();
     });
 });
 
