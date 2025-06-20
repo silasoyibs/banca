@@ -591,20 +591,10 @@ var _model = require("./dashboard/model");
 const form = document.querySelector("#form");
 const btnRegister = document.getElementById("register-button");
 const formInput = document.querySelectorAll("input");
-// clear form input
-function clearForm() {
-    formInput.forEach((input)=>{
-        input.value = "";
-    });
-}
-// Capitalize FullName
-function capitalizeName(name) {
-    return name.split(" ").map((word)=>word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
-}
 // form submittion
 form.addEventListener("submit", async (e)=>{
     e.preventDefault();
-    const FullName = capitalizeName(document.querySelector("#FullName").value);
+    const FullName = (0, _common.capitalizeName)(document.querySelector("#FullName").value);
     const email = document.querySelector("#email").value;
     const password = document.querySelector("#password").value;
     (0, _common.loadingSpinner)(btnRegister);
@@ -613,12 +603,8 @@ form.addEventListener("submit", async (e)=>{
         // Signed up
         const user = userCredential.user;
         await (0, _model.createUserData)(user, FullName, email);
-        clearForm();
+        (0, _common.clearForm)(formInput);
         (0, _common.toast).success("Thanks for Registering!");
-        (0, _common.toast).hide();
-        setTimeout(()=>{
-            (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
-        }, 6000);
     } catch (error) {
         const errorCode = error.code;
         let errorMessage;
@@ -636,75 +622,13 @@ form.addEventListener("submit", async (e)=>{
                 errorMessage = error.message;
         }
         (0, _common.toast).error(errorMessage);
-        (0, _common.toast).hide();
     } finally{
+        (0, _common.toast).hide();
         setTimeout(()=>{
             (0, _common.clearLoadingSpinner)(btnRegister, "Create Account");
         }, 6000);
     }
-    const form = document.querySelector("#form");
-    const btnSubmit = document.querySelector("#submit-button");
-    form.addEventListener("submit", (e)=>{
-        e.preventDefault();
-        const email = document.querySelector("#email").value;
-        const password = document.querySelector("#password").value;
-        (0, _auth.createUserWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
-            // Signed up
-            (0, _common.changeSubmitText)(btnSubmit, "Registering...");
-            const user = userCredential.user;
-            (0, _common.toast).success("Thanks for Registering!");
-            (0, _common.toast).hide();
-            setTimeout(()=>{
-                (0, _common.changeSubmitText)(btnSubmit, "Register");
-            }, 6000);
-        }).catch((error)=>{
-            const errorCode = error.code;
-            let errorMessage;
-            switch(errorCode){
-                case "auth/weak-password":
-                    errorMessage = "password must be at least 6 characters long";
-                    break;
-                case "auth/email-already-in-use":
-                    errorMessage = "This email is already in use";
-                    break;
-                case "auth/invalid-email":
-                    errorMessage = "lease enter a valid email";
-                    break;
-                default:
-                    errorMessage = error.message;
-            }
-            (0, _common.toast).error(errorMessage);
-            (0, _common.toast).hide();
-        });
-    });
-}); // <div class="transaction__history__item">
- // <div class="u-flex u-gap-small u-flex-v-center">
- //   <figure class="user-picture">
- //     <img src=${userAvatar} alt="user-picture" />
- //   </figure>
- //   <div class="transaction-details">
- //     <p>Idris Saidu</p>
- //     <p class="transaction-details__date">Aug 8,2024-02:26</p>
- //   </div>
- // </div>
- // <div>
- //   <p class="debit">₦<span>700</span></p>
- // </div>
- // </div>
- // <div class="transaction__history__item">
- // <div class="u-flex u-gap-small u-flex-v-center">
- //   <figure class="user-picture">
- //     <img src=${userAvatar}  alt="user-picture" />
- //   </figure>
- //   <div class="transaction-details">
- //     <p>Idris Saidu</p>
- //     <p class="transaction-details__date">Aug 8,2024-02:26</p>
- //   </div>
- // </div>
- // <div>
- //   <p class="credit">₦<span>700</span></p>
- // </div>
- // </div>
+});
 
 },{"./firebase":"5VmhM","firebase/auth":"79vzg","./common":"2ASYY","./dashboard/model":"k67WZ"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -712,6 +636,8 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 // creating New Banca user Data
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
+// wait for user Auth
+parcelHelpers.export(exports, "waitForUserAuth", ()=>waitForUserAuth);
 // get user data from firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
@@ -722,6 +648,8 @@ parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
 parcelHelpers.export(exports, "listenToTransaction", ()=>listenToTransaction);
 // fund banca account
 parcelHelpers.export(exports, "fundAccount", ()=>fundAccount);
+// signout banca user
+parcelHelpers.export(exports, "signOutUser", ()=>signOutUser);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -747,12 +675,6 @@ async function createUserData(user, fullName, email) {
         balance: 0,
         accountNumber: accountNumber
     });
-    //   initializing user transaction
-    await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
-        type: "initial deposit",
-        amount: 0,
-        timestamp: (0, _firestore.serverTimestamp)()
-    });
 }
 // generating 10 Digit Banca Account Number
 function generateAccountNum() {
@@ -764,10 +686,9 @@ function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
 }
-// wait for user Auth
-function waitForUserAuth() {
-    const auth = (0, _auth.getAuth)();
+async function waitForUserAuth() {
     return new Promise((resolve, reject)=>{
+        const auth = (0, _auth.getAuth)();
         const unsubscribe = (0, _auth.onAuthStateChanged)(auth, (user)=>{
             unsubscribe(); // stop listening after the first response
             if (user) resolve(user);
@@ -844,7 +765,7 @@ async function getRecipientData(recipientAccountNumber) {
 }
 async function transfer(transfer) {
     const { recipientAccountNumber, amount } = transfer;
-    await sendMoney(amount, recipientAccountNumber);
+    return await sendMoney(amount, recipientAccountNumber);
 }
 // send/recieve money in banca
 async function sendMoney(amount, recipientAccountNumber) {
@@ -921,15 +842,15 @@ async function fundAccount(fundAmount) {
                 callback: function() {
                     // You can now call your backend to update wallet
                     depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
-                    resolve("funding successful");
+                    resolve("Funding Successful");
                 },
                 onClose: function() {
-                    reject(new Error("transaction not successful"));
+                    reject(new Error("Transaction Not Successful"));
                 }
             });
             handler.openIframe();
         } catch (error) {
-            (0, _common.toast).error(error?.message || "transaction not successful");
+            (0, _common.toast).error(error?.message || "Transaction Not Successful");
         }
     });
 }
@@ -951,6 +872,11 @@ async function depositMoney(user, userRef, transactionRef, amount, senderName) {
     } catch (err) {
         throw new Error("transaction not successful");
     }
+}
+async function signOutUser() {
+    await (0, _firebase.auth).signOut();
+    sessionStorage.removeItem("authenticated");
+    window.location.href = "/login.html";
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","../common":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["8zSRm","4C53m"], "4C53m", "parcelRequiree06a")

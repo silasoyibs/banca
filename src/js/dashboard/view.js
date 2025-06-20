@@ -8,10 +8,8 @@ import iconSun from "../../img/SVG/sun-icon.svg";
 import iconMoon from "../../img/SVG/moon-icon.svg";
 
 let darkModeBound = false;
-
 export default class View {
   data;
-
   constructor() {
     if (!darkModeBound) {
       this._setUpStoredDarkMode();
@@ -19,7 +17,6 @@ export default class View {
       darkModeBound = true;
     }
   }
-
   render(data) {
     this.data = data;
     if (
@@ -33,7 +30,6 @@ export default class View {
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
     this._addEventHandler?.();
   }
-
   renderSpinner() {
     const markup = `
      <div class="spinner-container">
@@ -43,17 +39,13 @@ export default class View {
     this._clear();
     this._parentElement.insertAdjacentHTML("afterbegin", markup);
   }
-
   _addEventHandler() {}
-
   _clear() {
     this._parentElement.innerHTML = "";
   }
-
   clearForm(formElements) {
     formElements.forEach((el) => (el.value = ""));
   }
-
   headerMarkUp() {
     const isDark = document.documentElement.classList.contains("dark-mode");
     return `
@@ -79,7 +71,7 @@ export default class View {
               )}</span></p>
             </div>
             <a class="dark-mode-toggler">
-              <img src=${isDark ? iconMoon : iconSun} />
+              <img src=${isDark ? iconSun : iconMoon} />
             </a>
             <div class="notification-container">
               <div class="notification">
@@ -96,7 +88,6 @@ export default class View {
       </div>
     `;
   }
-
   customerDashboardMarkUp() {
     return `
       <div class="customer-account">
@@ -136,7 +127,6 @@ export default class View {
       </div>
     `;
   }
-
   emptyTransactionMarkUp() {
     return `
       <div class="transaction__history container-dashboard container-dashboard--shadow">
@@ -151,7 +141,6 @@ export default class View {
       </div>
     `;
   }
-
   transactionListMarkUp(transaction) {
     return `
       <div class="transaction__history__item">
@@ -181,14 +170,12 @@ export default class View {
       </div>
     `;
   }
-
   _setUpStoredDarkMode() {
     const savedTheme = localStorage.getItem("theme");
     if (savedTheme === "dark") {
       document.documentElement.classList.add("dark-mode");
     }
   }
-
   _addHandlerDarkModeToggle() {
     document.addEventListener("click", (e) => {
       const toggleBtn = e.target.closest(".dark-mode-toggler");
@@ -198,7 +185,7 @@ export default class View {
       localStorage.setItem("theme", isDark ? "dark" : "light");
 
       document.querySelectorAll(".dark-mode-toggler img").forEach((icon) => {
-        icon.setAttribute("src", isDark ? iconMoon : iconSun);
+        icon.setAttribute("src", isDark ? iconSun : iconMoon);
       });
     });
   }

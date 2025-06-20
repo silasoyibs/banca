@@ -1,6 +1,6 @@
+// dashboard sidebar
 .dashboard-sidebar {
   @media (max-width: 38em) {
-    order: 2;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -28,6 +28,9 @@
       }
       img:first-child {
         width: 5rem;
+        @media (max-width: 38em) {
+          width: 3.5rem;
+        }
       }
       img:last-child {
         width: 8rem;
@@ -36,7 +39,8 @@
         }
       }
     }
-    &__link {
+    &__link,
+    &__link__logout.mobile-nav {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -62,6 +66,10 @@
           width: 3rem;
           height: 3rem;
         }
+        @media (max-width: 38em) {
+          width: 2.5rem;
+          height: 2.5rem;
+        }
       }
 
       &.active,
@@ -69,7 +77,8 @@
         background-color: #00bfff;
       }
     }
-    &__link.mobile-nav {
+    &__link.mobile-nav,
+    &__link__logout.mobile-nav {
       display: none;
       @media (max-width: 38em) {
         display: block;
@@ -77,6 +86,7 @@
     }
   }
 }
+// dashboard main
 .dashboard-main {
   @media (max-width: 38em) {
     order: 1;
@@ -426,7 +436,6 @@
     }
   }
 }
-
 // notfication
 .notification-container {
   @media (max-width: 38em) {
@@ -459,9 +468,7 @@
     right: -23%;
   }
 }
-
 // dark mode
-
 html.dark-mode {
   .page-spinner {
     border: 3px solid $color-white;
@@ -508,6 +515,12 @@ html.dark-mode {
       border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
       padding: 0.5rem 0;
     }
+    &__item.empty {
+      p,
+      span {
+        color: $color-white !important;
+      }
+    }
   }
   .transaction__history__send-money {
     span,
@@ -550,6 +563,53 @@ html.dark-mode {
     }
     &::after {
       background-color: $color-white;
+    }
+  }
+}
+// redirect loader
+.redirect-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: bold;
+  z-index: 10000;
+  span {
+    margin-top: -5px;
+    animation: blink 1.2s infinite;
+    opacity: 0;
+  }
+  /* Delay each dot */
+  & span:nth-child(1) {
+    animation-delay: 0s;
+  }
+  & span:nth-child(2) {
+    animation-delay: 0.4s;
+  }
+  & span:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+  & span:nth-child(4) {
+    animation-delay: 0.8s;
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
     }
   }
 }

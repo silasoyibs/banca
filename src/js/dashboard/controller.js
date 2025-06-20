@@ -1,9 +1,33 @@
 import * as model from "./model.js";
 import dashboardView from "./views/dashboard/dashboardView.js";
-import transactionView from "./views/transactions/transactionView.js";
 import fundAccountView from "./views/fundAccount/fundAccountView.js";
-import loanView from "./views/loan/loanView.js";
+import initRouter from "./router.js";
 
+// protect access to dashboard
+async function controlProtectRoute() {
+  try {
+    const user = await model.waitForUserAuth(); // ✅ Wait for Firebase
+
+    const isAuthenticated = sessionStorage.getItem("authenticated");
+
+    if (!isAuthenticated) {
+      // First login in this tab — show loader briefly
+      document.querySelector(".redirect-loader").style.display = "flex";
+      document.querySelector(".container--dashboard").style.display = "none";
+
+      await new Promise((res) => setTimeout(res, 600));
+      sessionStorage.setItem("authenticated", "true");
+    }
+
+    // ✅ Always show dashboard now that we’re authenticated
+    document.querySelector(".redirect-loader").style.display = "none";
+    document.querySelector(".container--dashboard").style.display = "grid";
+  } catch (err) {
+    console.warn("🔒 Redirecting to login:", err.message);
+    window.location.href = "/login.html";
+  }
+}
+// control dashbaord data
 async function controlDashboard() {
   try {
     // render spinner
@@ -21,21 +45,15 @@ async function controlDashboard() {
     console.log(error);
   }
 }
-
-async function controlSendMoney(transfer) {
-  transferStatus = await model.transfer(transfer);
-  return transferStatus;
+// control real time listeners
+function controlRealTimeListeners() {
+  // Listen to RealTime Changes
+  model.listenToBalance(controlUpdateBalance);
+  model.listenToTransaction(controlUpdateTransaction);
 }
-// control banca funding account
-async function controlFundAccount(fundAmount) {
-  const fundingStatus = await model.fundAccount(fundAmount);
-  return fundingStatus;
-}
-
 function controlUpdateBalance(newBalance) {
   dashboardView.updateBalance(newBalance);
 }
-
 function controlUpdateTransaction(
   newTransaction,
   newTotalIncome,
@@ -47,61 +65,33 @@ function controlUpdateTransaction(
     newTotalExpense
   );
 }
-function controlDashboardView() {
-  const navLinks = document.querySelectorAll(".nav__link");
-  let viewTarget;
-  navLinks.forEach((link) => {
-    link.addEventListener("click", (e) => {
-      // remove all active link on click
-      navLinks.forEach((link) => {
-        link.classList.remove("active");
-      });
-      // add active class to current clicked nav
-      e.currentTarget.classList.add("active");
-      // get view target
-      viewTarget = e.currentTarget.dataset.view;
-      // render dashboardview
-      if (viewTarget === "dashboard-view") {
-        dashboardView.render(model.state);
-      }
-      // render transaction view
-      if (viewTarget === "transaction-view") {
-        transactionView.render(model.state);
-      }
-      // render funding view
-      if (viewTarget === "funding-view") {
-        fundAccountView.render(model.state);
-      }
-      // render loan view
-      if (viewTarget === "loan-view") {
-        loanView.render(model.state);
-      }
-    });
+// Handlers for user actions
+async function controlSendMoney(transfer) {
+  return await model.transfer(transfer);
+}
+async function controlFundAccount(fundAmount) {
+  return await model.fundAccount(fundAmount);
+}
+async function controlSignOut() {
+  document.addEventListener("click", async (e) => {
+    const logOutBtn = e.target.closest(".logout");
+    if (!logOutBtn) return;
+    await model.signOutUser();
   });
 }
-
-function controlRealTimeListeners() {
-  // Listen to RealTime Changes
-  model.listenToBalance(controlUpdateBalance);
-  model.listenToTransaction(controlUpdateTransaction);
-}
-
-function controlViewAllTransaction() {
-  transactionView.render(model.state);
-}
-
-const init = function () {
+// intialize all control functions
+const init = async function () {
+  // control protectroute
+  await controlProtectRoute();
+  // Init Router
+  initRouter();
+  // control dashboard
   controlDashboard();
   // Send Money to Another Banca User
   dashboardView.addHandlerSendMoney(controlSendMoney);
   // Fund Banca Account
   fundAccountView.addHandlerFundAccount(controlFundAccount);
-  // control view all transaction
-  dashboardView.addHandlerViewAllTransaction(controlViewAllTransaction);
-
-  // control dashboard view
-  document.addEventListener("DOMContentLoaded", function () {
-    controlDashboardView();
-  });
+  // control user signout
+  controlSignOut();
 };
 init();

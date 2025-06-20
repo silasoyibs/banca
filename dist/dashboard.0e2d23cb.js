@@ -588,12 +588,31 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
 var _dashboardViewJs = require("./views/dashboard/dashboardView.js");
 var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
-var _transactionViewJs = require("./views/transactions/transactionView.js");
-var _transactionViewJsDefault = parcelHelpers.interopDefault(_transactionViewJs);
 var _fundAccountViewJs = require("./views/fundAccount/fundAccountView.js");
 var _fundAccountViewJsDefault = parcelHelpers.interopDefault(_fundAccountViewJs);
-var _loanViewJs = require("./views/loan/loanView.js");
-var _loanViewJsDefault = parcelHelpers.interopDefault(_loanViewJs);
+var _routerJs = require("./router.js");
+var _routerJsDefault = parcelHelpers.interopDefault(_routerJs);
+// protect access to dashboard
+async function controlProtectRoute() {
+    try {
+        const user = await _modelJs.waitForUserAuth(); // ✅ Wait for Firebase
+        const isAuthenticated = sessionStorage.getItem("authenticated");
+        if (!isAuthenticated) {
+            // First login in this tab — show loader briefly
+            document.querySelector(".redirect-loader").style.display = "flex";
+            document.querySelector(".container--dashboard").style.display = "none";
+            await new Promise((res)=>setTimeout(res, 600));
+            sessionStorage.setItem("authenticated", "true");
+        }
+        // ✅ Always show dashboard now that we’re authenticated
+        document.querySelector(".redirect-loader").style.display = "none";
+        document.querySelector(".container--dashboard").style.display = "grid";
+    } catch (err) {
+        console.warn("\uD83D\uDD12 Redirecting to login:", err.message);
+        window.location.href = "/login.html";
+    }
+}
+// control dashbaord data
 async function controlDashboard() {
     try {
         // render spinner
@@ -611,14 +630,11 @@ async function controlDashboard() {
         console.log(error);
     }
 }
-async function controlSendMoney(transfer) {
-    transferStatus = await _modelJs.transfer(transfer);
-    return transferStatus;
-}
-// control banca funding account
-async function controlFundAccount(fundAmount) {
-    const fundingStatus = await _modelJs.fundAccount(fundAmount);
-    return fundingStatus;
+// control real time listeners
+function controlRealTimeListeners() {
+    // Listen to RealTime Changes
+    _modelJs.listenToBalance(controlUpdateBalance);
+    _modelJs.listenToTransaction(controlUpdateTransaction);
 }
 function controlUpdateBalance(newBalance) {
     (0, _dashboardViewJsDefault.default).updateBalance(newBalance);
@@ -626,59 +642,45 @@ function controlUpdateBalance(newBalance) {
 function controlUpdateTransaction(newTransaction, newTotalIncome, newTotalExpense) {
     (0, _dashboardViewJsDefault.default).updateTransaction(newTransaction, newTotalIncome, newTotalExpense);
 }
-function controlDashboardView() {
-    const navLinks = document.querySelectorAll(".nav__link");
-    let viewTarget;
-    navLinks.forEach((link)=>{
-        link.addEventListener("click", (e)=>{
-            // remove all active link on click
-            navLinks.forEach((link)=>{
-                link.classList.remove("active");
-            });
-            // add active class to current clicked nav
-            e.currentTarget.classList.add("active");
-            // get view target
-            viewTarget = e.currentTarget.dataset.view;
-            // render dashboardview
-            if (viewTarget === "dashboard-view") (0, _dashboardViewJsDefault.default).render(_modelJs.state);
-            // render transaction view
-            if (viewTarget === "transaction-view") (0, _transactionViewJsDefault.default).render(_modelJs.state);
-            // render funding view
-            if (viewTarget === "funding-view") (0, _fundAccountViewJsDefault.default).render(_modelJs.state);
-            // render loan view
-            if (viewTarget === "loan-view") (0, _loanViewJsDefault.default).render(_modelJs.state);
-        });
+// Handlers for user actions
+async function controlSendMoney(transfer) {
+    return await _modelJs.transfer(transfer);
+}
+async function controlFundAccount(fundAmount) {
+    return await _modelJs.fundAccount(fundAmount);
+}
+async function controlSignOut() {
+    document.addEventListener("click", async (e)=>{
+        const logOutBtn = e.target.closest(".logout");
+        if (!logOutBtn) return;
+        await _modelJs.signOutUser();
     });
 }
-function controlRealTimeListeners() {
-    // Listen to RealTime Changes
-    _modelJs.listenToBalance(controlUpdateBalance);
-    _modelJs.listenToTransaction(controlUpdateTransaction);
-}
-function controlViewAllTransaction() {
-    (0, _transactionViewJsDefault.default).render(_modelJs.state);
-}
-const init = function() {
+// intialize all control functions
+const init = async function() {
+    // control protectroute
+    await controlProtectRoute();
+    // Init Router
+    (0, _routerJsDefault.default)();
+    // control dashboard
     controlDashboard();
     // Send Money to Another Banca User
     (0, _dashboardViewJsDefault.default).addHandlerSendMoney(controlSendMoney);
     // Fund Banca Account
     (0, _fundAccountViewJsDefault.default).addHandlerFundAccount(controlFundAccount);
-    // control view all transaction
-    (0, _dashboardViewJsDefault.default).addHandlerViewAllTransaction(controlViewAllTransaction);
-    // control dashboard view
-    document.addEventListener("DOMContentLoaded", function() {
-        controlDashboardView();
-    });
+    // control user signout
+    controlSignOut();
 };
 init();
 
-},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe","./views/loan/loanView.js":"gOtW5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k67WZ":[function(require,module,exports) {
+},{"./model.js":"k67WZ","./views/dashboard/dashboardView.js":"iIV3a","./views/fundAccount/fundAccountView.js":"f9GCe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./router.js":"T1gN8"}],"k67WZ":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 // creating New Banca user Data
 parcelHelpers.export(exports, "createUserData", ()=>createUserData);
+// wait for user Auth
+parcelHelpers.export(exports, "waitForUserAuth", ()=>waitForUserAuth);
 // get user data from firebase
 parcelHelpers.export(exports, "getCurrentUserData", ()=>getCurrentUserData);
 // send money to another banca user (transfer)
@@ -689,6 +691,8 @@ parcelHelpers.export(exports, "listenToBalance", ()=>listenToBalance);
 parcelHelpers.export(exports, "listenToTransaction", ()=>listenToTransaction);
 // fund banca account
 parcelHelpers.export(exports, "fundAccount", ()=>fundAccount);
+// signout banca user
+parcelHelpers.export(exports, "signOutUser", ()=>signOutUser);
 var _firestore = require("firebase/firestore");
 var _firebase = require("../firebase");
 var _auth = require("firebase/auth");
@@ -714,12 +718,6 @@ async function createUserData(user, fullName, email) {
         balance: 0,
         accountNumber: accountNumber
     });
-    //   initializing user transaction
-    await (0, _firestore.addDoc)((0, _firestore.collection)((0, _firebase.db), "users", user.uid, "transaction"), {
-        type: "initial deposit",
-        amount: 0,
-        timestamp: (0, _firestore.serverTimestamp)()
-    });
 }
 // generating 10 Digit Banca Account Number
 function generateAccountNum() {
@@ -731,10 +729,9 @@ function generateUserName(fullName) {
     const firstName = fullName.split(" ");
     return firstName[0];
 }
-// wait for user Auth
-function waitForUserAuth() {
-    const auth = (0, _auth.getAuth)();
+async function waitForUserAuth() {
     return new Promise((resolve, reject)=>{
+        const auth = (0, _auth.getAuth)();
         const unsubscribe = (0, _auth.onAuthStateChanged)(auth, (user)=>{
             unsubscribe(); // stop listening after the first response
             if (user) resolve(user);
@@ -811,7 +808,7 @@ async function getRecipientData(recipientAccountNumber) {
 }
 async function transfer(transfer) {
     const { recipientAccountNumber, amount } = transfer;
-    await sendMoney(amount, recipientAccountNumber);
+    return await sendMoney(amount, recipientAccountNumber);
 }
 // send/recieve money in banca
 async function sendMoney(amount, recipientAccountNumber) {
@@ -888,15 +885,15 @@ async function fundAccount(fundAmount) {
                 callback: function() {
                     // You can now call your backend to update wallet
                     depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
-                    resolve("funding successful");
+                    resolve("Funding Successful");
                 },
                 onClose: function() {
-                    reject(new Error("transaction not successful"));
+                    reject(new Error("Transaction Not Successful"));
                 }
             });
             handler.openIframe();
         } catch (error) {
-            (0, _common.toast).error(error?.message || "transaction not successful");
+            (0, _common.toast).error(error?.message || "Transaction Not Successful");
         }
     });
 }
@@ -918,6 +915,11 @@ async function depositMoney(user, userRef, transactionRef, amount, senderName) {
     } catch (err) {
         throw new Error("transaction not successful");
     }
+}
+async function signOutUser() {
+    await (0, _firebase.auth).signOut();
+    sessionStorage.removeItem("authenticated");
+    window.location.href = "/login.html";
 }
 
 },{"firebase/firestore":"8A4BC","../firebase":"5VmhM","firebase/auth":"79vzg","../common":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iIV3a":[function(require,module,exports) {
@@ -945,7 +947,10 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 const recipientAccountNumber = Number(accountNumberInput.value);
                 // set total amount to user amount input
                 const amount = Number(transferAmountInput.value);
-                if (!recipientAccountNumber || !amount) (0, _commonJs.toast).error("please fill all fields");
+                if (!recipientAccountNumber || !amount) {
+                    (0, _commonJs.toast).error("please fill all fields");
+                    return;
+                }
                 // get transfer status from model
                 const transferStatus = await handler({
                     recipientAccountNumber,
@@ -953,7 +958,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
                 });
                 if (transferStatus === "Transfer Successful!") (0, _commonJs.toast).success(transferStatus);
             } catch (error) {
-                (0, _commonJs.toast).error(error.message || "Transaction Could Not be Completed");
+                (0, _commonJs.toast).error(error.message || "Transfer failed");
             } finally{
                 // reset total amount to default
                 const totalAmount = document.querySelector(".send-total-amount");
@@ -991,7 +996,7 @@ class DashboardView extends (0, _viewJsDefault.default) {
             >
               <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a class="transaction-view" >View all</a>
+                <a href="#transaction" class="transaction-view" data-view="transaction">View all</a>
               </div>
              ${this.data.transactions.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
             </div>`}
@@ -1033,20 +1038,12 @@ class DashboardView extends (0, _viewJsDefault.default) {
         transactionContainer.innerHTML = `
     <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a class="transaction-view" href="">View all</a>
+                <a class="transaction-view" href="#transaction" data-view="transaction">View all</a>
        </div>
     `;
         // Generate Transaction Markup
         const newTransactionHtml = newTransaction.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("");
         transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
-    }
-    addHandlerViewAllTransaction(handler) {
-        document.addEventListener("click", (e)=>{
-            const viewAllTransactionLink = e.target.closest(".transaction-view");
-            if (!viewAllTransactionLink) return; // Not the link you care about
-            e.preventDefault();
-            handler();
-        });
     }
 }
 exports.default = new DashboardView();
@@ -1125,7 +1122,7 @@ class View {
               <p>\u{20A6}<span class="banca-user-balance">${this._formatAmount(this.data.user.balance)}</span></p>
             </div>
             <a class="dark-mode-toggler">
-              <img src=${isDark ? (0, _moonIconSvgDefault.default) : (0, _sunIconSvgDefault.default)} />
+              <img src=${isDark ? (0, _sunIconSvgDefault.default) : (0, _moonIconSvgDefault.default)} />
             </a>
             <div class="notification-container">
               <div class="notification">
@@ -1221,7 +1218,7 @@ class View {
             const isDark = document.documentElement.classList.toggle("dark-mode");
             localStorage.setItem("theme", isDark ? "dark" : "light");
             document.querySelectorAll(".dark-mode-toggler img").forEach((icon)=>{
-                icon.setAttribute("src", isDark ? (0, _moonIconSvgDefault.default) : (0, _sunIconSvgDefault.default));
+                icon.setAttribute("src", isDark ? (0, _sunIconSvgDefault.default) : (0, _moonIconSvgDefault.default));
             });
         });
     }
@@ -1231,7 +1228,7 @@ class View {
 }
 exports.default = View;
 
-},{"../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX","../../img/SVG/user.svg":"jGroa","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../../img/SVG/wallet.svg":"lhq7W","../../img/SVG/notfication-icon.svg":"488Yh","../../img/SVG/logout-icon.svg":"5LIHH","../../img/SVG/sun-icon.svg":"3GLI3","../../img/SVG/moon-icon.svg":"gL4zD"}],"3hLZF":[function(require,module,exports) {
+},{"../../img/dashboard-img-card.png":"3hLZF","../../img/SVG/empty-transaction.svg":"kqXGX","../../img/SVG/user.svg":"jGroa","../../img/SVG/wallet.svg":"lhq7W","../../img/SVG/notfication-icon.svg":"488Yh","../../img/SVG/logout-icon.svg":"5LIHH","../../img/SVG/sun-icon.svg":"3GLI3","../../img/SVG/moon-icon.svg":"gL4zD","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3hLZF":[function(require,module,exports) {
 module.exports = require("ac29cf51cf3f1a90").getBundleURL("ks2i7") + "dashboard-img-card.b6f4c164.png" + "?" + Date.now();
 
 },{"ac29cf51cf3f1a90":"lgJ39"}],"lgJ39":[function(require,module,exports) {
@@ -1290,42 +1287,7 @@ module.exports = require("15f9c5a6b19e7fe8").getBundleURL("ks2i7") + "sun-icon.6
 },{"15f9c5a6b19e7fe8":"lgJ39"}],"gL4zD":[function(require,module,exports) {
 module.exports = require("ee210a8f45b0dc6c").getBundleURL("ks2i7") + "moon-icon.02d3df18.svg" + "?" + Date.now();
 
-},{"ee210a8f45b0dc6c":"lgJ39"}],"jPxSl":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _view = require("../../view");
-var _viewDefault = parcelHelpers.interopDefault(_view);
-var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
-var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
-class TransactionView extends (0, _viewDefault.default) {
-    _parentElement = document.querySelector(".dashboard-main");
-    _generateMarkup() {
-        return `
-        ${this.headerMarkUp()}
-        <main class="main-view">
-              <!-- transactionview -->
-          <div class="transaction transaction--view">
-            <div class="transaction__history container-dashboard">
-              <div class="transaction__history__heading">
-                <span>Transactions</span>
-              </div>
-              ${this.data.transactions.length === 0 ? `<div class="transaction__history__item empty">
-                           <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
-                           <span>Aww! There is nothing here!</span>
-                           <p>
-                             No transactions yet. Start using Banca Wallet and they\u{2019}ll
-                             appear here.
-                           </p>
-                         </div>` : this.data.transactions.map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
-          </div>  
-         </main>
-       </div>
-          `;
-    }
-}
-exports.default = new TransactionView();
-
-},{"../../view":"38NyO","../../../../img/SVG/empty-transaction.svg":"kqXGX","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f9GCe":[function(require,module,exports) {
+},{"ee210a8f45b0dc6c":"lgJ39"}],"f9GCe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");
@@ -1361,13 +1323,9 @@ class FundAccountView extends (0, _viewJsDefault.default) {
             // get funding amount
             const fundAmountInput = document.querySelector(".amount input");
             const fundAmount = Number(fundAmountInput.value);
-            if (!fundAmount || fundAmount <= 0) {
-                (0, _commonJs.toast).error("please enter valid");
-                (0, _commonJs.clearLoadingSpinner)(fundBtn, "Fund Now");
-                return;
-            }
             // get funding message from handler
             try {
+                if (!fundAmount || fundAmount <= 0) throw new Error("Please enter valid amount");
                 const fundingStatus = await handler(fundAmount);
                 if (fundingStatus.toLowerCase().includes("successful")) (0, _commonJs.toast).success(fundingStatus);
             } catch (error) {
@@ -1381,8 +1339,8 @@ class FundAccountView extends (0, _viewJsDefault.default) {
                 // Always reset spinner after 6 seconds
                 setTimeout(()=>{
                     (0, _commonJs.clearLoadingSpinner)(fundBtn, "Fund Now");
-                    (0, _commonJs.toast).hide(); // optionally hide toast, but maybe better to leave it visible longer
                 }, 6000);
+                (0, _commonJs.toast).hide(); // optionally hide toast, but maybe better to leave it visible longer
             }
         });
     }
@@ -1463,7 +1421,7 @@ class FundAccountView extends (0, _viewJsDefault.default) {
                         >
                           <div class="transaction__history__heading">
                             <span>Transactions</span>
-                            <a class="transaction-view">View all</a>
+                            <a   href="#transaction"  class="transaction-view"data-view="transaction">View all</a>
                           </div>
                          ${this.data.transactions.slice(0, 3).map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
                         </div>`}
@@ -1480,7 +1438,93 @@ exports.default = new FundAccountView();
 },{"../../view.js":"38NyO","../../../../img/dashboard-img-card.png":"3hLZF","../../../../img/SVG/empty-transaction.svg":"kqXGX","../../../../img/Logo-2.png":"92p5i","../../../common.js":"2ASYY","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"92p5i":[function(require,module,exports) {
 module.exports = require("50c0dbe393cde5a8").getBundleURL("ks2i7") + "Logo-2.039d4a1d.png" + "?" + Date.now();
 
-},{"50c0dbe393cde5a8":"lgJ39"}],"gOtW5":[function(require,module,exports) {
+},{"50c0dbe393cde5a8":"lgJ39"}],"T1gN8":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>initRouter);
+var _dashboardViewJs = require("./views/dashboard/dashboardView.js");
+var _dashboardViewJsDefault = parcelHelpers.interopDefault(_dashboardViewJs);
+var _transactionViewJs = require("./views/transactions/transactionView.js");
+var _transactionViewJsDefault = parcelHelpers.interopDefault(_transactionViewJs);
+var _fundAccountViewJs = require("./views/fundAccount/fundAccountView.js");
+var _fundAccountViewJsDefault = parcelHelpers.interopDefault(_fundAccountViewJs);
+var _loanViewJs = require("./views/loan/loanView.js");
+var _loanViewJsDefault = parcelHelpers.interopDefault(_loanViewJs);
+var _modelJs = require("./model.js");
+// Route-to-view mapping
+const routes = {
+    dashboard: ()=>(0, _dashboardViewJsDefault.default).render(_modelJs.state),
+    transaction: ()=>(0, _transactionViewJsDefault.default).render(_modelJs.state),
+    funding: ()=>(0, _fundAccountViewJsDefault.default).render(_modelJs.state),
+    loan: ()=>(0, _loanViewJsDefault.default).render(_modelJs.state)
+};
+// Render view based on hash
+function router() {
+    const view = window.location.hash.slice(1) || "dashboard";
+    const render = routes[view];
+    if (render) {
+        render();
+        updateActiveNav(view);
+    } else console.warn(`No route found for: ${view}`);
+}
+// Highlight active nav link
+function updateActiveNav(activeView) {
+    document.querySelectorAll(".nav__link").forEach((link)=>{
+        link.classList.toggle("active", link.dataset.view === activeView);
+    });
+}
+function initRouter() {
+    window.addEventListener("hashchange", router);
+    window.addEventListener("load", ()=>{
+        window.location.hash = "dashbaord";
+        router();
+    });
+    // Make nav links set hash
+    document.addEventListener("click", (e)=>{
+        const link = e.target.closest(".nav__link");
+        if (!link) return;
+        e.preventDefault();
+        const view = link.dataset.view;
+        if (view) window.location.hash = view;
+    });
+}
+
+},{"./views/dashboard/dashboardView.js":"iIV3a","./views/transactions/transactionView.js":"jPxSl","./views/fundAccount/fundAccountView.js":"f9GCe","./views/loan/loanView.js":"gOtW5","./model.js":"k67WZ","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jPxSl":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _view = require("../../view");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+var _emptyTransactionSvg = require("../../../../img/SVG/empty-transaction.svg");
+var _emptyTransactionSvgDefault = parcelHelpers.interopDefault(_emptyTransactionSvg);
+class TransactionView extends (0, _viewDefault.default) {
+    _parentElement = document.querySelector(".dashboard-main");
+    _generateMarkup() {
+        return `
+        ${this.headerMarkUp()}
+        <main class="main-view">
+              <!-- transactionview -->
+          <div class="transaction transaction--view">
+            <div class="transaction__history container-dashboard">
+              <div class="transaction__history__heading">
+                <span>Transactions</span>
+              </div>
+              ${this.data.transactions.length === 0 ? `<div class="transaction__history__item empty">
+                           <img src=${0, _emptyTransactionSvgDefault.default} alt="" />
+                           <span>Aww! There is nothing here!</span>
+                           <p>
+                             No transactions yet. Start using Banca Wallet and they\u{2019}ll
+                             appear here.
+                           </p>
+                         </div>` : this.data.transactions.map((transaction)=>this.transactionListMarkUp(transaction)).join("")}
+          </div>  
+         </main>
+       </div>
+          `;
+    }
+}
+exports.default = new TransactionView();
+
+},{"../../view":"38NyO","../../../../img/SVG/empty-transaction.svg":"kqXGX","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gOtW5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _viewJs = require("../../view.js");

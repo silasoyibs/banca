@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="/login.0f324447.js"></script><script>(()=>{
+    <script src="/login.cf258242.js"></script><script>(()=>{
     const theme = localStorage.getItem("theme");
     if (theme === "dark") document.documentElement.classList.add("dark-mode");
 })();
@@ -13,6 +13,13 @@
     <title>Dashbord</title>
   </head>
   <body>
+    <div class="redirect-loader">
+      Redirecting
+      <span>.</span>
+      <span>.</span>
+      <span>.</span>
+      <span>.</span>
+    </div>
     <div class="container--dashboard">
       <!-- toast container -->
       <div class="toastBox"></div>
@@ -22,24 +29,22 @@
             <img src="/Logo-symbol.a26b1004.png" alt="banca logo">
             <img src="/Logo-name.b04a46df.png" alt="banca logo">
           </div>
-          <a href="#" class="nav__link" data-view="dashboard-view">
+          <a href="#dashboard" class="nav__link" data-view="dashboard">
             <svg class="nav__icon">
               <use xlink:href="/sprite.e70822e0.svg#icon-th-small-outline"></use>
             </svg>
             <span>Dashboard</span></a>
-          <a href="#" class="nav__link" data-view="transaction-view">
+          <a href="#transaction" class="nav__link" data-view="transaction">
             <svg class="nav__icon">
               <use xlink:href="/sprite.e70822e0.svg#icon-swap_horiz"></use>
             </svg>
             <span>Transactions</span></a>
-
-          <a href="#" class="nav__link" data-view="funding-view">
+          <a href="#funding" class="nav__link" data-view="funding">
             <svg class="nav__icon">
               <use xlink:href="/sprite.e70822e0.svg#icon-credit-card"></use>
             </svg>
             <span>Fund Account</span></a>
-
-          <a href="#" class="nav__link" data-view="loan-view">
+          <a href="#loan" class="nav__link" data-view="loan">
             <svg class="nav__icon">
               <use xlink:href="/sprite.e70822e0.svg#icon-money"></use>
             </svg>
@@ -53,7 +58,7 @@
               <ion-icon class="nav__icon" name="notifications-outline"></ion-icon>
             </div>
           </a>
-          <a href="/login.html" class="nav__link mobile-nav">
+          <a href="/login.html" class="nav__link__logout mobile-nav">
             <ion-icon class="nav__icon" name="log-out"></ion-icon>
           </a>
         </nav>

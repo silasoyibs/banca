@@ -339,11 +339,19 @@ button:disabled {
 
 .toastBox {
   z-index: 100;
+  max-width: 300rem;
   transition: transform 2s cubic-bezier(.17, .67, .91, 1.26);
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(300%);
+}
+
+@media (width <= 38em) {
+  .toastBox {
+    width: 30rem;
+    max-width: 50rem;
+  }
 }
 
 .toastBox.active {
@@ -427,11 +435,10 @@ button:disabled {
 
 .container--dashboard {
   grid-template-columns: 1.4fr 4fr;
-  max-width: 192rem;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0;
-  display: grid;
+  display: none;
 }
 
 @media (width <= 59em) {
@@ -442,7 +449,6 @@ button:disabled {
 
 @media (width <= 38em) {
   .container--dashboard {
-    grid-template-rows: auto auto;
     grid-template-columns: none;
     max-width: 100%;
     height: auto;
@@ -1325,6 +1331,7 @@ button:disabled {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  padding: 0 2rem;
   display: flex;
 }
 
@@ -1417,6 +1424,8 @@ button:disabled {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 100vh;
+  padding: 0 2rem;
   display: flex;
 }
 
@@ -1508,7 +1517,6 @@ button:disabled {
   .dashboard-sidebar {
     z-index: 999;
     border-top: 1px solid #ffffff1a;
-    order: 2;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -1544,6 +1552,12 @@ button:disabled {
   width: 5rem;
 }
 
+@media (width <= 38em) {
+  .dashboard-sidebar .nav__logo img:first-child {
+    width: 3.5rem;
+  }
+}
+
 .dashboard-sidebar .nav__logo img:last-child {
   width: 8rem;
 }
@@ -1554,7 +1568,7 @@ button:disabled {
   }
 }
 
-.dashboard-sidebar .nav__link {
+.dashboard-sidebar .nav__link, .dashboard-sidebar .nav__link__logout.mobile-nav {
   color: #fff;
   border-radius: 10px;
   align-items: center;
@@ -1566,40 +1580,47 @@ button:disabled {
 }
 
 @media (width <= 59em) {
-  .dashboard-sidebar .nav__link span {
+  .dashboard-sidebar .nav__link span, .dashboard-sidebar .nav__link__logout.mobile-nav span {
     display: none;
   }
 }
 
 @media (width <= 38em) {
-  .dashboard-sidebar .nav__link {
+  .dashboard-sidebar .nav__link, .dashboard-sidebar .nav__link__logout.mobile-nav {
     margin-bottom: 0;
   }
 }
 
-.dashboard-sidebar .nav__link .nav__icon {
+.dashboard-sidebar .nav__link .nav__icon, .dashboard-sidebar .nav__link__logout.mobile-nav .nav__icon {
   fill: #fff;
   width: 2rem;
   height: 2rem;
 }
 
 @media (width <= 59em) {
-  .dashboard-sidebar .nav__link .nav__icon {
+  .dashboard-sidebar .nav__link .nav__icon, .dashboard-sidebar .nav__link__logout.mobile-nav .nav__icon {
     width: 3rem;
     height: 3rem;
   }
 }
 
-.dashboard-sidebar .nav__link.active, .dashboard-sidebar .nav__link:hover {
+@media (width <= 38em) {
+  .dashboard-sidebar .nav__link .nav__icon, .dashboard-sidebar .nav__link__logout.mobile-nav .nav__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+
+.dashboard-sidebar .nav__link.active, .dashboard-sidebar .nav__link:hover, .dashboard-sidebar .nav__link__logout.mobile-nav.active, .dashboard-sidebar .nav__link__logout.mobile-nav:hover {
   background-color: #00bfff;
 }
 
-.dashboard-sidebar .nav__link.mobile-nav {
+.dashboard-sidebar .nav__link.mobile-nav, .dashboard-sidebar .nav__link__logout.mobile-nav {
   display: none;
 }
 
 @media (width <= 38em) {
-  .dashboard-sidebar .nav__link.mobile-nav {
+  .dashboard-sidebar .nav__link.mobile-nav, .dashboard-sidebar .nav__link__logout.mobile-nav {
     display: block;
   }
 
@@ -2097,7 +2118,7 @@ html.dark-mode .transaction__history .transaction__history__heading, html.dark-m
   border-bottom: 1px solid #ffffff4d !important;
 }
 
-html.dark-mode .transaction__history__send-money span, html.dark-mode .transaction__history__send-money p, html.dark-mode .transaction-details > p:first-child {
+html.dark-mode .transaction__history__item.empty p, html.dark-mode .transaction__history__item.empty span, html.dark-mode .transaction__history__send-money span, html.dark-mode .transaction__history__send-money p, html.dark-mode .transaction-details > p:first-child {
   color: #fff !important;
 }
 
@@ -2129,5 +2150,58 @@ html.dark-mode .toast .toast-icon.toast-icon--error {
 
 html.dark-mode .toast:before, html.dark-mode .toast:after {
   background-color: #fff;
+}
+
+.redirect-loader {
+  color: #333;
+  z-index: 10000;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+  height: 100%;
+  font-size: 1.8rem;
+  font-weight: bold;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.redirect-loader span {
+  opacity: 0;
+  margin-top: -5px;
+  animation: 1.2s infinite blink;
+}
+
+.redirect-loader span:first-child {
+  animation-delay: 0s;
+}
+
+.redirect-loader span:nth-child(2) {
+  animation-delay: .4s;
+}
+
+.redirect-loader span:nth-child(3) {
+  animation-delay: .6s;
+}
+
+.redirect-loader span:nth-child(4) {
+  animation-delay: .8s;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 /*# sourceMappingURL=index.f7626f62.css.map */

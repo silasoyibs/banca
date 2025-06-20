@@ -30,13 +30,10 @@ class FundAccountView extends View {
       // get funding amount
       const fundAmountInput = document.querySelector(".amount input");
       const fundAmount = Number(fundAmountInput.value);
-      if (!fundAmount || fundAmount <= 0) {
-        toast.error("please enter valid");
-        clearLoadingSpinner(fundBtn, "Fund Now");
-        return;
-      }
       // get funding message from handler
       try {
+        if (!fundAmount || fundAmount <= 0)
+          throw new Error("Please enter valid amount");
         const fundingStatus = await handler(fundAmount);
         if (fundingStatus.toLowerCase().includes("successful")) {
           toast.success(fundingStatus);
@@ -50,8 +47,8 @@ class FundAccountView extends View {
         // Always reset spinner after 6 seconds
         setTimeout(() => {
           clearLoadingSpinner(fundBtn, "Fund Now");
-          toast.hide(); // optionally hide toast, but maybe better to leave it visible longer
         }, 6000);
+        toast.hide(); // optionally hide toast, but maybe better to leave it visible longer
       }
     });
   }
@@ -144,7 +141,7 @@ class FundAccountView extends View {
                         >
                           <div class="transaction__history__heading">
                             <span>Transactions</span>
-                            <a class="transaction-view">View all</a>
+                            <a   href="#transaction"  class="transaction-view"data-view="transaction">View all</a>
                           </div>
                          ${this.data.transactions
                            .slice(0, 3)

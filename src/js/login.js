@@ -1,6 +1,6 @@
 import { clearLoadingSpinner, loadingSpinner, toast } from "./common";
-import { auth } from "./firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase";
 const form = document.querySelector("#form");
 const loginBtn = document.getElementById("login-button");
 
@@ -13,17 +13,22 @@ form.addEventListener("submit", (e) => {
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
+      sessionStorage.setItem("authenticated", "true");
       window.location.href = "/dashboard.html";
     })
     .catch((error) => {
       const errorCode = error.code;
+      console.log(errorCode);
       let errorMessage;
       switch (errorCode) {
         case "auth/invalid-login-credentials":
-          errorMessage = "invalid login details";
+          errorMessage = "Invalid login email or password";
+          break;
+        case "auth/invalid-email":
+          errorMessage = "Please enter valid email";
           break;
         default:
-          errorMessage = error.message;
+          errorMessage = "Something went wrong. Try again";
       }
       toast.error(errorMessage);
     })

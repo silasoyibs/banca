@@ -585,8 +585,8 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 
 },{}],"47T64":[function(require,module,exports) {
 var _common = require("./common");
-var _firebase = require("./firebase");
 var _auth = require("firebase/auth");
+var _firebase = require("./firebase");
 const form = document.querySelector("#form");
 const loginBtn = document.getElementById("login-button");
 form.addEventListener("submit", (e)=>{
@@ -597,16 +597,21 @@ form.addEventListener("submit", (e)=>{
     (0, _auth.signInWithEmailAndPassword)((0, _firebase.auth), email, password).then((userCredential)=>{
         // Signed in
         const user = userCredential.user;
+        sessionStorage.setItem("authenticated", "true");
         window.location.href = "/dashboard.html";
     }).catch((error)=>{
         const errorCode = error.code;
+        console.log(errorCode);
         let errorMessage;
         switch(errorCode){
             case "auth/invalid-login-credentials":
-                errorMessage = "invalid login details";
+                errorMessage = "Invalid login email or password";
+                break;
+            case "auth/invalid-email":
+                errorMessage = "Please enter valid email";
                 break;
             default:
-                errorMessage = error.message;
+                errorMessage = "Something went wrong. Try again";
         }
         (0, _common.toast).error(errorMessage);
     }).finally(()=>{
@@ -615,6 +620,6 @@ form.addEventListener("submit", (e)=>{
     });
 });
 
-},{"./common":"2ASYY","./firebase":"5VmhM","firebase/auth":"79vzg"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
+},{"./common":"2ASYY","firebase/auth":"79vzg","./firebase":"5VmhM"}]},["ed6Mz","47T64"], "47T64", "parcelRequiree06a")
 
 //# sourceMappingURL=login.333b87f1.js.map

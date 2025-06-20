@@ -5,14 +5,13 @@ import {
   getDoc,
   getDocs,
   query,
-  serverTimestamp,
   setDoc,
   where,
   updateDoc,
   onSnapshot,
 } from "firebase/firestore";
-import { db } from "../firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../firebase";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { toast } from "../common";
 export const state = {
   user: {},
@@ -38,39 +37,31 @@ export async function createUserData(user, fullName, email) {
     balance: 0,
     accountNumber: accountNumber,
   });
-
-  //   initializing user transaction
-  await addDoc(collection(db, "users", user.uid, "transaction"), {
-    type: "initial deposit",
-    amount: 0,
-    timestamp: serverTimestamp(),
-  });
 }
-
 // generating 10 Digit Banca Account Number
 function generateAccountNum() {
   const randomNumber = Math.floor(1000000000 + Math.random() * 9000000000);
   return randomNumber;
 }
-
 // generate username
 function generateUserName(fullName) {
   const firstName = fullName.split(" ");
   return firstName[0];
 }
-
 // wait for user Auth
-function waitForUserAuth() {
-  const auth = getAuth();
+export async function waitForUserAuth() {
   return new Promise((resolve, reject) => {
+    const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       unsubscribe(); // stop listening after the first response
-      if (user) resolve(user);
-      else reject(new Error("No user signed in"));
+      if (user) {
+        resolve(user);
+      } else {
+        reject(new Error("No user signed in"));
+      }
     });
   });
 }
-
 // get user data from firebase
 export async function getCurrentUserData() {
   const user = await waitForUserAuth();
@@ -152,7 +143,7 @@ async function getRecipientData(recipientAccountNumber) {
 // send money to another banca user (transfer)
 export async function transfer(transfer) {
   const { recipientAccountNumber, amount } = transfer;
-  await sendMoney(amount, recipientAccountNumber);
+  return await sendMoney(amount, recipientAccountNumber);
 }
 // send/recieve money in banca
 async function sendMoney(amount, recipientAccountNumber) {
@@ -250,16 +241,16 @@ export async function fundAccount(fundAmount) {
         callback: function () {
           // You can now call your backend to update wallet
           depositMoney(user, userRef, userTransactionsRef, fundAmount, name);
-          resolve("funding successful");
+          resolve("Funding Successful");
         },
         onClose: function () {
-          reject(new Error("transaction not successful"));
+          reject(new Error("Transaction Not Successful"));
         },
       });
 
       handler.openIframe();
     } catch (error) {
-      toast.error(error?.message || "transaction not successful");
+      toast.error(error?.message || "Transaction Not Successful");
     }
   });
 }
@@ -281,4 +272,10 @@ async function depositMoney(user, userRef, transactionRef, amount, senderName) {
   } catch (err) {
     throw new Error("transaction not successful");
   }
+}
+// signout banca user
+export async function signOutUser() {
+  await auth.signOut();
+  sessionStorage.removeItem("authenticated");
+  window.location.href = "/login.html";
 }

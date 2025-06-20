@@ -5,6 +5,11 @@
   transform: translateX(calc(-50% + 350%));
   transition: transform 2s cubic-bezier(0.17, 0.67, 0.91, 1.26);
   z-index: 100;
+  max-width: 300rem;
+  @media (max-width: 38em) {
+    max-width: 50rem;
+    width: 30rem;
+  }
 }
 .toastBox.active {
   transform: translateX(-50%);
@@ -20,6 +25,7 @@
   border-radius: 12px;
   border-left: solid 6px $color-blue;
   overflow: hidden;
+
   & .toast-close-icon {
     position: absolute;
     top: 5%;

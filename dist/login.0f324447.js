@@ -601,6 +601,10 @@ parcelHelpers.export(exports, "changeSubmitText", ()=>changeSubmitText);
 parcelHelpers.export(exports, "loadingSpinner", ()=>loadingSpinner);
 // Setting Button Text to Normal
 parcelHelpers.export(exports, "clearLoadingSpinner", ()=>clearLoadingSpinner);
+// clear form input
+parcelHelpers.export(exports, "clearForm", ()=>clearForm);
+// Capitalize FullName
+parcelHelpers.export(exports, "capitalizeName", ()=>capitalizeName);
 const navLinks = document.querySelectorAll(".nav__link");
 const btnCta = document.querySelectorAll(".btn-cta");
 const navLinkActive = function(navLinks) {
@@ -728,6 +732,14 @@ function clearLoadingSpinner(button, text) {
     button.disabled = false;
     buttonEl.innerHTML = "";
     buttonEl.insertAdjacentHTML("afterbegin", text);
+}
+function clearForm(formInput) {
+    formInput.forEach((input)=>{
+        input.value = "";
+    });
+}
+function capitalizeName(name) {
+    return name.split(" ").map((word)=>word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {

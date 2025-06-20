@@ -3,17 +3,13 @@
   max-width: 125rem;
   padding: 0 2rem;
 }
-// .container--hero {
-//   margin: 0 auto;
-//   max-width: 125rem;
-// }
+
 .container--dashboard {
-  max-width: 192rem;
+  display: none;
   margin: 0 auto;
   padding: 0;
-  height: 100vh;
-  display: grid;
   grid-template-columns: 1.4fr 4fr;
+  min-height: 100vh;
   @media (max-width: 59em) {
     grid-template-columns: 1fr 112fr;
   }
@@ -24,6 +20,5 @@
     overflow-y: auto;
     margin: 0;
     grid-template-columns: none;
-    grid-template-rows: auto auto;
   }
 }

@@ -1,6 +1,5 @@
 import View from "../../view.js";
 import { toast, loadingSpinner, clearLoadingSpinner } from "../../../common.js";
-
 class DashboardView extends View {
   _parentElement = document.querySelector(".dashboard-main");
   _addEventHandler() {
@@ -20,8 +19,10 @@ class DashboardView extends View {
         const recipientAccountNumber = Number(accountNumberInput.value);
         // set total amount to user amount input
         const amount = Number(transferAmountInput.value);
-        if (!recipientAccountNumber || !amount)
+        if (!recipientAccountNumber || !amount) {
           toast.error("please fill all fields");
+          return;
+        }
         // get transfer status from model
         const transferStatus = await handler({
           recipientAccountNumber,
@@ -30,7 +31,7 @@ class DashboardView extends View {
         if (transferStatus === "Transfer Successful!")
           toast.success(transferStatus);
       } catch (error) {
-        toast.error(error.message || "Transaction Could Not be Completed");
+        toast.error(error.message || "Transfer failed");
       } finally {
         // reset total amount to default
         const totalAmount = document.querySelector(".send-total-amount");
@@ -68,7 +69,7 @@ class DashboardView extends View {
             >
               <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a class="transaction-view" >View all</a>
+                <a href="#transaction" class="transaction-view" data-view="transaction">View all</a>
               </div>
              ${this.data.transactions
                .slice(0, 3)
@@ -121,7 +122,7 @@ class DashboardView extends View {
     transactionContainer.innerHTML = `
     <div class="transaction__history__heading">
                 <span>Transactions</span>
-                <a class="transaction-view" href="">View all</a>
+                <a class="transaction-view" href="#transaction" data-view="transaction">View all</a>
        </div>
     `;
     // Generate Transaction Markup
@@ -130,14 +131,6 @@ class DashboardView extends View {
       .map((transaction) => this.transactionListMarkUp(transaction))
       .join("");
     transactionContainer.insertAdjacentHTML("beforeend", newTransactionHtml);
-  }
-  addHandlerViewAllTransaction(handler) {
-    document.addEventListener("click", (e) => {
-      const viewAllTransactionLink = e.target.closest(".transaction-view");
-      if (!viewAllTransactionLink) return; // Not the link you care about
-      e.preventDefault();
-      handler();
-    });
   }
 }
 

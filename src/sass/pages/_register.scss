@@ -1,4 +1,5 @@
 .register-section {
+  height: 100vh;
   background: linear-gradient(rgba(6, 8, 43, 0.7), rgba(6, 8, 43, 0.7)),
     url("../img/login-section-img.jpg") no-repeat;
   background-size: cover;
@@ -7,6 +8,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 0 2rem;
 }
 
 .register {

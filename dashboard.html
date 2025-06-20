@@ -15,6 +15,13 @@
     <title>Dashbord</title>
   </head>
   <body>
+    <div class="redirect-loader">
+      Redirecting
+      <span>.</span>
+      <span>.</span>
+      <span>.</span>
+      <span>.</span>
+    </div>
     <div class="container--dashboard">
       <!-- toast container -->
       <div class="toastBox"></div>
@@ -24,27 +31,25 @@
             <img src="src/img/Logo-symbol.png" alt="banca logo" />
             <img src="src/img/Logo-name.png" alt="banca logo" />
           </div>
-          <a href="#" class="nav__link" data-view="dashboard-view">
+          <a href="#dashboard" class="nav__link" data-view="dashboard">
             <svg class="nav__icon">
               <use xlink:href="src/img/sprite.svg#icon-th-small-outline"></use>
             </svg>
             <span>Dashboard</span></a
           >
-          <a href="#" class="nav__link" data-view="transaction-view">
+          <a href="#transaction" class="nav__link" data-view="transaction">
             <svg class="nav__icon">
               <use xlink:href="src/img/sprite.svg#icon-swap_horiz"></use>
             </svg>
             <span>Transactions</span></a
           >
-
-          <a href="#" class="nav__link" data-view="funding-view">
+          <a href="#funding" class="nav__link" data-view="funding">
             <svg class="nav__icon">
               <use xlink:href="src/img/sprite.svg#icon-credit-card"></use>
             </svg>
             <span>Fund Account</span></a
           >
-
-          <a href="#" class="nav__link" data-view="loan-view">
+          <a href="#loan" class="nav__link" data-view="loan">
             <svg class="nav__icon">
               <use xlink:href="src/img/sprite.svg#icon-money"></use>
             </svg>
@@ -62,7 +67,7 @@
               ></ion-icon>
             </div>
           </a>
-          <a href="/login.html" class="nav__link mobile-nav">
+          <a href="/login.html" class="nav__link__logout mobile-nav">
             <ion-icon class="nav__icon" name="log-out"></ion-icon>
           </a>
         </nav>
